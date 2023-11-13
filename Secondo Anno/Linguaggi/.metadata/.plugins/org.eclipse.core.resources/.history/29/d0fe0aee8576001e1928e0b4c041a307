@@ -1,0 +1,14 @@
+import java.util.ArrayList;
+public class Store {
+	private ArrayList<Product> cart;
+	private Invetory inv;
+	
+	public Store(Inventory inv) {
+		this.cart = new ArrayList<>();
+		this.inv = inv;
+	}
+	
+	public void addToCart() {}
+	public void viewCart() {}
+	public int total() {}
+}

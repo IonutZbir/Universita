@@ -1,0 +1,142 @@
+			Algoritmi per risolvere Fibonacci
+
+1(fib1). Uso la formula chiusa: F_n = 1/sqrt(5)*(phi^n - phi_^n)
+
+2(fib2). Uso la ricorsione:
+
+algoritmo fibonacci2(intero n) → intero
+	if (n≤2) then return 1 
+	else return fibonacci2(n-1) + fibonacci2(n-2)
+
+COSTO: T(n) = 2 + T(n-1) + T(n-2)  T(1) = T(2) = 1
+
+Albero della ricorsione
+* Utile per risolvere la relazione di ricorrenza
+* Nodi corrispondenti alle chiamate ricorsive
+* Figli di un nodo corrispondenti alle chiamate
+
+(Il primo nodo si chiama RADICE
+ I NODI INTERNI sono i nodi che hanno figli	
+ I nodi che non hanno figli si dicono FOGLIE)
+
+I nodi interni hanno etichetta 2
+Le foglie hanno etichetta 1
+
+Per calcolare T(n):
+- Contiamo il numero di foglie
+- Contiamo il numero di nodi interni
+
+Lemma 1:
+Il numero di foglie dell'albero della ricorsione di fibonacci è pari a F_n
+
+Lemma 2:
+Il numero di nodi interni di un albero in cui ogni nodo interno ha due figli è pari al numero di foglie - 1
+
+In totale:
+	T(n) = F_n + 2(F_n - 1) = 3F_n - 2 = F_n = phi^n -> algoritmo lento (crescita esponenziale)
+E' lento perché continua a ricalcolare ripetutamente la sooluzione dello stesso sottoprobelma
+
+3(fib3). Memorizzo i numeri di fibonacci in un Array
+
+algoritmo fibonacci3(intero n) -> intero
+	sia Fib un array di n interi	#eseguita una sola volta
+	Fib[1] = 1; Fib[2] = 1	#eseguita una sola volta
+	for i = 3 to n do	#eseguita n volte
+		Fib[i] = Fib[i-1] + Fib[i-2]	#eseguita n volte
+	return Fib[n] 	#eseguita una sola volta
+
+T(n) = n + n + 3 = 2n + 3 -> alogirtmo più veloce rispetto a fibonacci 2 di 38 milioni di volte (crescita lineare)
+Unica pecca: l'utilizza della memoria, fib3 occupa in memoria uno spazio proporzionale a n
+
+4(fib4). Invece di memorizzare tutti i valori di fibonacci, memorizzo solo gli ultimi 2
+	
+algoritmo fibonacci4(interno n) -> intero
+	a = 1; b = 1
+	for i = 3 to n do
+		c = a + b
+		a = b
+		b = c
+	return c
+
+T(n) = 4n + 2 (Più lento di fib3??)
+
+Notazione Asintotica
+* Esprimere T(n) in modo QUALITATIVO
+* Perdere un pò in PRECISIONE ma guadagnare SEMPLICITA'
+* Di T(n) vogliamo descrivere come cresce al cresere di n
+	- ignoro costanti moltiplicative
+	- ignoro termini di ordine inferiore
+
+Esempi:
+	- T(n) = 5n + 9 = O(n)
+	- T(n) = 6n^2 + 8n - 13 = O(n^2)
+
+Diremo che f(n) = Og(n) se f(n) <= c*g(n) per qualche costante c, ed n abbastanza grande
+- T(n) = 3Fn con T(n) = O(Fn)
+- T(n) = Fn con T(n) = O(phi^n)
+
+5(fib5). matrici
+- fib4 non è il miglior algoritmo possibile
+- E' possibile dimostrare per induzione la seguente proprietà di matrici:
+	[1 1]^n  [Fn+1 Fn  ]
+	[1 0]  = [Fn   ]
+- Useremo questa proprietà per progettare un algoritmo più efficiente
+
+Lemma:
+	il prodotto sopra
+
+algoritmo fibonacci5(intero n) -> intero
+	M = [1 1] 
+	    [1 0]
+	for i = 1 to n - 1 do
+		M = M * [1 1] 
+			[1 0]
+	return M[0][0]
+
+- Il tempo di esecuzione è ancora O(n) ma possiamo usare le proprietà delle potenze e ottenere un risultato migliore
+
+Calcolo di Potente
+* Possiamo calcolare la n-esima potenza elevando al quadrato la (n/2)-esima potenza
+* Se n è dispari eseguiamo una ulteriore moltemplicazione
+
+* Esempio
+3^2=9	3^4=(9)^2 = 81	3^8 = (81)^2 = 6561
+=> Ho eseguito solo 3 prodotti invece di 7
+
+6(fib9). 
+
+algoritmo fibonacci6(interno n) -> intero
+	A = [1 1]
+	    [1 0]
+	M = potenzaDiMatrice(A, n-1)
+	return M[0][0]
+
+funzione potenzaDiMatrice(matrice A, intero k) -> matrice
+	if(k = 0) return [1 0]
+			 [0 1]
+	else M = potenzaDiMatrice(A, k/2)
+		M = M * M
+	if (k dispari) then M = M * A
+	return M
+
+Costo: T(n) = O(log²n) quindi è esponenzialmente più veloce di fibonacci3
+
+Quanta memoria usa un algoritmo?
+* Algoritmo non ricorsivo: dipende dalla memoria ausiliaria utilizzata (variabili, arry, strutture dati)
+* Algoritmo ricorsibo: dipende dalla memoria ausiliaria utilizzata da ogni chiamata e dal numero di chiamate che sono contemporaneamente attive.
+Nota: Una chiamata usa sempre almeno memoria costante
+
+Analisi Memoria Ausiliaria Fibonacci2
+* chiamate attive formano un cammino P radice-nodo
+* P ha al più n nodi
+* ogni nodo/chiamata usa memoria costante
+=> spazio O(n)
+
+Analisi Memoria Ausiliaria Fibonacci6
+=> spazio O(log n)
+
+
+
+
+
+

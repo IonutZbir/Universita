@@ -1,0 +1,32 @@
+import java.util.ArrayList;
+public class Inventory {
+	private ArrayList<Product> inventory;
+	
+	public Inventory() {
+		this.inventory = new ArrayList<>();
+	}
+	
+	public void addProduct(Product newProduct) {
+	    // Cerca il prodotto nell'inventario
+	    for (Product existingProduct : this.inventory) {
+	        if (newProduct.equals(existingProduct)) {
+	            // Il prodotto esiste già nell'inventario, aggiorna la quantità
+	            if (existingProduct instanceof PhysicalProduct && newProduct instanceof PhysicalProduct) {
+	                // Verifica se entrambi i prodotti sono di tipo PhysicalProduct
+	                PhysicalProduct existingPhysicalProduct = (PhysicalProduct) existingProduct;
+	                PhysicalProduct newPhysicalProduct = (PhysicalProduct) newProduct;
+	                existingPhysicalProduct.updateStock(newPhysicalProduct.getStock());
+	                break;
+	            }
+	        }
+	    }
+	    // Se il prodotto non esiste nell'inventario, aggiungilo
+	    this.inventory.add(newProduct);
+	}
+
+	public boolean removeProduct(Product delProduct) {
+		return this.inventory.remove(delProduct);
+		
+	}
+	
+}

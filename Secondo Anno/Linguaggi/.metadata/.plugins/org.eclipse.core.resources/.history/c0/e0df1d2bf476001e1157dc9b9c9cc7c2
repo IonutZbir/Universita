@@ -1,0 +1,18 @@
+import java.util.ArrayList;
+public class Store {
+	private ArrayList<Product> cart;
+	private ArrayList<Product> inv;
+	
+	public Store(Inventory inv) {
+		this.cart = new ArrayList<>();
+		this.inv = inv.getInventory();
+	}
+	
+	public void addToCart(Product newProduct) {
+		if(this.inv.contains(newProduct)) {
+			
+		}
+	}
+	public void viewCart() {}
+	public int total() {}
+}

@@ -1,0 +1,25 @@
+public class Main {
+	public static void main(String args[]) {
+		PhysicalProduct computer = new PhysicalProduct("Lenovo", 500.0d, 40);
+		PhysicalProduct phone = new PhysicalProduct("Samsung", 540.0d, 20);
+		DigitalProduct e_book = new DigitalProduct("Il Signore Dei Anelli", 20.0d);
+		
+		Inventory inv = new Inventory();
+		
+		Store myStore = new Store(inv);
+		
+		inv.addProduct(e_book);
+		inv.addProduct(computer);
+		inv.addProduct(phone);
+		
+		inv.viewInventory();
+		
+		myStore.addToCart(e_book);
+		myStore.addToCart(computer);
+	
+		myStore.viewCart();
+		
+		System.out.println(computer.getName() + computer.getStock());
+	
+	}
+}

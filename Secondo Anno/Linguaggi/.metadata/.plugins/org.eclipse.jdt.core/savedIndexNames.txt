@@ -1,0 +1,8 @@
+INDEX VERSION 1.134+/home/ionut/Desktop/Secondo Anno/Linguaggi/.metadata/.plugins/org.eclipse.jdt.core
+3947477163.index
+3878780248.index
+1336387358.index
+1865797976.index
+1582616940.index
+2958154534.index
+3002897646.index

@@ -1,0 +1,43 @@
+DBMS -> software in grado di gestire collezioni di dati
+	* grandi
+	* persistenti
+	* condivise
+garantendo affidabilità e privatezza (disciplina e controllo degli accessi).
+Deve essere:
+	- efficiente (ottimizzando le risorse del sistema)
+	- efficace (rendendo produttive le attività dei suoi utilizzatori)
+
+DataBase -> Collezione di informazioni registrate in formato leggibile dall'elaboratore
+	elettronico e relativa ad un preciso DOMINIO di conoscenza (azienda, università, etc..)
+	organizzata allo scopo di poter essere consultata dai suoi utilizzatori.
+ 
+Archivio di File
+- Ogni file è un insieme di record all'interno dei quali sono memorizzati dati elementari (attributi e campi)
+- Formati incompatibili rende la condivisione dei dati attraverso applicazioni differenti difficoltosa
+
+L'approccio basato su DBMS va olte l'uso di file locali gestiti dalle sigole applicazioni tramite un sistema di gestione dei dati che risulta indipendente dalle applicazioni e specializzati in tale funzione.
+Il DBMS si interfaccia fra le applicazioni e la memoria di massa
+{immagine}
+
+Condivisione
+- Ridurre la ridondanza: una base di dati centralizzata permette di ridurre la replica della stessa informazione
+- Ridurre l'inconsistenza: l'eliminazione della presenza di varie copie dello dato elimina la possibilita di inconsistenze, la gesitione attraverso una componetente specializzata permette di introdurre controlli sui dati per garantire la consistenza
+
+
+
+DBMS vs File System
+
+l'efficienza si misura in termini di:
+- tempo di esecuzione
+- memoria
+
+I DBMS non sono più efficienti dei file system
+
+
+Modello di rappresentazione dei dati
+
+
+
+
+
+
