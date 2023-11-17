@@ -13,6 +13,7 @@ typedef struct stack{
 
 node *alloc_node(int);
 stack *init_stack();
+int is_empty(stack*);
 void push(stack*, int);
 node *pop(stack*);
 node *top(stack*);

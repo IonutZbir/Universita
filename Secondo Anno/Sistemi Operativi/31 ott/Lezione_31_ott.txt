@@ -205,7 +205,34 @@ Due procedure principali: mutex_lock e mutex_unlock
 - Se il mutex è unlocked, il thread può entrare; se è locked, il thread attende.
 - Al termine dell'accesso, il thread chimata mutex_unlock per liberare la risorsa.
 - IMPORTANTE: non si utilizza il busy waiting. Se un thread non puo acquisire un lock, chiama thread_yield per cedere la CPU ad un altro thread.
+- I mutex possono essere implementati nello spazio utente con istruzioni come TLS e XCHG
+- Alcuni pacchetti di thread offrono mutex_trylock che, tenta di acquisire il lock o restituisce un errore, senza bloccare. Offre la possibilita di provare a prendere lock, se non è gia occupato non si blocca ma continua ad eseguire altro, non sprecando tempo.
+- I mutex sono efficaci quando i thread operano in uno spazio degli indirizzi comune.
+- La condivisione di memoria tra processi può essere gesitita tramite il kernel o con l'aiuto di sistemi operativi che permettono la condivisione di parti dello spazio degli inidirizzi.
+- L'efficienza nella sincronizzazione diventa cruciale con l' aumento del parallelismo
+- Spin lock e mutex con busy waiting: efficaci per attese brevi, ma sprecano CPU per attese lunghe.
+- Passaggio al kernel per bloccare processi è oneroso se le contese sono poche.
+- Soluzione: Futex (Fast User Space Mutex), combina il meglio di entrambi gli approcci.
+
+Mutexes in Pthead
+La libreria Posix Pthead fornisce funzioni per sincronizzazione tra thread.
+Il mutex è una variabile che puo essere locked o unlocked ed è utilizzato per proteggere le regioni critiche.
+Il thread tenta di bloccare (lock) un mutex per accedere alla regione critica. Se mutex è unlocked, l'accesso è immediato e atomico. Se locked il thead attende.
+
+Semafori o mutex?
+- Finalità
+  Mutex: E' utilizzato principalmente per garantire l'esclusione mutua. E' destinato a proteggere l'accesso a una risorsa condivisa, garantendo che una solo thead possa accedervi alla volta.
+  Semaforo: Può essere usato per controllare l'accesso a una risorsa condivisa, ma è anche spesso usato per la sincronizzazione tra thread.
+
+- Semantica
+  Mutex: Di solito ha una semantica di "proprietà", il che significa che solo il thread che ha acquisito il mutex può rilascirarlo
+  Semaforo: Non ha una semantica di "proprietà". Qualsiasi thead può aumentare o diminuire il conteggio del semaforo, indipendentemente da chi lo ha modificato l'ultima volta.
+
+- Casistica
+  Per l'esclusione mutua: Un mutex è generalmente preferibile. E' più semplice (di solito ha operazioni di lock e unlock) e spesso offre una semantica più rigorosa e un comportamento più prevedibile.
+  Per la sincronizzazione tra thread: Un semaforo può essere più adatto, specialmente quando si tratta di coordinare tra diversi thread o di gestire risorse con un numero limitato di istanze disponibili.
 {6.4_produce_consumer_mutex.c}
+
 
 
 

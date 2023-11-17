@@ -24,7 +24,6 @@ void push(stack *st, int elem){
     node *nd = alloc_node(elem);
     if (st->len == 0) {
         st->head = nd;
-        nd->next = NULL;
     }else{
         nd->next = st->head;
         st->head = nd;
@@ -54,7 +53,7 @@ void print_stack(stack *st){
     node *nd = st->head;
     int i = 0;
     printf("len: %d\n( ", st->len);
-    while (nd->next != NULL) {
+    while (nd != NULL) {
         printf("%d ", nd->data);
         nd = nd->next;
         i++;
