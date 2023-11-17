@@ -23,10 +23,12 @@ stack *init_stack(){
 void push(stack *st, int elem){
     node *nd = alloc_node(elem);
     if (st->len == 0) {
-       st->head = nd; 
+        st->head = nd;
+        nd->next = NULL;
+    }else{
+        nd->next = st->head;
+        st->head = nd;
     }
-    nd->next = st->head;
-    st->head = nd;
     st->len++;
 }
 
@@ -52,7 +54,7 @@ void print_stack(stack *st){
     node *nd = st->head;
     int i = 0;
     printf("len: %d\n( ", st->len);
-    while (i < st->len) {
+    while (nd->next != NULL) {
         printf("%d ", nd->data);
         nd = nd->next;
         i++;

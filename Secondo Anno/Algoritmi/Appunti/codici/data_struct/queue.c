@@ -36,6 +36,7 @@ void enqueue(queue *q, int elem){
         q->tail->next = nd;
         q->tail = nd;
     }
+    nd->next = NULL;
     q->len++;
 }
 
@@ -52,7 +53,6 @@ node *dequeue(queue *q){
 node *first(queue *q){
     if (!isEmpty(q)) {
         node *nd = q->head;
-        q->head = q->head->next;
         return nd;
     }
     return NULL;
