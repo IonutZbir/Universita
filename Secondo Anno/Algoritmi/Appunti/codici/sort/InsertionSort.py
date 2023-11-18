@@ -7,7 +7,7 @@ def insertion(array):
                 x = a
                 array[i] = b
                 array[i-1] = x
-            i -= 1
+                i -= 1
     return array
 
 a = [10, 4, 1, 32, 450, 2, 20, 10, 0, 75]
