@@ -1,0 +1,33 @@
+Gestione della memoria nei sistemi operativi
+
+La memoria principale (RAM) è una risorsa fondamentale che va gestita attentamente, anche se cresce rapidamente, i programmi crescono più velocemente.
+Il desiderio è quello di avere una memoria privata, grande, veloce e persistente (non volatile), ma la tecnologia di oggi ancora non permette di avere questo tipo di memoria.
+Nel corso degli anni si è sviluppato il concetto di gerarchia della memoria, i computer possono avere pochi megabyte di memoria molto veloce e molto costosa, qualche gigabyte di memoria abbastanza veloce ma meno costosa e volatile, e qualche terabyte di memoria lenta, poco costosa e non volatile. E' compito del sistema operativo astrarre questa gerarchia.
+La parte del sistema operativo che gestisce la gerarchia della memoria è detto Gestore della Memoria i quali compiti sono: tener traccia della memoria in uso, allocare nuova memoria, e deallocare memoria.
+
+MEMORY ABSTRACTION
+
+# Memoria senza Astrazione
+
+Il modo più semplice per astrarre la memoria è non farlo. Quindi il processo va ad utilizzare direttamente la memoria fisica.
+Questo tipo di "astrazzione" funziona quando sulla macchina viene eseguito un solo programma. Questo modello ha fallito quando erano più di un programma as essere eseguiti sulla macchina.
+Inoltre, bastava far accedere il processo all'area di memoria dell sistema operativo per causare danni.
+
+--> Monoprogrammazione
+
+Anche con il modello della memoria fisica, esistono tre sottomodelli di organizzazione della memoria:
+1. Il sistema operativo può trovarsi in fondo alla RAM, usato sui mainframe e sui minicomputer.
+2. Il sistema operativo si trova in ROM, usato nei sistemi embedded, incastrato nella memoria ROM
+3. Il sistema operativo e i drivers in RAM + ROM, usato sui primi modelli si personal computer, dove la parte del sistema nella ROM è chiamta BIOS (Basic Input Output System).
+{immagine}
+--> Multiprogrammazione
+
+E' pero possibile eseguire più programmi contemporaneamente anche senza astrazione della memoria; il sistema operativo deve salvare l'intero contenuto della memoria in un file su memoria non volatile, quindi prelevare ed eseguire il programma successivo. Finche in memoria c'e un solo programma per volta, non ci sono conflitti. Questo concetto (swapping) verrà approfondito piu avanti.
+
+Un approccio che si ha avuto è il cosidetto Naive Approch, ovvero caricamento di piu programmi in memoria fisica consecutivamente, senza astrazione dell'indirizzo.
+Per esempio: Avendo due programmi da 16Kb, il programma A (0 - 16380) inzia con l'istruzione JMP 24, il prgramma B (16384 - 32764) inzia con l'istruzione JMP 28. Se sono caricati in sequenza, l'istruzione JMP 28 punta all'area di memoria 28, che appartiene al programma A, quindi punta ad uno spazio di memoria sbagliato, causando conflitti durante l'esecuzione e crash dei programmi.
+{immagine}
+
+# Astrazione della Memoria
+
+
