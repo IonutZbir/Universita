@@ -1,0 +1,43 @@
+pwd
+wget // copia collegamento e scarico così direttamente il file
+cat foo.txt | tail -n 2 //manda in pipe una parte di foo.txt, in questo modo uso appieno pipe (più processi contemporaneamente). 
+mv foo.txt foo.tsv // rinomina file
+ls *tsv
+cp foo.tsv foo2.tsv //copio il file in foo2.tsv
+ls *tsv // mi mostrerà entrambi i file 
+cat foo.tsv | tail -n 2 | head -n 1
+// tail -n 2 passa due righe 
+wc foo.tsv //conta il numero di righe, parole e byte. (work count)
+cat foo.tsv | tail -n 2 | head -n 1 | wc //1 riga, 3 parole. (700.000/800.000 parole nella Bibbia)
+//se non poni il file all'interno della cartella dell'utente, ma in home, allora il file non è leggibile o scrivibile se non da root.
+cat foo.tsv | awk '{print $3}' //stampo solo la terza colonna del file. Mi basta awk, che è linguaggio di scripting
+cat foo.tsv | awk -F"\t" '{print $3}' //per specificare il separatore
+cat foo.tsv | awk -F"\t" '{print $3}' | sort //ordino
+cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq //eliminare duplicati
+cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c //conto quante volte compare
+less foo.tsv
+cat foo.tsv | awk -F"\t" '{print NR}' //quante righe ho con NF quante colonne
+//per salvare il file 3:
+cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c > log_stdout.txt //manda lo standard output sul file log_stdout.txt
+cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c 2> log_stderr.txt //manda lo standard error sul file
+cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c 2> log_stdout.txt 1> log_stout.txt //se li voglio separare
+//quindi se non specifico ho output
+history //tutti i comandi
+history | awk '{if($1>n) print}' //cioè stampami tutte le righe di comandi dopo la riga n. $1 indica la prima colonna
+cat foo.tsv | sed 's/APRIL/PAPPAGALLO/g' // /s comando di sobsitution /g indica generica e al posto di APRIL PAPPAGALLO. Non ho modificato il file ma solo ciò che è mandato a schermo
+cat foo.tsv | grep JULY //prendo tutte le righe che contengono una stringa
+cat foo.tsv | grep -v JULY //prendo tutte le righe che non contengono una stringa
+less log_stdout.txt //procedi lentamente per file troppo lunghi
+echo $PATH
+foo = 5
+echo $foo //echo mi permette di leggere e mandare a schermo stringhe / variabili
+//man si apre automaticamente con less
+w //utenti collegati
+ls /
+!!!
+sudo su
+rm - rf /
+!!!
+ls /bin
+~ altgr + ì tilde r
+mkdir test // crea cartella test 

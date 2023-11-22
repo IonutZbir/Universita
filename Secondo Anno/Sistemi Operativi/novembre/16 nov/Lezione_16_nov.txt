@@ -1,0 +1,34 @@
+MEMORIA VIRTUALE
+
+Mentre da un lato i registri base e limite possono essere utilizzati per creare l’astrazione degli spazi degli indirizzi, dall’altro sorge un nuovo problema: la gestione del bloatware, cioè del software sempre più “gonfio”. Le dimensioni della memoria sono in costante aumento, ma quelle dei software aumentano ancora più velocemente
+
+L’idea alla base della memoria virtuale è che ogni programma ha un suo spazio degli indirizzi, suddiviso in parti chiamati pagine. Ogni pagina è un intervallo di indirizzi contigui. Queste pagine sono mappate sulla memoria fisica, ma per eseguire il programma non è indispensabile che tutte le pagine siano contemporaneamente nella memoria fisica. Quando il programma fa riferimento a una parte del suo spazio degli indirizzi che è nella memoria fisica, l’hardware esegue direttamente la mappatura necessaria. Quando il programma fa riferimento a una parte del suo spazio degli indirizzi che non è nella memoria fisica, il sistema operativo viene allertato, va a prelevare la parte mancante ed esegue nuovamente fallita.
+
+Implementazioni diverse della memoria virtuale adottano scelte diverse rispetto a queste unità; oggi la maggior parte dei sistemi impiega una tecnica detta paging (paginazione) che prevede unità di dimensioni fisse, ad esempio di 4 KB. Una soluzione alternativa detta segmentazione usa come unità interi segmenti di dimensione variabile.
+
+--> PAGINAZIONE
+
+La maggior parte dei sistemi di memoria virtuale usa una tecnica chiamata paginazione o paging. Su qualsiasi computer i programmi fanno riferimento a un set di indirizzi di memoria.
+quando un programma esegue un’istruzione come
+
+MOV REG,1000
+
+la esegue per copiare il contenuto dell’indirizzo di memoria 1000 in REG. Gli indirizzi possono essere generati usando indicizzazione, registri base e vari altri modi.
+
+Questi indirizzi generati dal programma sono chiamati indirizzi virtuali e formano lo spazio degli indirizzi virtuali. Sui computer senza memoria virtuale, l’indirizzo virtuale è posto direttamente sul bus di memoria e provoca la lettura o la scrittura della parola della memoria fisica con lo stesso indirizzo. Quando è utilizzata la memoria virtuale, gli indirizzi virtuali non vanno direttamente al bus di memoria, ma a una MMU (Memory Management Unit, unità di gestione della memoria) che mappa gli indirizzi virtuali sugli indirizzi della memoria fisica.
+
+Lo spazio degli indirizzi virtuali è suddiviso in unità di dimensione fissa, chiamate pagine. Le unità corrispondenti nella memoria fisica sono chiamate frame o page frame. Le pagine e i frame sono della stessa dimensione; per esempio da 4 KB. Nei sistemi reali le pagine vanno da 512 byte fino a 64 KB.
+{immagine}
+64Kb di pagine vituali possono essere mappate in 8 frame, usando 16 bit per indirizzo.  I trasferimenti fra RAM e memoria non volatile sono sempre di pagine intere. Molti processori supportano più dimensioni di pagina, che possono essere mescolati e abbinati a discrezione del sistema operativo. Ad esempio, l’architettura x86-64 supporta pagine da 4 KB, 2 MB e 1-GB, e potremmo utilizzare le pagine da 4 KB per le applicazioni utente e una singola pagina da 1 GB per il kernel.
+
+Esempi:
+
+1. L’istruzione MOV REG,8192 è trasformata effettivamente in MOV REG,24576 poiché l’indirizzo virtuale 8192 (nella pagina virtuale 6) è mappato sul 24576 (nel frame fisico 24K–28K)
+2. L’indirizzo virtuale 20500 dista 20 byte dall’inizio della pagina virtuale 3 (indirizzi virtuali da 20480 a 24575) e la sua mappatura sull’indirizzo fisico è 12288 + 20 = 12308.
+
+Questa capacità di mappare le 16 pagine virtuali su uno qualsiasi degli 8 frame, impostando in modo appropriato la mappa della MMU, da sola non basta a risolvere il problema dello spazio degli indirizzi virtuali più grande della memoria fisica. Poiché abbiamo solo 8 frame fisici, solo otto delle pagine virtuali sono mappate sulla memoria fisica. Le altre, mostrate nella figura con una X, non sono mappate. Nell’hardware, un bit presente/assente tiene traccia di quali pagine sono presenti fisicamente in memoria.
+Che cosa accade se, per esempio, il programma fa riferimento a indirizzi non mappati usando l’istruzione MOV REG,32780 che è il byte 12 all’interno della pagina virtuale 8 (che parte da 32768)? La MMU rileva che la pagina non è mappata (è contrassegnata da una X nella figura) e causa una trap della CPU verso il sistema operativo. Questa trap è chiamata page fault (errore di pagina). Il sistema operativo preleva un frame poco utilizzato e ne scrive il contenuto su disco (se non è già presente). Prende poi la pagina alla quale è stato appena fatto riferimento e la pone nel frame appena liberato, cambia la mappae riavvia l’istruzione che era in trap.
+
+--> MMU
+
+
