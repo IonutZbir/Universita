@@ -1,0 +1,15 @@
+--> ALGORITMI DI SOSTITUZIONE DELLE PAGINE
+Quando si verifica un page fault, per far spazio alla pagina entrante il sistema operativo deve scegliere una pagina da sfrattare (rimuovere dalla memoria). Se la pagina da rimuovere è stata modificata mentre era in memoria, deve essere riscritta sulla memoria non volatile per aggiornare la copia su disco o SSD. Se invece la pagina non è stata modificata (per esempio perché contiene il codice eseguibile del programma), la copia su disco o SSD è già aggiornata e non c’è bisogno di riscrivere. La pagina da leggere sovrascrive semplicemente la pagina sfrattata.
+
+Sarebbe possibile prendere una pagina a caso da rimuovere a ogni page fault, ma le prestazioni del sistema migliorano molto se si sceglie una pagina non particolarmente utilizzata. Se si sfrattasse una pagina usata frequentemente, con ogni probabilità dovrebbe essere riportata in memoria a breve, con il risultato di un ulteriore sovraccarico.
+
+1. L'algoritmo ottimale di sostituzione delle pagine
+
+Ciascuna pagina può essere etichettata con il numero di istruzioni da eseguire prima di ricevere un riferimento per la prima volta.
+L’algoritmo di sostituzione ottimale indica che deve essere rimossa la pagina con, l’etichetta con il numero più alto. Se una pagina non sarà usata per 8 milioni di istruzioni e un’altra pagina per 6 milioni di istruzioni, rimuovere la prima allontana il page fault che la ricaricherebbe il più in là possibile.
+
+Il solo problema di questo algoritmo è che è irrealizzabile. Al momento del page fault, il sistema operativo non ha modo di sapere in quale momento verrà fatto il prossimo riferimento a ciascuna delle pagine. Però eseguendo un programma su un simulatore, e tenendo traccia di tutti i riferimenti alle pagine, è possibile implementare una sostituzione delle pagine ottimale sulla seconda esecuzione, usando le informazioni sui riferimenti alle pagine raccolte durante la prima esecuzione. In questo modo è possibile confrontare le prestazioni degli algoritmi realizzabili con quelle del migliore algoritmo possibile, ad esempio, se un sistema operativo ottiene una prestazione inferiore dell’1% rispetto all’algoritmo ottimale, per quanto ci si sforzi alla ricerca di un algoritmo migliore si otterrà al massimo un miglioramento dell’1%.
+
+2. Not Recently Used (NRU)
+
+
