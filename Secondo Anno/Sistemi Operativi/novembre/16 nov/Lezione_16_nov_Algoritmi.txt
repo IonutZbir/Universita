@@ -40,3 +40,83 @@ Supponiamo che si verifichi un page fault all’istante 20. La pagina più vecch
 
 Quello che la seconda chance sta cercando è una vecchia pagina che non sia stata oggetto di riferimenti durante l’ultimo intervallo del clock. Se tutte le pagine hanno avuto riferimenti, la seconda chance degenera in un FIFO puro.
 
+5. Clock
+
+Funzionamento: Lista circolare dei frame di pagina con un puntatore simile ad una lancetta di un orologio per identificare la pagina più vecchia.
+Quando avviene un page fault, la pagina indicata dalla lancetta viene controllata. Se il suo bit R è 0 viene sfrattata, la nuova pagina viene inserita al suo posto nell’orologio e la lancetta viene spostata in avanti di una posizione. Se R è 1, viene azzerato e la lancetta passa alla pagina successiva. Questo processo è ripetuto finché viene trovata una pagina con R = 0. E' piu efficiente rispetto a Seconda chance e FIFO.
+{immmagine}
+
+6. Least Recently Used (LRU)
+
+L'idea del algoritmo è di sfrattare la pagina rimasta inutilizzata per più tempo. Teoricamente l'algoritmo è fattibile, il problema è l'implementazione. Per implementare tale algoritmo è necessario tenere in memoria una lista concatenata di tutte le pagine, con quelle più usate in testa e quelle meno usate in coda. La difficoltà sta nel fatto che l’elenco deve essere aggiornato a ogni riferimento alla memoria. Trovare una pagina in memoria, cancellarla e poi portarla in testa è un’operazione che costa del tempo, anche se eseguita nell’hardware. 
+
+Esistono però altri metodi per implementare l’LRU con hardware speciale. Usare un contatore a 64 bit per ogni riferimento a memoria. Alla generazione di un page fault, si rimuove la pagina con contatore più basso, indicando l'uso meno recente.
+
+7. Simulazione del LRU via software - algoritmo NFU (Not Frequently Used)
+
+Associa ad ogni pagina un contatore, incrementato con ogni interrupt del clock in base al bit R. I contatori tengono traccia del numero di riferimenti di ciascuna pagina. Quando avviene un page fault, la scelta di quale pagina sostituire cade su quella con il contatore più basso. 
+
+Il problema principale dell’NFU è che non dimentica mai nulla. Per esempio, nel caso di un compilatore multipass (a molteplici passaggi) le pagine usate frequentemente durante il passaggio 1 avrebbero un conteggio alto anche nei passaggi successivi. Infatti, se accade che il passaggio 1 è quello con il tempo di esecuzione più alto fra tutti i passaggi, le pagine contenenti il codice per i passaggi seguenti potrebbero avere sempre conteggi inferiori alle pagine del passaggio 1, quindi il sistema operativo rimuoverebbe pagine utili invece di pagine non più utilizzate.
+
+Il NFU si può migliorare semplicemente con il concetto di aging. Si usa un numero limitato di bit (8), ad ogni interrupt del clock i bit vengono spostati a destra, ma prima dello shifting, il bit R viene aggiunto a sinistra.
+Quando avviene un page fault, viene rimossa la pagina con il contatore più basso. È evidente che una pagina che non abbia riferimenti, diciamo, per quattro cicli del clock, avrà 4 zero consecutivi nel suo contatore e avrà così un valore inferiore rispetto a una senza riferimenti per tre cicli del clock.
+{immagine}
+
+Consideriamo come esempio la pagina 1. 
+a. Non è modificata ed ha valore     0 0 0 0 0 0 0 0.
+b. viene modificata ed ha valore     1 0 0 0 0 0 0 0.
+c. viene modificata ed ha valore     1 1 0 0 0 0 0 0.
+d. non viene modificata ed ha valore 0 1 1 0 0 0 0 0.
+
+Adesso consideriamo le pagine 3 e 5. 
+c. Entrambe hanno avuto accesso: 3 -> 1 0 0 0 0 0 0 0.
+                                 5 -> 1 0 1 0 0 0 0 0.
+d ed e. Nessuna delle due ha avuto riferimenti
+                                 3 -> 0 0 1 0 0 0 0 0.
+                                 5 -> 0 0 1 0 1 0 0 0.
+Con NFU è Aging, la pagina 3 viene rimossa poiche la pagina 5 ha avuto riferimenti in (a) prima e la pagina 3 no.
+L’uso di un contatore a 16, 32 o 64 bit fornisce una cronologia più lunga, al costo di una maggior quantità di memoria per contenerla. Di solito 8 bit sono più che sufficienti.
+
+8. Working Set 
+
+Demand Paging: quando i processi sono avviati nessuna delle loro pagine è in memoria. Appena la CPU prova a prelevare la prima istruzione, genera un page fault e fa sì che il sistema operativo prelevi la pagina con la prima istruzione. Rapidamente seguono altri page fault per le variabili globali e lo stack. Dopo un certo tempo, il processo ha la maggior parte delle pagine che gli servono ed è in condizione di essere eseguito con relativamente pochi page fault
+
+Working Set: L’insieme delle pagine che un processo sta attualmente usando. Se l’intero set di lavoro è in memoria, il processo sarà eseguito senza causare molti page fault fino a quando passerà a un’altra fase dell’esecuzione
+
+Molti sistemi di paginazione cercano quindi di tenere traccia del set di lavoro di ciascun processo e di accertarsi che sia in memoria prima di consentirne l’esecuzione. Tale approccio è chiamato working set model ed è stato progettato per ridurre notevolmente la frequenza dei page fault. Il caricamento delle pagine prima di lasciar eseguire i processi è detto anche prepaginazione o prepaging.
+
+È risaputo che raramente i programmi fanno riferimenti a tutto il loro spazio degli indirizzi uniformemente; i riferimenti tendono a raggrupparsi su un numero ristretto di pagine. In ogni istante t esiste un insieme che consiste di tutte le pagine usate dai k riferimenti alla memoria più recenti. Questo insieme w(k, t) è il set di lavoro. w(k, t) è una funzione monotòna non decrescente di k al crescere di k perche le pagine o aumentano oppure il numero rimane costante se non servono al processo. Il limite di w(k, t) quando k diventa grande è finito, poiché un programma non può fare riferimento a più pagine di quante ne contenga il suo spazio degli indirizzi e pochi programmi utilizzeranno ogni singola pagina.
+
+Se il working set di un processo è completamente in memoria, si verificano pochi page fault. Se il working set è piu grande della memoria disponibile, si verificano frequenti page fault, rallentando significamente il processo. Questo fenomeno è noto come thrashing, ovvero la CPU è occupata solo a scambiare le pagine da memoria volatile a memoria non volatile.
+{immagine}
+Tracciamento del Working Set.
+Il working set è definito come l'insieme delle pagine usate negli ultimi k riferimenti alla memoria. In pratica è spesso definito in termini di tempo, ad esempio le pagine usate negli ultimi t secondi di tempo di esecuzione.
+
+Andiamo adesso ad analizzare un algoritmo di sostituzione delle pagine che si basa sul set di lavoro. L’idea base è quella di trovare una pagina che non sia nel set di lavoro e rimuoverla. Un interrupt periodico azzera il bit R a ogni ciclo di clock.
+Cosa succede durante un page fault? Viene fatta una scansione delle pagine alla ricerca di una pagina da rimuovere. Viene controllato il bit R di ciascuna pagina. 
+- Se R = 1, viene aggiornato il tempo dell'ultimo utilizzo, la pagina rimane nel working set.
+- Se R = 0 e età > t, la pagina non è nel working set e viene rimossa.
+- Se R = 0 e età <= t, la pagina è nel working set e non viene rimossa.
+Se nessuna pagina è rimovibile, viene selezionata la piu vecchia con R = 0, altrimenti una a caso.
+{immagine}
+
+9. WSClock
+
+WSClock è un miglioramento dell'algoritmo di Clock che integra le informazioni del working set.
+Usa una lista circolare di frame, simile all'algoritmo Clock. Ogni frame nella lista contiene: il tempo di utilizzo, il bit R e il bit M.
+
+Ad ogni page fault è esaminata per prima la pagina indicata dalla lancetta dell'orologio. Se il bit R = 1 la pagina non è la candidata ideale alla rimozione, ovvero è stata usata nel ciclo del clock, poi il bit R viene impostato a 0. La lancetta avanza alla pagina successiva e l'algoritmo viene ripetuto per la nuova pagina.
+Se la pagina indicata ha R = 0 e se eta > t:
+- Se M = 0 (pagina pulita), non è nel working set e ne esiste una copia valida su memoria non volatile. Quindi il frame viene semplicemente riciclato e vi viene posta la nuova pagna.
+- Se M = 1 (pagina sporca), non ne esiste una copia valida in memoria non volatile quindi non puo essere sfrattata iimmediatamente.
+
+Per eviatre "rallentamenti" la scrittura su memoria non volatile viene schedulata e rimandata. Lungo la lista potrebbe esserci una pagina pulita e vecchia che puo essere usata immediatamente. La lancetta avanza e l'algoritmo procede con la pagina successiva.
+
+In conclusione, quali sono i migliori algoritmi?
+Aging e WSClock sono i migliori tra gli algoritmi analizzati, entrambi basati rispettivamente su LRU e sull'idea di Working Set, con buone prestazioni e implementazione efficiente. La nozione di migliore è il risultato del trade-off tra la complessità del metodo e i vincoli hardware che il sistema operativo deve comunque rispettare.
+
+
+
+
+
+
