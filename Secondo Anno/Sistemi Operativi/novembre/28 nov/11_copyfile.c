@@ -1,18 +1,14 @@
 /* Programma di copia di file con controllo errori minimale e reportistica. */
 
-#include <fcntl.h>
+#include <fcntl.h> //Contiene le costanti che vengono utilizzate nelle chiamate di sistema relative al controllo dei file descriptors. In questo programma, O_RDONLY viene utilizzato per aprire il file di input in modalità sola lettura.
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h> // Include i file header necessari
 #include <unistd.h>
 
 #define BUF_SIZE 4096    // Dimensione del buffer: 4096 byte
 #define OUTPUT_MODE 0700 // Bit di protezione per file di output
 
 #define TRUE 1
-
-// Prototipo della funzione main secondo lo standard ANSI
-int main(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) {
     int in_fd, out_fd;      // File descriptor per i file di input e output
@@ -22,12 +18,12 @@ int main(int argc, char *argv[]) {
     // Controllo del numero di argomenti
     if (argc != 3) {
         // Stampa un messaggio di errore se il numero di argomenti non è 
-        // orretto
+        // corretto
         fprintf(
             stderr,
             "Errore di sintassi. Uso: %s input_file_path output_file_path\n",
             argv[0]);
-        exit(1);
+        exit(1); // scrivo su STD_ERROR
     }
 
     // Apertura del file di input
