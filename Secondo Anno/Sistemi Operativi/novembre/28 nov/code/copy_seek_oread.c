@@ -1,6 +1,5 @@
 /* Programma di copia di file con controllo errori minimale e reportistica. */
 
-#include <ctype.h>
 #include <fcntl.h> //Contiene le costanti che vengono utilizzate nelle chiamate di sistema relative al controllo dei file descriptors. In questo programma, O_RDONLY viene utilizzato per aprire il file di input in modalità sola lettura.
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,6 +20,14 @@ long fileSize(const char *filename) {
         perror("[ERROR]: Error getting file size");
         return -1; // Indicates an error
     }
+}
+
+int checkPermission(const char *filename) {
+    struct stat fileInfo;
+
+    // NOT IMPLEMENTED
+
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
