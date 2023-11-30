@@ -42,7 +42,6 @@ int main(int argc, char *argv[]) {
         exit(3); // Se non può crearlo, esce
 
     // Ciclo di copia
-    // TODO lseek()
 
     while (TRUE) {
         rd_count = read(in_fd, buffer, BUF_SIZE); // Legge un blocco di dati

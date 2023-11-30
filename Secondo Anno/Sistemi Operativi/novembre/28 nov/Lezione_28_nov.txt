@@ -72,3 +72,61 @@ Quali operazioni si possono effettuare sui file?
 2. Delete: Eliminazione di un file per liberare spazio sul disco, attraverso una specifica chiamata di sistema.
 3. Open: Apertura di un file per consentire al sistema di caricare in memoria gli attributi e gli indirizzi del disco.
 4. Close: Chiusura del file ala termine degli accessi per liberare spazio nelle tabelle interne.
+5. Read: Lettura dei dati da un file, generalmente dalla posizione corrente, specificando la quantità di dati richiesti e fornendo un buffer per la loro memorizzazione.
+6. Write: Scrittura di dati nel file, tipicamente alla posizione corrente, puo comportare l'ampliamento del file o la sovrascrittura dei dati esistenti.
+7. Append: Aggiunta dei dati solo alla fine del file, usata in alcuni sistemi operativi come forma limitata di scrittura.
+8. Seek: Riposizionamento del puntatore del file su una posizione specifica per file ad accesso casuale, permettendo la lettura o la scrittura da quella posizione.
+9. GetAttributes: Lettura degli attributi del file 
+10. SetAttributes: Modifica degli attributi di un file da parte dell'utente, come la modalità di protezione o altri flag, dopo la creazione del file.
+11. Rename: Ridenominazione di un file, utilizzata come alternativa al processo di copia ed eliminazione del file originale, specialmente utile per file di grandi dimensione.
+
+{11_copyfile.c}
+
+--> DIRECTORY
+
+Per tener traccia dei file, i file system normalmente hanno directory o cartelle, che sono anch’esse dei file.
+
+1. Sistemi di directory a livello singolo
+
+La forma più semplice di sistema di directory è di avere una sola directory contenente tutti i file, talvolta chiamata directory principale (root directory). Il vantaggio di questo schema è la semplicità e la capacità di localizzare i file rapidamente: in fin dei conti c’è solo un posto in cui cercare.
+Oggi, in era moderna, questo tipo di organizzazione viene spesso usato nei dispositivi embedded, come fotocamere digitali o MP3, in teconologie RFID, come carte di credito, tessere di trasposto.
+{immagine}
+
+2. Sistemi a directory gerarchici
+
+Quello che serve è una gerarchia (cioè delle directory ramificate ad albero). Inoltre, se più utenti condividono un file server comune, com’è nel caso di molti network aziendali, ogni utente può avere una directory principale privata per la propria gerarchia. Questo metodo è illustrato nella figurra sotto. In questo caso, le directory A, B e C contenute nella directory principale appartengono ciascuna a un utente differente; due utenti hanno creato delle sottodirectory per i progetti su cui stanno lavorando. La capacità di creare un numero arbitrario di sottodirectory fornisce agli utenti un potente strumento di strutturazione per organizzare il lavoro; per questo motivo tutti i file system moderni sono organizzati in questo modo. Vale la pena di ricordare che il file system gerarchico è una delle tante idee sperimentate per la prima volta in Multics negli anni ’60.
+{immagine}
+
+
+Quando il file system è organizzato secondo un albero di directory, i nomi dei file vanno specificati in qualche modo. Sono usati comunemente due metodi.
+
+1. Il primo prevede di assegnare a ogni file un nome di percorso assoluto composto dal percorso che inizia dalla directory principale e arriva al file. Per esempio, il percorso /usr/ast/mailbox significa che la directory principale contiene una sottodirectory usr, che a sua volta contiene una sottodirectory ast, che a sua volta contiene il file mailbox. I nomi di percorso assoluti iniziano dalla directory principale e sono univoci.
+
+2. L’altro metodo è quello del nome di percorso relativo. È usato congiuntamente al concetto di directory di lavoro, chiamata anche directory corrente. Un utente può designare una directory come directory di lavoro, e in quel caso tutti i nomi di percorso che non cominciano con la directory principale sono considerati relativi alla directory di lavoro. 
+
+Se l'utente si trova già nella directory /usr/hjb allora i due comandi sono equivalenti.
+cp /usr/hjb/mailbox /usr/hjb/mailbox.bak === cp mailbox mailbox.bak
+
+In UNIX i componenti del percorso sono divisi tramite /, in Windows il separatore è \ e in MULTICS era >
+
+Molti sistemi operativi che supportano un sistema di directory gerarchico hanno due voci speciali in ogni directory, “.” e “..”, generalmente dette “punto” e “puntopunto” (“dot” e “dotdot”). “Punto” si riferisce alla directory corrente, “puntopunto” alla directory genitore (la directory precedente), con l’esclusione della directory radice che anche nel caso di “puntopunto” fa riferimento a se stessa.
+
+Quali operazioni si possono effetuare sulle directory?
+
+1. create: creazione di una directory vuota con le voci '.' e '..' 
+2. delete: Eliminazione di una directory, possibile solo se la directory è vuota
+3. opendir: Apertura di una directory per la lettura del suo contenuto 
+4. closedir: Chiusura di una directory dopo la lettura per liberare risorse
+5. readdir: Restituisce la prossima voce in una directory aperta senza esporre la struttra interna
+6. rename: Rinomina una cartella, simile al rinomino di un file
+7. link: Crea un hard link, collegando un file esistente a un nuovo percorso convidendone l'i-node (blocco di dati presente sul disco)
+8. unlink: Rimuove una voce di una directory, cancellando il file se è l'unico link
+
+Una variante del concetto di collegare i file è il link simbolico (detto anche collegamento o alias). Invece di avere due nomi che puntano alla stessa struttura di dati interna che rappresenta un file, può essere creato un nome che punta a un piccolo file che simboleggia un altro file. Quando viene usato il primo file, per esempio viene aperto, il file system segue il percorso e trova il nome alla fine. Quindi parte con il processo di ricerca usando il nuovo nome. I link simbolici hanno il vantaggio di poter varcare i confini dei dischi e collegare anche file su computer remoti. La loro implementazione talvolta è tuttavia meno efficiente degli hard link.
+
+{11_show_dir_content.c}
+
+
+
+
+
