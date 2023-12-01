@@ -22,12 +22,17 @@ long fileSize(const char *filename) {
     }
 }
 
-int checkPermission(const char *filename) {
+int check_read_permission(const char *filename) {
     struct stat fileInfo;
 
-    // NOT IMPLEMENTED
+    if (stat(filename, &fileInfo) < 0) {
+        return -1;
+    }
 
-    return 0;
+    int user = fileInfo.st_mode & S_IRUSR;
+    int group = fileInfo.st_mode & S_IRGRP;
+
+    return user || group;
 }
 
 int main(int argc, char *argv[]) {
@@ -53,6 +58,22 @@ int main(int argc, char *argv[]) {
     char *output_filename = argv[2];
     long index = (long)atoi(
         argv[3]); // converte una stringa in intero poi con il cast in long
+
+    int p = check_read_permission(input_filename);
+
+    if (p < 0) {
+        fprintf(stderr,
+                "[ERROR]: Errore nel recupero delle informazioni del file %s\n",
+                input_filename);
+        exit(0);
+    }
+    if (p == 0) {
+        fprintf(stderr,
+                "[ERROR]: Non ci sono i permessi necessari per leggere il file "
+                "%s\n",
+                input_filename);
+        exit(0);
+    }
 
     // Apertura del file di input
     in_fd = open(input_filename, O_RDONLY); // Apre il file di origine
