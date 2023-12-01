@@ -45,7 +45,7 @@ void printFileInfo(const char *dirName, const char *fileName) {
     printf((fileInfo.st_mode & S_IXOTH) ? "x"
                                         : "-"); // IXOTH -> other exec only
 
-    printf("\n ----------------\n");
+    printf("\n ---------------- \n");
 
     printf("[INFO] %d -> %08b, %b \n", fileInfo.st_mode, fileInfo.st_mode,
            S_ISDIR(fileInfo.st_mode));
@@ -69,7 +69,7 @@ void printFileInfo(const char *dirName, const char *fileName) {
     printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
            fileInfo.st_mode, S_IXOTH, S_IXOTH);
 
-    printf("\n ----------------\n");
+    printf("\n ---------------- \n");
 
     // Proprietario e gruppo
     struct passwd *pw = getpwuid(fileInfo.st_uid);
