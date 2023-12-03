@@ -30,9 +30,8 @@ int check_read_permission(const char *filename) {
     }
 
     int user = fileInfo.st_mode & S_IRUSR;
-    int group = fileInfo.st_mode & S_IRGRP;
 
-    return user || group;
+    return user;
 }
 
 int main(int argc, char *argv[]) {
