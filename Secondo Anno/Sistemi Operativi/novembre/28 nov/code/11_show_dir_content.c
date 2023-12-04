@@ -102,15 +102,16 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    dirent =
-        readdir(dirp); // leggo il primo elemento all'interno della directory
-
+    dirent = readdir(dirp);
+    // leggo il primo elemento all'interno della directory
     while (dirent != NULL) {
         // affinche ci sono ancora elementi dentro la directory
-        printFileInfo(argv[1],
-                      dirent->d_name); // leggo le informazioni dell'elemento
-                                       // corrente (sia file che directory)
-        dirent = readdir(dirp);        // leggo il prossimo elemento
+        printFileInfo(argv[1], dirent->d_name);
+        // leggo le informazioni dell'elemento
+
+        // corrente (sia file che directory)
+        dirent = readdir(dirp);
+        // leggo il prossimo elemento
     }
 
     closedir(dirp); // chiudo la directory

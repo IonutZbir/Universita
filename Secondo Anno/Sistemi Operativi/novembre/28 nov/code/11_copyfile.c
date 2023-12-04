@@ -45,6 +45,7 @@ int main(int argc, char *argv[]) {
 
     while (TRUE) {
         rd_count = read(in_fd, buffer, BUF_SIZE); // Legge un blocco di dati
+        printf("%d\n", rd_count);
         if (rd_count <= 0)
             break; // Se fine del file o errore, esce dal ciclo
 
