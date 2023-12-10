@@ -120,22 +120,27 @@ I dischi magnetici con blocchi piu grandi consentono il trasferimento di piu dat
 Blocchi piccoli minimizzano lo spreco di spazio con file piccoli. Ma significa distribuire la maggior parte dei file su più blocchi e incorrere in piu ricerche e ritardi per leggerli. L'efficienza dello spazio diminuisce con l'aumento della dimensione dei blocchi.
 
 # Gestione dei Blocchi Liberi
-
 1. Linked List 
 
+Si usa una lista concatenata, in cui si vanno a mettere solo i blocchi liberi. Per ospitare la lista si usano gli stessi blocchi del disco.
+Ogni blocco contiene numeri di blocchi del disco liberi. Richiede meno spazio solo se il disco è quasi pieno.
+Per ottimizzare la lista, si possono tracciare i blocchi liberi consecutivi. A ciascun blocco puo essere associato un conteggio a 8, 16, 32 bit che rappresenta il numero di blocchi liberi consecutivi. Nell'ipotesi migliore un disco fondamentalmente vuoto è rappresentato da due numeri, l'indririzzo del primo blocco libero, seguito dal conteggio dei blocchi liberi. Questo metodo è migliore per dischi quasi vuoti. Meno efficiente per dischi molto frammentati.
 
-
+La gestione dei blocchi liberi puo utilizzare una lista concatenata di puntatori, nota come "free list". Solo un blocco di puntatori è mantenuto in memoria contemporaneamente, ottimizzando cosi l'utilizzo della memoria.
+Quando si crea un file, i blocchi necessari vengono allocati dai puntatori disponibili nel blocco in memoria. Questo metodo evita I/O su disco inutili mantenendo una lista di blocchi liberi direttamente accessibili in memoria.
+Al riempimento del blocco di puntatori in memoria, un nuovo blocco viene letto da disco per proseguire con le operazioni.
+La presenza di file temporanei puo portare a frequenti operazioni di I/O su disco se ilblocco di puntatori in memoria è quasi pieno.
+Una strategia alternativa prevede di dividere il blocco pieno di puntatori per gestire meglio i blocchi liberi senza I/O su disco.
 
 2. Bitmap
 
+Un disco con n blocchi richiede una bitmap con n bit. I blocchi liberi sono indicati dal valore 1 nella mappa, quelli allocati dallo 0. Per esempio, per un disco da 1TB serveuna mappa da 1 miliardo di bit, il che richiede 130,000 blocchi da 1 KB per eseguire la memorizzazione. E' piu efficiente rispetto alla linked list, tranne in dischi quasi pieni.
+{immagine}
 
 
+# Quote del Disco
+Per impedire che gli utenti occupino troppo spazio su disco, i sistemi operativi multiutente forniscono spesso un meccanismo per imporre le quote del disco. L’idea è che l’amministratore di sistema assegni a ciascun utente un numero massimo di file e blocchi e che il sistema operativo si accerti che gli utenti non superino la loro quota.
 
-
-
-
-
-
-
-
+Ogn apertura di file coinvolge il controllo degli attributi e degli indirizzi sul disco. Attributi includono l'identificatore del proprietario del file. In un tabella dei file aperti, viene contabilizzato la quota di ciascun utente.
+Ci sono 2 limiti, soft e hard. Il limite soft puo essere temporaneamente superato, mentre il limite hard, mai.
 
