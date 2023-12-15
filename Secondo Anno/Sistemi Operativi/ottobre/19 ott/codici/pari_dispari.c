@@ -1,8 +1,10 @@
-// Generare due processi figli che comunicano con il padre. Uno dei processi
-// genera numeri casuali [0-100] ed invia al padre solo i numeri pari. L'altro
-// processo genera numeri casuali [0-100] ed invia al padre solo i numeri
-// dispari. Il padre fa la loro somma e quando la somma > 190, termina
-// l'esecuzione dei figli.
+/*
+Generare due processi figli che comunicano con il padre. Uno dei processi
+genera numeri casuali [0-100] ed invia al padre solo i numeri pari. L'altro
+processo genera numeri casuali [0-100] ed invia al padre solo i numeri
+dispari. Il padre fa la loro somma e quando la somma > 190, termina
+l'esecuzione dei figli.
+*/
 
 #include <signal.h> // pid_t
 #include <stdio.h>
