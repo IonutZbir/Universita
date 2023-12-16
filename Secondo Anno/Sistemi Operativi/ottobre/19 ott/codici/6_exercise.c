@@ -16,7 +16,6 @@
 #include <time.h>
 #include <unistd.h>
 
-
 // Definizione delle costanti per gli estremi dei pipe
 #define LEGGI 0
 #define SCRIVI 1
@@ -70,7 +69,7 @@ int main() {
         if (pid2 == 0) {
             // Codice del secondo figlio
             t1 = clock();
-            srand(t1 + 2); // Inizializzazione del generatore di numeri casuali
+            srand(t1 + 2);     // Inizializzazione del generatore di numeri casuali
             close(pd2[LEGGI]); // Il figlio chiude l'estremo di lettura del pipe
             while (1) {
                 n = rand() % 101; // Genera un numero casuale tra 0 e 100

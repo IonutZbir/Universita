@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <wait.h>
 
 // Definizione di costanti per leggibilità per i descrittori di file
 #define STDIN 0
@@ -42,7 +43,7 @@ int main(int argc, char **argv) {
 
         dup(fd[PIPE_WR]);
         // Duplica l'estremità di scrittura della pipe al descrittore di file 
-        // ell'output standard. Ora, 'cat' scriverà sulla pipe invece che sul 
+        // dell'output standard. Ora, 'cat' scriverà sulla pipe invece che sul 
         // terminale
         execl("/bin/cat", "cat", "names.txt", NULL); // Esegui il comando 'cat'
     }

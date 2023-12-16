@@ -11,14 +11,14 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <wait.h>
 
 #define PIPE_RD 0
 #define PIPE_WR 1
 
 long file_size(const char *filename) {
     struct stat st;
-    // st.st_mode: da informazioni sulla tipologia del file (dir o no), e i
-    // permessi
+    // st.st_mode: da informazioni sulla tipologia del file (dir o no), e i permessi
     if (stat(filename, &st) == 0) {
         return st.st_size;
     } else {

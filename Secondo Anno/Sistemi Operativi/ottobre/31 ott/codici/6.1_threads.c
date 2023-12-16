@@ -31,16 +31,14 @@ int main(int arg, char *argv[]) {
     // Ciclo per creare NUMBER_OF_THREADS thread
     for (i = 0; i < NUMBER_OF_THREADS; i++) {
 
-        // Crea un nuovo thread e assegna la funzione print_hello_world come
-        // funzione di avvio
+        // Crea un nuovo thread e assegna la funzione print_hello_world come funzione di avvio
         status =
             pthread_create(&threads[i], NULL, print_hello_world, (void *)i);
 
         // Stampa l'ID del thread creato e il suo stato
         printf("Process %d created with status %d\n", i, status);
 
-        // Se ci sono problemi nella creazione del thread, stampa un messaggio
-        // di errore e termina il programma
+        // Se ci sono problemi nella creazione del thread, stampa un messaggio di errore e termina il programma
         if (status != 0) {
             printf("Problems while creating process %d\n", i);
             exit(-1);
@@ -54,8 +52,7 @@ int main(int arg, char *argv[]) {
         // Stampa l'ID del thread che ha terminato e il suo stato
         printf("Process %d terminated with status %d\n", i, status);
 
-        // Se ci sono problemi nell'attesa del thread, stampa un messaggio di
-        // errore e termina il programma
+        // Se ci sono problemi nell'attesa del thread, stampa un messaggio di errore e termina il programma
         if (status != 0) {
             printf("Problems while waiting for process %d\n", i);
             exit(-1);

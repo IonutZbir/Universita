@@ -33,8 +33,7 @@ int in = 0;    // Indice dove inserire il prossimo elemento nel buffer
  * bloccato */
 void down(sem_t *sem) { sem_wait(sem); }
 
-/* Incrementa di 1 il semaforo, quando è > 0 viene risvegliato uno dei thread in
- * attesa */
+// Incrementa di 1 il semaforo, quando è > 0 viene risvegliato uno dei thread in attesa 
 void up(sem_t *sem) { sem_post(sem); }
 
 /* Funzione per inserire un elemento nel buffer */
@@ -96,10 +95,10 @@ void *producer(void *arg) {
 void *consumer(void *arg) {
     int i = 0;
     while (i < MAX) {
-        down(&full); // Decrementa full, quindi consumo un elemento dal buffer,
-                     // se full == 0, il buffer è vuoto quindi il consumatore si 
-                     // blocca (si mette in attesa che il produttore produca
-                     // almeno un elemento)
+        down(&full);  // Decrementa full, quindi consumo un elemento dal buffer,
+                      // se full == 0, il buffer è vuoto quindi il consumatore si 
+                      // blocca (si mette in attesa che il produttore produca
+                      // almeno un elemento)
         down(&mutex); // Prova a entrare nella regione critica, se il mutex è 0
                       // attende altrimenti entra nella regione critica
 
