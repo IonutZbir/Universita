@@ -27,9 +27,6 @@ long file_size(const char *filename) {
     }
 }
 
-// lseek(file, 0, SEEK_END)
-// size = ftell(file)
-
 int check_read_permission(const char *filename) {
     struct stat fileInfo;
     if (stat(filename, &fileInfo) < 0) {
@@ -65,6 +62,7 @@ int main(int dim, char **argv) {
         }
         int file = open(input_file, O_RDONLY);
         read(file, &buff, half);
+        close(file);
         write(fd_p1[PIPE_WR], &buff, half);
     } else if (p1 > 0) {
         if ((p2 = fork()) < 0) {
@@ -81,6 +79,7 @@ int main(int dim, char **argv) {
             int file = open(input_file, O_RDONLY);
             lseek(file, half, SEEK_SET);
             read(file, &buff, half);
+            close(file);
             write(fd_p2[PIPE_WR], &buff, half);
         } else if (p2 > 0) {
             close(fd_p1[PIPE_WR]);
