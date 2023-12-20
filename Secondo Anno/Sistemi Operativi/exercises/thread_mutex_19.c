@@ -15,8 +15,10 @@ In seguito genera tre thread utilizzando le librerie POSIX secondo le seguenti s
 */
 
 #include <pthread.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 
 #define N 11
@@ -25,13 +27,14 @@ pthread_mutex_t the_mutex;
 pthread_cond_t cond_control;
 
 int buffer[N] = {0};
+pthread_t p1, p2, p3;
 
 void print_buffer() {
     printf("[");
-    for (int i = 0; i < N; i++) {
-        printf("%2d,", buffer[i]);
+    for (int i = 0; i < N - 1; i++) {
+        printf("%3d,", buffer[i]);
     }
-    printf("]\n");
+    printf("%3d ]\n", buffer[N - 1]);
 }
 
 void *set_one(void *args) {
@@ -39,12 +42,12 @@ void *set_one(void *args) {
         pthread_mutex_lock(&the_mutex);
         int index = rand() % N;
         buffer[index] = 1;
-        printf("[INFO]: p1 genera: %d\n", index);
+        printf("[INFO]: sono thread 1, ho generato l'indice: %d\n", index);
         print_buffer();
-        sleep(rand() % 4);
+        pthread_cond_signal(&cond_control);
         pthread_mutex_unlock(&the_mutex);
+        sleep(rand() % 4);
     }
-    return NULL;
 }
 
 void *set_neg_one(void *args) {
@@ -52,59 +55,58 @@ void *set_neg_one(void *args) {
         pthread_mutex_lock(&the_mutex);
         int index = rand() % N;
         buffer[index] = -1;
-        printf("[INFO]: p2 genera: %d\n", index);
+        printf("[INFO]: Sono thread 2, ho generato l'indice: %d\n", index);
         print_buffer();
-        sleep(rand() % 4);
+        pthread_cond_signal(&cond_control);
         pthread_mutex_unlock(&the_mutex);
+        sleep(rand() % 4);
     }
-    return NULL;
 }
 
-void *control(void *args) { // Correggi la firma della funzione
+int check_init() {
+    for (int i = 0; i < N; ++i) {
+        if (buffer[i] == 0) {
+            return 0;
+        }
+    }
+    return 1;
+}
 
+void *control(void *args) {
     while (1) {
         pthread_mutex_lock(&the_mutex);
-        int o = 0, n = 0;
 
-        int allInitialized = 1;
-        for (int i = 0; i < N; ++i) {
-            if (buffer[i] == 0) {
-                allInitialized = 0;
-                break;
-            }
+        // controllo se tutti i elementi dell'array sono inizializzatise
+        // se lo sono allora il thread va avanti, altrimenti lascia il mutex e rifà il controllo.
+        while (check_init() == 0) {
+            sleep(rand() % 4);
+            pthread_cond_wait(&cond_control, &the_mutex);
+        }
+        int n_ones = 0, n_neg_ones = 0;
+        for (int i = 0; i < N; i++) {
+            if (buffer[i] == 1)
+                n_ones++;
+            if (buffer[i] == -1)
+                n_neg_ones++;
         }
 
-        if (allInitialized) {
-
-            for (int i = 0; i < N; i++) {
-                if (buffer[i] == 1)
-                    o++;
-                if (buffer[i] == -1)
-                    n++;
-            }
-
-            if ((n + o) == N) {
-                if (o > n) {
-                    printf("[INFO]: Ha vinto il thread 1, impostando %d uno\n", o);
-                } else {
-                    printf("[INFO]: Ha vinto il thread -1, impostando %d -uno\n", n);
-                }
-                pthread_mutex_unlock(&the_mutex);
-                pthread_exit(NULL); // Termina il thread
-            }
+        if (n_ones > n_neg_ones) {
+            printf("[INFO]: Ha vinto il thread 1, impostando %d -> '1'\n", n_ones);
+        } else {
+            printf("[INFO]: Ha vinto il thread 2, impostando %d -> '-1'\n", n_neg_ones);
         }
-        printf("[INFO]: sono il 3 thread\n");
-        sleep(rand() % 4);
+        // printf("[INFO]: sono il 3 thread\n");
         pthread_mutex_unlock(&the_mutex);
+
+        pthread_kill(p1, SIGINT);
+        pthread_kill(p2, SIGINT);
+
+        pthread_exit(0); // Termina il thread
     }
-    return NULL;
 }
 int main() {
-
     srand(time(NULL));
-    int ret_control;
 
-    pthread_t p1, p2, p3;
     pthread_mutex_init(&the_mutex, NULL);
     pthread_cond_init(&cond_control, NULL);
 
