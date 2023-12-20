@@ -96,10 +96,9 @@ void *control(void *args) {
             printf("[INFO]: Ha vinto il thread 2, impostando %d -> '-1'\n", n_neg_ones);
         }
         // printf("[INFO]: sono il 3 thread\n");
-        pthread_mutex_unlock(&the_mutex);
-
         pthread_kill(p1, SIGINT);
         pthread_kill(p2, SIGINT);
+        pthread_mutex_unlock(&the_mutex);
 
         pthread_exit(0); // Termina il thread
     }
