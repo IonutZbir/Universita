@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <time.h>
 #include <unistd.h>
 
 #define N 10
@@ -33,6 +34,14 @@ pthread_t p1, p2, p3;
 
 const char file_name[] = "dati.txt";
 
+int char_to_int(char n) {
+    return n - '0';
+}
+
+char int_to_char(int n) {
+    return n + '0';
+}
+
 int write_file(int *buffer, int len) {
     int file = creat(file_name, OUTPUT_MODE);
     if (file < 0)
@@ -40,31 +49,39 @@ int write_file(int *buffer, int len) {
     char buff[3] = {0};
 
     for (int i = 0; i < len; i++) {
-        buff[0] = buffer[i] + '0';
+        buff[0] = int_to_char(i);
         buff[1] = ' ';
         buff[2] = '\0';
+        printf("%s\n", buff);
         write(file, &buff, strlen(buff));
     }
     close(file);
     return 0;
 }
 
-int modify_file(int index) {
+int modify_file(int index, int mode) {
     struct stat info;
-    int size = info.st_size, file, number;
+    int file;
+    char n_c;
+    int n;
 
-    if (stat(file_name, &info) < 0)
-        return -1;
+    file = open(file_name, O_RDWR);
 
-    lseek(file, index * 2, SEEK_SET);
-    file = open(file_name, O_RDONLY);
-    read(file, &number, 1);
-    close(file);
+    printf("[INFO]: %d\n", index);
 
-    file = open(file_name, O_WRONLY);
-    lseek(file, index * 2, SEEK_SET);
-    number++;
-    write(file, &number, 1);
+    lseek(file, 4, SEEK_SET);
+    read(file, &n_c, 1);
+
+    printf("[INFO]: %c\n", n_c);
+    n = char_to_int(n_c);
+    printf("[INFO]: %d\n", n);
+
+    lseek(file, -1, SEEK_CUR);
+    n++ ? (mode == 1) : n--;
+
+    n_c = int_to_char(n);
+
+    write(file, &n_c, 1);
     close(file);
 
     return 0;
@@ -73,32 +90,54 @@ int modify_file(int index) {
 void print_data() {
     struct stat info;
     int size = info.st_size, file;
+    stat(file_name, &info);
     char buffer[size];
     file = open(file_name, O_RDONLY);
     read(file, &buffer, size);
-    printf("[");
-    for (int i = 0; i < size; i++) {
+    // printf("%d -> %s\n", (int)strlen(buffer), buffer);
+    printf("\n[ ");
+    int i = 0;
+    while (i < 2 * N) {
         if (buffer[i] != ' ') {
-            printf("%3d ", buffer[i]);
+            int n = char_to_int(buffer[i]);
+            printf("%2d ", n);
         }
+        i++;
     }
     printf("]\n");
     close(file);
 }
 
 void *increment(void *args) {
-    int index;
+    int index, i = 0;
     while (1) {
         pthread_mutex_lock(&the_mutex);
         index = rand() % N;
-        modify_file(index);
+        modify_file(index, 1);
         print_data();
         pthread_cond_signal(&condp);
         pthread_mutex_unlock(&the_mutex);
+        i++;
     }
+    // pthread_exit(0);
+}
+
+void *decrement(void *args) {
+    int index, i = 0;
+    while (1) {
+        pthread_mutex_lock(&the_mutex);
+        index = rand() % N;
+        modify_file(index, 0);
+        print_data();
+        pthread_cond_signal(&condp);
+        pthread_mutex_unlock(&the_mutex);
+        i++;
+    }
+    // pthread_exit(0);
 }
 
 int main() {
+    srand(time(NULL));
     int buffer[N] = {0};
     if (write_file(buffer, N) < 0) {
         fprintf(stderr, "[ERROR]: Could not write on file\n");
@@ -106,7 +145,9 @@ int main() {
     }
 
     pthread_create(&p1, NULL, increment, NULL);
+    pthread_create(&p2, NULL, decrement, NULL);
     pthread_join(p1, NULL);
+    pthread_join(p2, NULL);
     pthread_mutex_destroy(&the_mutex);
     pthread_cond_destroy(&condp);
     return 0;
