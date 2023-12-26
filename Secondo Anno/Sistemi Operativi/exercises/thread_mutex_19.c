@@ -21,7 +21,7 @@ In seguito genera tre thread utilizzando le librerie POSIX secondo le seguenti s
 #include <time.h>
 #include <unistd.h>
 
-#define N 11
+#define N 5
 
 pthread_mutex_t the_mutex;
 pthread_cond_t cond_control;

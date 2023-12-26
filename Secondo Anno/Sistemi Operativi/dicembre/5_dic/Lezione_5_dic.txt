@@ -1,0 +1,146 @@
+IMPLEMENTAZIONE DEL FILE SYSTEM
+
+-> Layout Del File System 
+
+Il file system è il metodo utilizzato per organizzare e memorizzare dati sui dispositivi di memoria non volatile. Fornisce un modo strutturato per gestire informazioni come file e directory su dispositivi di memoria. Un disco può essere suddiviso in più partizioni, ciascuna con un proprio file system indipendente.
+
+# MBR
+Nel vecchio stile, il settore 0 del disco è chiamato MBR (Master Boot Record), essenziale per l'avvio del computer. Contiene la tabella delle partizioni (contiene gli indirizzi di inzio e fine di ciascuna partizione), inoltre identifica la partizione attiva da cui avviare il sistema.
+
+Quando si avvia il computer, il BIOS legge ed esegue l'MBR, che per prima cosa localizza la partzione attiva, ne legge il primo blocco, chiamato blocco di boot (boot block) e lo esegue. Ogni partizione inzia con un boot block, anche se non contiene un sistema operativo avviabile, ma ne potrebbe contenere uno in futuro.
+
+Il layout del file system cambia molto a seconda del file system, ma in generale è struttare nel seguente modo:
+{immagine}
+- superblocco: contine tutti i parametri chiave riguardanti il file system e viene letto in memoria all'avvio del computer. Le informazioni tipiche che contiene sono: un numero magico per identificare il file system, il nuemro di blocchi nel file system e altre informazioni chiave.
+- bitmap o linked list: usate per la gestione dello spazio libero
+- i-node: un array di strutture dati, una per file, che raccontano tutto riguardo i file.
+- directory radice, contenente la cima dell'albero del file-system
+
+# UEFI
+Avviare il computer con la MBR è lento oltre ad essere limitato a dischi di dimensione fino a 2 TB. Pertanto è stato introdotto UEFI (Unified Extensible Firmware Interface), che attualmente è il modo più diffuso per avviare il computer. UEFI è veloce, ammette infinite partzioni, non più 4 come MBR, supporta architetture diverse e dischi di dimensione fino a 8 ZiB (Tanto).
+
+UEFI non si basa sul MBR ma cerca la tabella delle partzioni nel secondo blocco, riservando il primo blocco per il software che si aspetta di trovarvi un MBR.
+UEFI utilizza la GPT (GUID Partition Table) struttare molto flessibile e dinamica, che contiene informazioni sulla posizione delle varie partizioni sul disco. Inoltre, nell'ultimo blocco conserva un backup della GPT. Una GPT contiene l'inizio e la fine di ogni partizione, una volta travata la GPT, il firmware ha funzionalità di leggere file system di tipi specifici. UEFI usa un vero file system, FAT, contenente programmi, file di configurazione e tutto ciò che può servire durante l'avvio. In altre parole, il firmware sotto UEFI somiglia a un piccolo sistema operativo consapevole di partizioni del disco, file system, eseguibili etc...
+{immagine}
+
+-> Implemetazione Dei File
+
+E' importante avere una buona implemetazione dei file, per assicurare l'integrità, l'accesso efficiente e la gestione dello spazio sul disco.
+
+# Allocazione Continua
+Lo schema di allocazione più semplice è quello di memorizzare ciascun file come una sequenza contigua di blocchi sul disco.
+
+Vantaggi: 
+- E' semplice da implementare poiche per tenere traccia delle posizioni dei blocchi di un file basta sapere l'indirizzo sul disco del primo blocco e il numero dei blocchi.
+- Le prestazioni di lettura sono eccellenti anche su disco magnetico poiche l'intero file può essere letto dal disco con una singola operazione, senza ulteriori ritardi.
+
+Svantaggi:
+- Questo metodo porta ad una frammentazione del disco, lasciando intervalli di blocchi liberi.
+- Per gestire lo spazio vuoto, richiederebbe una lista di spazi liberi e la conoscenza  della dimensione finale dei nuovi file (quasi impossibile da sapere)
+Diventa quindi difficile aggiungere nuovi file in un disco frammentato, ed ha la necessita di compattare il disco, operazione molto costosa.
+
+# Allocazione a Liste Concatenate
+Il secondo metodo  per memorizzare i file è configurare ciascuno come una lista concatenata di blocchi sul disco. La prima parte di ciascun blocco è usata come puntatore al successivo, il resto del blocco è per i dati.
+Utilizza in modo efficiente tutti i blocchi del disco, e minimizza la frammentazione esterna (eccetto che per la frammentazione interna nell'ultimo blocco).
+Inoltre la voce delle directory deve memorizzare semplicemente l'indirizzo su disco del primo blocco.
+Leggere un file sequenzialmente è semplice, però l'accesso casuale è estremamente lento, poiche per leggere il blocco n, il sistema operativo deve prima leggere gli n-1 blocchi.
+Inoltre, la quantita di spazio per i dati di un blocco non è più una potenza di due, poiche il puntatore occupa alcuni byte, pertanto letture e scritture possono essere meno efficienti.
+
+# Allocazione a Liste Concatenate con FAT
+Gli svantaggi dell'allocazione a liste concatenate possono essere eliminati spostando i puntatori in una tabella di memoria FAT (File Allocation Table). Ogni blocco del disco è rappresentato come una voce nella FAT, in memoria RAM!
+Dato che i puntatori sono tenuti in RAM, l'intero blocco è disponibile per i dati, inoltre l'accesso casuale è semplificato, essendo memorizzata in RAM.
+Il grande svantaggio è che la tabella deve restare sempre in memoria. Con un disco da  1 TB e blocchi da 1 KB, la tabella deve avere 2^40 / 2^10 = 2^30 voci, e ogni voce deve essere come minimo 3/4 byte, andando ad occupare almeno 3GB di RAM. Orginariamente implementato in MS-DOS, ancora supportato da Windows e UEFI. Viene ancora usato in dispositivi portatili come schede SD in fotocamere, lettori musicali e altri dispositivi elettronici.
+{immagine}
+
+[Domanda]
+Se ho blocchi da 4 KB = 2^12 byte, ogni numero/indirizzo è rappresentato a 32 bit = 4 = 2^2 byte, quanti indirizzi si possono mettere su un blocco da 4 KB?
+2^12 / 2^2 = 2^10 = 1024 indirizzi 
+[Domanda]
+Qual è il file più grande che si può indicizzare è:
+
+FAT12: 32 MB
+FAT16: 2 GB
+FAT32: 4 GB
+
+# I-node
+Gli i-node o index-node sono una struttura dati che elenca gli attributi (esclusi nome e contenuto) come permessi, proprietario, timestamp e gli indirizzi dei blocchi dei file. Ogni file e directory è rappresentato da un I-node univoco, indicizzato in una tabella di I-node. 
+Dato un i-node, è possibile trovare tutti i blocchi di quel file. 
+Un grande vantaggio è che solo gli i-node dei file aperti sono mantenuti in memoria, riducendo significativamente l'utilizzo della memoria. Inoltre l'array degli i-node in memoria è proporzionale al numero di file aperti, non alla dimensione del disco. (Tutti problemi di FAT, risolti con gli i-node). 
+Gli i-node hanno uno spazio limitato per gli indirizzo, pero, per file che superano il limite, uno degli indirizzi nell'i-node punta a un blocco contenente ulteriori indirizzi di blocchi dati.
+Gli i-node son un concetto fondamentale in UNIX e nei suoi file system derivati.
+NTFS, il file system di Windows, utilizza una struttura simile con i-node più grandi che possono contenere file di piccole dimensioni all'interno dell' i-node stesso.
+{immagine}
+
+-> Implemetazione Delle Directory
+
+# Implemetazione Directory
+Il ruolo principare delle directory è di mappare il nome ASCII del file sulle informazioni necessarie per localizzare i dati sul disco. A seconda del sistema, questa informazione può essere l'indirizzo del disco dell'intero file (allocazione contigua), il numero del primo blocco (linked list), o il numero dell' i-node.
+Nella figura (a), gli attributi del file sono memorizzati nell voce della directory, nella figura (b), gli attributi del file sono memorizzati nell'inode, e la directory contiene il puntatore all'i-node.
+{immagine}
+
+I moderni file-system supportano nomi di file variabili da 1 a 255 caratteri.
+Per fare ciò, le directory si possono strutturare in 2 modi:
+{immagine}
+(a) Ciascuna directory contiene l'header di lunghezza fissa seguito dal nome del file. Ogni nome di file termina con un carattere speciale. Per consentire a ciasucna voce di directory di inziare alla fine della parola, ogni nome di file è riempito fino ad arrivare a un numero intero di parole.
+Lo svantaggio è che quando il file viene cancellato, nella directory è introdotto un vuoto di ampiezza variabile, che potrebbe non bastare a contenere il file da inserire successivamente.
+(b) Uso di heap per tenere i nomi dei file. Questo metodo ha il vantaggio che quando viene rimossa una voce, il successivo file da inserire ci starà sempre. 
+Una piccolissima conquista in questo caso è che non è più necessario che i nomi dei file inizino ai confini delle parole, quindi non sono necessari caratteri di riempimento.
+
+Inzialmente, i file in una directory venivano cercati linearmente dall'inzio alla fine.Questo metodo può diventare lento in directory con un gran numero di file.
+Si è passato dunque all'utilizzo delle Hash Table, accelerando il processo di ricerca.
+Il nome di un file è sottoposto a hashing per generare un indice nell'intervallo da 0 a n-1. La voce corrispondente nella tabella di hash indica il punto di partenza per la ricerca del file. Per i file che condividono lo stesso hash, viene creata una lista concatenata.
+Un modo diverso per velocizzare la ricerca in grandi directory è salvare nella cache il risulato delle ricerche. Prima di avviare la ricerca si verifica se quel nome di file si trova nella cache. Se si trova puo essere immediatamente individuato, altrimenti si segue la ricerca all'interno della directory.
+
+# File Condivisi e Link nel File System
+
+I file condivisi sono essenziali in ambienti collaborativi per permettere a più utenti di lavorare sugli stessi file.
+{immagine}
+- Hard Link: Puntano direttamente all'i-node di un file condiviso. Un file con hard link viene rimosso solo quando non ci sono piu riferimenti ad esso. Sono efficienti in termini di spazio, usano un solo i-node indipendentemente dal numero di link.
+Il file permane fino all'eliminazione dell'ultimo link, potenzialmente causando confusione sulla proprieta del file.
+{immagine}
+- Soft Link: Puntano al nome di un file piuttosto che all'i-node. Sono più flessibili, possono riferirsi a nomi di file oltre i confini del file system e su macchine remote, pero sono meno efficienti in termini di spazio in quanto richiedono un i-node per ogni link.
+I soft link diventano invalidi alla rimozione del file originale. Il sistema operativo impiega piu tempo nella risoluzione del percorso rispetto agli hard link.
+
+Entrambe le modalita, pero hanno un problema comune, ovvero che i file con piu percorsi possono essere processati piu volte da programmi di backup o di ricerca. Per esempio
+c'e il rischio di duplicazione dei file su un'unita di backup.
+
+--> Gestione Dello Spazio sull' Disco
+
+
+# Dimensione dei Blocchi
+Generalmente i file sono memorizzati su disco, tramite l'allocazione contigua, portandoa maggiori spostamenti sul disco se le loro dimensioni aumentano, oppure suddividendo il file in blocchi piu piccoli consentendo maggiore flessibilità e un migliore utilizzo dello spazio su disco.
+La dimensione comune di 4KB per blocco è un compromesso tra lo spazio su disco e le prestazioni di trasferimento dei dati.
+
+Perche 4KB?
+
+- Prestazioni di Trasferimento Dati
+I dischi magnetici con blocchi piu grandi consentono il trasferimento di piu dati per operazione di lettura/scrittura. Ma blocchi grandi portano a spreco di memoria.
+
+- Efficienza dello Spazio
+Blocchi piccoli minimizzano lo spreco di spazio con file piccoli. Ma significa distribuire la maggior parte dei file su più blocchi e incorrere in piu ricerche e ritardi per leggerli. L'efficienza dello spazio diminuisce con l'aumento della dimensione dei blocchi.
+
+# Gestione dei Blocchi Liberi
+1. Linked List 
+
+Si usa una lista concatenata, in cui si vanno a mettere solo i blocchi liberi. Per ospitare la lista si usano gli stessi blocchi del disco.
+Ogni blocco contiene numeri di blocchi del disco liberi. Richiede meno spazio solo se il disco è quasi pieno.
+Per ottimizzare la lista, si possono tracciare i blocchi liberi consecutivi. A ciascun blocco puo essere associato un conteggio a 8, 16, 32 bit che rappresenta il numero di blocchi liberi consecutivi. Nell'ipotesi migliore un disco fondamentalmente vuoto è rappresentato da due numeri, l'indririzzo del primo blocco libero, seguito dal conteggio dei blocchi liberi. Questo metodo è migliore per dischi quasi vuoti. Meno efficiente per dischi molto frammentati.
+
+La gestione dei blocchi liberi puo utilizzare una lista concatenata di puntatori, nota come "free list". Solo un blocco di puntatori è mantenuto in memoria contemporaneamente, ottimizzando cosi l'utilizzo della memoria.
+Quando si crea un file, i blocchi necessari vengono allocati dai puntatori disponibili nel blocco in memoria. Questo metodo evita I/O su disco inutili mantenendo una lista di blocchi liberi direttamente accessibili in memoria.
+Al riempimento del blocco di puntatori in memoria, un nuovo blocco viene letto da disco per proseguire con le operazioni.
+La presenza di file temporanei puo portare a frequenti operazioni di I/O su disco se ilblocco di puntatori in memoria è quasi pieno.
+Una strategia alternativa prevede di dividere il blocco pieno di puntatori per gestire meglio i blocchi liberi senza I/O su disco.
+
+2. Bitmap
+
+Un disco con n blocchi richiede una bitmap con n bit. I blocchi liberi sono indicati dal valore 1 nella mappa, quelli allocati dallo 0. Per esempio, per un disco da 1TB serveuna mappa da 1 miliardo di bit, il che richiede 130,000 blocchi da 1 KB per eseguire la memorizzazione. E' piu efficiente rispetto alla linked list, tranne in dischi quasi pieni.
+{immagine}
+
+
+# Quote del Disco
+Per impedire che gli utenti occupino troppo spazio su disco, i sistemi operativi multiutente forniscono spesso un meccanismo per imporre le quote del disco. L’idea è che l’amministratore di sistema assegni a ciascun utente un numero massimo di file e blocchi e che il sistema operativo si accerti che gli utenti non superino la loro quota.
+
+Ogni apertura di file coinvolge il controllo degli attributi e degli indirizzi sul disco. Attributi includono l'identificatore del proprietario del file. In un tabella dei file aperti, viene contabilizzato la quota di ciascun utente.
+Ci sono 2 limiti, soft e hard. Il limite soft puo essere temporaneamente superato, mentre il limite hard, mai.
+

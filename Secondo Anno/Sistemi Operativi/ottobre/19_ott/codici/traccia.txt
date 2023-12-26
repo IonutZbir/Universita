@@ -1,0 +1,5 @@
+Un processo padre genera due processi figli. 
+Il primo processo figlio invia al padre un numero casuale da 0 a 100. 
+Il padre legge questo numero, lo moltiplica per un k causale e lo manda al secondo figlio.
+il secondo figlio legge il numero inviato dal padre e lo stampa a video.
+
