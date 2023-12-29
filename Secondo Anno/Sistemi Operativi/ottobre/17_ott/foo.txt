@@ -1,0 +1,6 @@
+Awk è un potente linguaggio di programmazione e un'utilità di linea di comando disponibile su sistemi operativi Unix e Unix-like, incluso Linux.
+Viene utilizzato principalmente per il trattamento di testo 
+e la generazione di report.
+Awk opera su file di testo in base a un modello di input e consente
+di specificare azioni da eseguire quando il modello viene trovato.
+di seguito sono riportati alcuni concetti chiave relativi ad Awk su Linux

@@ -120,4 +120,95 @@ Alcune considerazioni sul backup logico.
 3. Un’ulteriore questione è il fatto che i file UNIX possono contenere dei buchi. È consentito aprire un file, scriverci pochi byte, quindi spostarsi a un offset distante e scrivervi altri byte. I blocchi nel mezzo non sono parte del file, non dovrebbero essere salvati nel backup né ripristinati. Ogni file ripristinato riempirà quest’area con degli zero e avrà così la medesima dimensione dello spazio degli indirizzi virtuali.
 4. File speciali chiamati "pipe" e altri file simili (in pratica, qualsiasi cosa non sia un “vero” file) non andrebbero mai salvati nel backup, indipendentemente dalla directory in cui si possano trovare.
 
+# Coerenza 
+
+La coerenza del file system è cruciale per mantenere l'integrità dei dati. Problemi di incoerenza possono sorgere a seguito di crash durante la scrittura dei blocchi. In UNIX si 
+viene usato fsck e in Windows sfc per verificare la coerenza all'avvio dopo un crash.
+
+- Controllo dei blocchi
+Costruzione di due tabelle con contatori per ogni blocco (per file e blocchi liberi). Analisi di tutti gli I-node e verifica della presenza dei blocchi in file e nella lista dei 
+blocchi liberi. Dopo questo controllo si possono avere 3 riscontri possibili:
+a. Blocchi mancanti: non presenti in nessuna delle due tabelle
+b. Blocchi duplicati nella lista dei blocchi liberi
+c. Blocchi di dati presenti in più file
+
+Per correggerli si possono fare due azioni:
+a. Aggiunta dei blocchi mancanti ai blocchi liberi
+b. Assegnazione di blocchi duplicati a file diversi
+
+# File System con Journaling
+
+Registra anticipatamnete le operazioni da eseguire in un log, per garantire la coerenza in caso di crash. Ampiamente usato in NTFS, ext4, macOS.
+Un journal in un file system è come un registro che tiene traccia delle modifiche che verranno apportate al file system prima che esse avvengano effettivamente.
+Funzionamento:
+- Fase di Registrazione - prima di eseguire qualsiasi modifica, il file system scrive un record nel journal, descrivendo l'operazione che verrà eseguita.
+- Fase di Esecuzione - dopo aver registrato l'operazione, il file system procede con la modifica effettiva dei dati sul disco.
+- Fase di Conferma - una volta completata l'operazionem, il file system aggiorna il journal per indicare che l'azione è stata completata con successo.
+Se si verifica un crash del sistema prima che un modifica sia completata, al riavvio successivo il file system constulta il journal. Se trova operazioni registrate ma non confermate
+procede a completarle, in questo modo il file system non verrà mai lasciato in uno stato incoerente.
+
+Vantaggi:
+- Integrità dei Dati: il journaling riduce la possibilità di corruzione del file system in caso di crash inaspettato, assicurando che tutte le operazioni siano completate o nessuna.
+- Recupero Rapido: Riduce significativamente il tempo di recupero dopo un crash.
+
+# Eliminazione sicura e cifratura del disco
+
+La cancellazione standard non rimuove fisicamente i dati dal disco, lasciandoli vulnerabili agli attacchi. L'eliminazione sicura richiede la distruzione fisica o la sovrascrittura
+approfondità dei dati. Non basta sovrascrivere con zero a causa dei residui magnetici che possono essere recuparati con tecniche avanzate. E' consigliato inserire sequenze di 0
+e numeri causali, ripetendo l'operazione almeno 3-7 volte, sconsigliato sui SSD.
+
+La soluzione più efficace per proteggere i dati è cifrare l'intero disco con algoritmi robusti come l'AES.
+
+# File System Virtuali
+
+I sistemi operativi moderni gestiscono diversi file system simultaneamente. Windows utilizza lettere come C:, D:, per gestire file system differenti. I sistemi UNIX tentano di 
+integrare più file system in una singola struttura gerarchica.
+
+Il VFS è una struttura che permette di integrare vari file system in una struttura unificata. Si basa su un livello di codice comune che interagisce con i file system reali 
+sottostanti. L'interfaccia superiore interagisce con le chiamate di sistema POSIX di processi utente, mentre l'interfaccia inferiore è composta da decine di funzioni che il VFS 
+può inviare ai file system sottostante.
+{immagine}
+
+- Superblock nel VFS, rappresenta il descrittore di alto livello di un file system specifico nel VFS. Contiene informazion cruciali sul file system ed è usato per identificare e 
+interagire con il file system sottostante.
+- V-node nel VFS, astrazione di un file individuale all'interno del VFS, rappresentando un node nel file system virtuale. Contiene metadati come permessi, proprietà, dimensione del 
+file. Il VFS sfrutta i v-node per fornire 
+- Directory nel VFS, struttra che gestisce l'organizzazione e il mapping dei file e delle sottodirectory all'interno del VFS. Permette al VFS di mappare i nomi dei file ai loro v-node
+corrispondenti, indipendentemente dal file system in cui si trovano.
+
+Al momento della registrazione di un nuovo file system all'interno del VFS, il file system mette a disposizone un vettore di funzioni per il VFS. Inoltre al montaggio, il file 
+system mette a disposizone tutte le informazioni necessarie, per esempio il superblock. La gestion delle richieste di I/O nei procesi utente avviene tramite i v-node e tabelle 
+dei descrittori dei file. Aggiungere un nuovo file system diventa relativamente semplice, i progettisti devono soltanto fornire le funzioni che rispettino l'interfaccia VFS.
+
+-> RAID 
+
+RAID, Redundant Array Of Inexpensive (Independent), è un meccanismo per migliorare prestazioni e affidabilità della memoria non volatile.
+
+(a) RAID Level 0: +storage
+    Descrizione dei dati in strip su dischi multipli, migliora le prestazioni con richieste grandi. Nessuna ridondanza.
+(b) RAID Level 1: +redundancy
+    Duplicazione dei dischi per tolleranza agli errori. Prestazioni di lettura migliorate, scrittura simile a un'unità singola.
+(c) RAID Level 2: +storage
+    Level 2 basato su parole o byte con codice di Hamming
+(d) RAID Level 3: +redundancy, +storage
+    Level 3 usa un singolo bit di parità per parola, richiede sincronizzazione delle unità.
+(e) RAID Level 4: +redundancy, +storage
+    Utilizzo di strip con un'unità extra per la parità. 
+(f) RAID Level 5: +redundancy, +storage
+    distribuisce bit di parità in modo uniforme su tutte le unità.
+(g) RAID Level 6: +redundancy, +storage
+    Simile a Level 5 ma con un blocco di parità aggiuntivo. Maggiore affidabilità e tolleranza dei errori.
+(h) RAID 0 + 1: duplicazione ridondante secondo lo schema di RAID 1 di dischi associati in schema RAID 0
+
+Esempio RAID 5:
+RAID 5 con 3 dischi: Disco A, Disco B, Disco C. Ogni disco contiene una strip di dati e una strip di parità viene calcolata usando l'operazione XOR ui bit dei dati da Disco A a 
+Disco B, e poi memorizza sul Disco C.
+
+Disco A: 1011
+Disco B: 1100
+=> XOR bit a bit tra A e B
+Disco C: 0111
+
+In caso di guasto di un disco, per esempio il disco B, possiamo ricostruire i suoi dati facendo lo XOR tra il disco A ancora funzionante e il disco C.
+
 

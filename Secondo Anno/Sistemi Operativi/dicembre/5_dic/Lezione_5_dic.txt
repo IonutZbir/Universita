@@ -106,7 +106,6 @@ c'e il rischio di duplicazione dei file su un'unita di backup.
 
 --> Gestione Dello Spazio sull' Disco
 
-
 # Dimensione dei Blocchi
 Generalmente i file sono memorizzati su disco, tramite l'allocazione contigua, portandoa maggiori spostamenti sul disco se le loro dimensioni aumentano, oppure suddividendo il file in blocchi piu piccoli consentendo maggiore flessibilità e un migliore utilizzo dello spazio su disco.
 La dimensione comune di 4KB per blocco è un compromesso tra lo spazio su disco e le prestazioni di trasferimento dei dati.

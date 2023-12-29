@@ -14,8 +14,11 @@ void printFileInfo(const char *dirName, const char *fileName) {
     // filePath = dirName + fileName
     snprintf(filePath, sizeof(filePath), "%s/%s", dirName, fileName);
 
-    // memorizza all'interno della struct fileInfo tutti gli attributi relativi
-    // al file
+    // /code, 11_show_dir_content.c
+
+    // /code/11_show_dir_content.c
+
+    // memorizza all'interno della struct fileInfo tutti gli attributi relativi al file
     if (stat(filePath, &fileInfo) < 0) {
         perror("Errore nel recupero delle informazioni del file");
         return;
@@ -28,7 +31,7 @@ void printFileInfo(const char *dirName, const char *fileName) {
     // user permission
     printf((fileInfo.st_mode & S_IRUSR) ? "r" : "-"); // IRUSR -> user read only
     printf((fileInfo.st_mode & S_IWUSR) ? "w"
-                                        : "-"); // IWUSR -> user write only
+                                        : "-");       // IWUSR -> user write only
     printf((fileInfo.st_mode & S_IXUSR) ? "x" : "-"); // IXUSR -> user exec only
     // group permission
     printf((fileInfo.st_mode & S_IRGRP) ? "r"
@@ -47,27 +50,16 @@ void printFileInfo(const char *dirName, const char *fileName) {
 
     printf("\n ---------------- \n");
 
-    printf("[INFO] %d -> %08b, %b \n", fileInfo.st_mode, fileInfo.st_mode,
-           S_ISDIR(fileInfo.st_mode));
-
-    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
-           fileInfo.st_mode, S_IRUSR, S_IRUSR);
-    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
-           fileInfo.st_mode, S_IWUSR, S_IWUSR);
-    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
-           fileInfo.st_mode, S_IXUSR, S_IXUSR);
-    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
-           fileInfo.st_mode, S_IRGRP, S_IRGRP);
-    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
-           fileInfo.st_mode, S_IWGRP, S_IWGRP);
-    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
-           fileInfo.st_mode, S_IXGRP, S_IXGRP);
-    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
-           fileInfo.st_mode, S_IROTH, S_IROTH);
-    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
-           fileInfo.st_mode, S_IWOTH, S_IWOTH);
-    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode,
-           fileInfo.st_mode, S_IXOTH, S_IXOTH);
+    printf("[INFO] %d -> %08b, %b \n", fileInfo.st_mode, fileInfo.st_mode, S_ISDIR(fileInfo.st_mode));
+    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode, fileInfo.st_mode, S_IRUSR, S_IRUSR);
+    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode, fileInfo.st_mode, S_IWUSR, S_IWUSR);
+    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode, fileInfo.st_mode, S_IXUSR, S_IXUSR);
+    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode, fileInfo.st_mode, S_IRGRP, S_IRGRP);
+    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode, fileInfo.st_mode, S_IWGRP, S_IWGRP);
+    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode, fileInfo.st_mode, S_IXGRP, S_IXGRP);
+    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode, fileInfo.st_mode, S_IROTH, S_IROTH);
+    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode, fileInfo.st_mode, S_IWOTH, S_IWOTH);
+    printf("[INFO] %d -> %08b AND %03d -> %09b \n", fileInfo.st_mode, fileInfo.st_mode, S_IXOTH, S_IXOTH);
 
     printf("\n ---------------- \n");
 
@@ -78,12 +70,12 @@ void printFileInfo(const char *dirName, const char *fileName) {
 
     // Data di ultima modifica
     char dateStr[128];
-    strftime(dateStr, sizeof(dateStr), "%b %d %H:%M",
-             localtime(&fileInfo.st_mtime));
+    strftime(dateStr, sizeof(dateStr), "%B %D %H:%M", localtime(&fileInfo.st_mtime));
     printf(" %s", dateStr);
 
     // Nome del file
     printf(" %s\n", fileName);
+    printf("################################\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -91,8 +83,7 @@ int main(int argc, char *argv[]) {
     struct dirent *dirent; // punatore ad un singolo elemento della directory
 
     if (argc != 2) {
-        fprintf(stderr, "Errore: manca inputfile. Uso: %s <directory>\n",
-                argv[0]);
+        fprintf(stderr, "Errore: manca inputfile. Uso: %s <directory>\n", argv[0]);
         return 1;
     }
 

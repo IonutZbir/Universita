@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define BUF_SIZE 4096    // Dimensione del buffer: 4096 byte
+#define BUF_SIZE 700     // Dimensione del buffer: 4096 byte
 #define OUTPUT_MODE 0700 // Bit di protezione per file di output
 
 #define TRUE 1
