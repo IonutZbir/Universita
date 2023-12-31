@@ -44,14 +44,12 @@
 - <span style="color:blue">**`1>`**</span> or <span style="color:blue">`>`</span> -> *ridireziona l'output di un comando o il contenuto di un file nello STDOUT o 
              se specificato in un altro file.*
 - <span style="color:blue">**`2>`**</span> -> *ridireziona l'output di un comando o il contenuto di un file nello STDERR*
-
-- ps faux
-- mount
-- ln
-- top
-- rsync
-- free 
-
+- <span style="color:blue">**`ps faux`**</span> -> *mostra tutti i processi e tutte le informazioni su ciascun processo*
+- <span style="color:blue">**`mount`**</span> -> *usato per montare un disco (montare il file system di un disco)*
+- <span style="color:blue">**`ln`**</span> -> *crea hard link di default, --symbolic crea soft links*
+- <span style="color:blue">**`rsync`**</span> -> *tool molto versatile per copiare file, anche in remoto*
+- <span style="color:blue">**`free`**</span> -> *mostra la memoria libera, lo swap, cache e cosi via*
+- <span style="color:blue">**`top`**</span> -> *task manager, mostra in real-time lo stato delle risorse del sistema*
 
 ## Comandi annidati attraverso Pipes
 
@@ -68,13 +66,14 @@
 - <span style="color:blue">**`cat foo.txt | sed 's/APRIL/PAPPAGALLO/g'`**</span> -> *indica che deve sostituire tutte le occorrenze di "APRIL" con "PAPPAGALLO" e il flag g indica che deve farlo globalmente.*
 - <span style="color:blue">**`cat foo.txt | grep JULY`**</span> -> *prendo tutte le righe che contengono la stringa JULY*
 - <span style="color:blue">**`cat foo.txt | grep -v JULY`**</span> -> *prendo tutte le righe che non contengono la stringa JULY*
-- <span style="colot:blue">**`history | awk '{if($1>n) print}'`**</span> -> *prendo da history tutte le righe da una certa righa n in poi*
+- <span style="color:blue">**`history | awk '{if($1>n) print}'`**</span> -> *prendo da history tutte le righe da una certa righa n in poi*
 
 ## Comandi per salvare un file
 
-- cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c > log_stdout.txt -> manda lo standard output sul file log_stdout.txt
-- cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c 2> log_stderr.txt -> manda lo standard error sul file
-- cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c 2> log_stdout.txt 1> log_stout.txt -> se li voglio separare
+- <span style="color:blue">**`cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c > log_stdout.txt`**</span> -> *manda lo standard output sul file log_stdout.txt*
+- <span style="color:blue">**`cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c 2> log_stderr.txt`**</span> -> *manda lo standard error sul file log_stderr.txt*
+- <span style="color:blue">**`cat foo.tsv | awk -F"\t" '{print $3}' | sort | uniq -c 2> log_stderr.txt 1> log_stdout.txt`**</span> -> *manda lo standard output su log_stdout.txt e 
+lo standard error sul file log_stderr.txt*
 
 ## Combinazione tasti
-- '~' -> altgr + ì tilde r
+- <span style="color:blue">**`altgr + ì`**</span> -> *[~]*

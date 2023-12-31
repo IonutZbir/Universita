@@ -1,0 +1,153 @@
+Principi dell'Hardaware di I/O
+
+-> Dispositivi di I/O
+
+I dispositivi di I/O di possono suddividere in 
+- dispositivi a blocchi
+    Archivia informazioni in blocchi di dimensioni fisse, ognuno con il proprio indirizzo. Tutti i trasferimenti sono in unità di uno o più blocchi interi. La caratteristica 
+    principale di un dispositivo a blocchi è che ciascun blocco può essere letto o scritto indipendentemente da tutti gli altri. Dispositivi a blocchi sono: dischi fissi magnetici,
+    SSD ecc...
+
+- dispositivi a caratteri
+    Rilascia o accetta un flusso di caratteri, senza alcuna struttura a blocchi. Non è indirizzabile e non ha alcuna operazione di ricerca. Dispositivi a caratteri sono: stampanti, 
+    mouse, tastiera, ecc...
+
+Questa classificazione però non include tutti i dispositivi di I/O, per esempio clock, schermi o touchscreen.
+
+{immagine}
+    
+-> Controller dei Dispositivi
+
+I dispositivi di I/O sono composti da una parte elettronica detta controller del dispositivo e da una parte meccanica, ovvero il dispositivo stesso. E' presente sui computer come 
+un chip o una schea a circuiti stampati. Molti controller possono gestire diversi dispositivi identici. Le interfacce fra il controller e il dispositivo possono essere standardizzate 
+come ANSI, IEEE, ISO o de facto, come SATA, SCSI, USC o Thunderbolt.
+
+{immagine}
+
+L'interfaccia fra il controller e il dispositivo è di livello molto basso, infatti il compito del controller è di convertiver l flusso seriale di bit in blocchi di byte, corregere 
+errori e trasferire in memoria centrale. Senza il controller, il programmatore dovrebbe gestire dettagli complessi, come la modulazione di ciascun pixel. Il controller viene 
+inizalizzato dal sistema operativo con parametri essenziali, poi viene delegato alla gestione dei dettagli complessi.
+
+# Dalla Porta Parallela alla Porta USB
+
+Porta Parallela: tipo di interfaccia di comunicazione tra computer e dispositivi. Trasmette dati multi-bit simultaneamente su più canali. Comunemente dotata di 25 po 36 pin.
+
+{immagine}
+
+- Pin 1-8: trasferimento di dati
+- Pin 9-16: Controlli e status 
+- Pin 17-25: Masse e alimentazione.
+
+Porta USB: Universal Serial Bus è un  interfaccia standardizzata per la connessione e comunicazione tra dispositivi e computer. Anche utilizzata per fornire alimentazione elettrica 
+oltre che dati.
+E' ampiamente utilizzata in vari dispositivi come smartphone, periferiche computer e dispositivi di archiviazione. E' facile da usare, connessione plug-and-play.
+
+{immagine}
+
+- Pin 1: Vcc, alimentazione 5V
+- Pin 2: D-, Dati negativi
+- Pin 3: D+, Dati positivi
+- Pin 4: GND, Terra
+
+-> I/O Mappato in Memoria
+
+Ogni controller dispone di alcuni registri usati per le comunicazioni con la CPU. Scrivendo in questi registri, il sistema operativo può ordinare al dispositivo di inviare dati,
+accettarli, accendersi e spegnersi o eseguire qualche altra azione. Leggendo da questi registri, il sistema operativo apprende quale sia lo stato del dispositivo,
+se sia pronto ad accettare un nuovo comando e così via.
+
+Oltre ai registri di controllo, molti dispositivi hanno un buffer di dati su cui il sistema operativo può scrivere e leggere.
+Per esempio, un metodo classico dei computer per visualizzare i punti sullo schermo è avere una RAM video
+
+Come la CPU comunica con i registri di controllo e i buffer de dati? Ci sono due approcci principali.
+
+1. Port-Mapped I/O
+
+Ogni registro di controllo ha un numero di porta di I/O associato, di solito un intero di 8 o 16 bit.
+Per esempio per leggere da una porta, IN REG, PORT, mentre per scrivere, OUT PORT, REG
+
+E' importante avere una separazione degli spazi di indirizzi della memoria e dell'I/O, quindi IN R0, 4 legge dalla porta 4 e salva in R0, mentre MOV R0, 4 legge dal'indirizzo di 
+memoria 4 e salva in R0. I due 4 sono indirizzi diversi.
+
+2. Memory-Mapped I/O
+
+Questo metodo assegna a ogni registro di controllo un indirizzo di memoria univoco, perciò i registri di controllo sono mappati nello spazio di memoria.
+In questo modo viene eliminata la necessità di avere istruzioni speciali di I/O come IN e OUT. Inoltre i registri di controllo adesso possono essere trattati come variabili in un 
+linguaggio come C, facilitando la scrittura di driver direttamente in C e non in assembly. Non hanno bisogno di una protezione complicata, il sistema operativo semplicemente non deve
+mettere questi indirizzi nello spazio dei indirizzi virtuale di qualunque processo utente. E' possibile, attraverso la gestione delle pagine di memoria, di dare controllo selettivo
+su dispositivi specifici. Consente l'esecuzione di driver di dispositivi in spazi separati, aumentando la sicurezza e riducendo le dimensioni del kernel.
+Uno svantaggio di questo metodo è di gestire male le cache e i registri mappati in memoria. Per esempio se un registro finisce in cache, la CPU controlla solo la cache e se un ciclo 
+while è in attesa che il contenuto del registro cambi, questo ciclo diventerebbe infinito.
+Un altro grande svantaggio è la presenza di un'unico spazio degli indirizzi. Tutti i moduli di memoria e tutti i dispositivi di I/O devono esaminare tutti i riferimenti alla memoria
+per vedere a quali rispondere. Se il computer ha un singolo bus, è semplice fare in modo che ciascuno controlli tutti gli indirizzi, il problema sorge quando ci sono bus multipli.
+Una soluzione è l'invio di riferimenti alla memoria, prima alla memoria stessa, se la memoria non risponde, si tenta con gli altri bus.
+
+Un'altra possibile soluzione è un approccio ibrido delle dei due metodi. L'idea è di filtrare gli indirizzi per distinguere tra memoria e dispositivi di I/O. Gli indirizzi di I/O 
+in questo modo verranno inoltrati ai dispositivi anziché alla memoria.
+
+-> Direct Memory Access
+
+Il DMA permette alla CPU di scambiare dati con i controller dei dispositivi bypassando il trasferimento manuale byte per byte. Riduce lo spreco di tempo alla CPU, migliorando 
+l'efficienza del trasferimento dei dati.
+
+Confrontiamo ora il trasferimento di dati tradizionale, ovvero senza DMA e il trasferimento di dati con DMA.
+
+- Senza DMA:
+Il controller del disco legge i dati e li memorizza nel suo buffer. Dopo aver controllato gli errori, provoca un interrupt e il SO copia i dati in memoria, sprecando tempo alla CPU.
+
+- Con DMA
+
+{immagine}
+
+- Passo 1: La CPU imposta il controller DMA e invia un comando al controller del disco
+- Passo 2: Il controller DMA richiede la lettura al controller del disco
+- Passo 3: Scrittura in memoria da parte del controller del disco
+- Passo 4: Conferma dal controller del disco al DMA
+
+I passi 2-4 vengono ripetuti fino al completamento del trasferimento, al termine il DMA invia un interrupt alla CPU.
+In questo modo la CPU delega il trasferimento dei dati al DMA, nel mentre la CPU può fare altro.
+
+Modalità DMA e interazioni con il BUS:
+- Cycle Stealing: DMA trasferisce una parola per volta, "rubando" cicli alla CPU nel caso in cui anche alla CPU servisse il BUS.
+- Modalità Burst: DMA ottiene controllo completo del bus, eseguendo trasferimenti multipli in una volta.
+- Fly-by Mode: DMA trasferisce dati direttamente alla memoria principale senza intermediari.
+
+
+-> Interrupt
+
+Gli interrupt possono essere di diversi tipo:
+
+- Trap: Azione deliberata da parte del codice del programma, ad esempio una trap nel kernel per una chiamata di sistema.
+- Fault o Eccezione: Azioni non deliberate, come errori di segmentazione o divisione per 0.
+- Interrupt Hardaware: Segnali inviati da dispositivi come stampanti o reti della CPU.
+
+{immagine}
+
+Un dispositivo di I/O invia un segnale di interrupt alla CPU mediante un bus, poi viene gestito dal chip nel controller degli interrupt sulla scheda madre. Se non ci sono altri 
+interrupt in corso, il controller gestisce immediatamente l'interrupt, in caso di interrupt simultanei, il dispositivo è ignorato temporaneamente.
+
+# Processo di Gestione degli Interrupt
+
+- Segnalazione dell'Interrupt alla CPU: il controller assegna un numero alle linee degli indirizzi per specificare il dispositivo che richiede attenzione e invia un segnale di 
+interruzione alla CPU. 
+- Interruzione e Gestione da Parte della CPU: la CPU interrompe il suo attuale compito. Utilizza un numero sulle linee degli indirizzi come indice nella tabella del vettore degli 
+interupt per ottenere un nuovo contatore di programma.
+- Il Vettore degli Interrupt punta all'inizio della procedura di servizio degli interrupt corrispondente.
+- Conferma e Gestione degli Interrupt: la procedura di servizio conferma l'interrupt scrivendo su una porta del controller degli interrupt.
+- Salvataggio dello Stato: al minimo, il contatore di programma deve essere salvato per riavvirare i processi interrotti. Il salvattaggio avviene nei registri interni o sullo stack.
+La CPU deve decidere se usare lo stack corrente del processo rischiando errori di pagina e puntatori illeciti o lo stack del kernel, producendo un overhead, poiché deve cambiare
+il contesto della MMU e possibile invalidazione della cache o del TLB.
+
+Ci sono due tipologie di interrupt.
+(a). Interrupt Precisi: Situazione in cui il sistema può determinare con esattezza quali istruzioni sono state completate al momento dell'interupt e quali no.
+     In questo caso il PC è salvato in luogo noto. Tutte le istruzioni eseguite prima del PC sono completat. Nessuna istruzione dopo il PC è stata eseguita. Lo stato dell'istruzione
+     puntata dal PC è noto. Per gestire questo interupt, la CPU cancella gli effetti di eventuali istruzioni transitorie eseguite dopo il PC, garantendo compatibilità e prevedibilità.
+
+(b). Interrupt Imprecisi: Condizione in cui diverse istruzioni vicino al contatore di programma si trovano in vari stati di completamento al momento dell'interupt, rendendo incerto 
+lo stato esatto del programma.
+     Richiede che la CPU salvi una grande quantità di stato interno sullo stack, rendendo tutto il processo di gestione molto lento.
+
+{immagine}
+
+
+
+
