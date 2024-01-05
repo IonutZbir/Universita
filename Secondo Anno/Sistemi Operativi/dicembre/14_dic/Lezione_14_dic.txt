@@ -1,4 +1,4 @@
-Principi dell'Hardaware di I/O
+Principi dell'Hardware di I/O
 
 -> Dispositivi di I/O
 
@@ -118,7 +118,7 @@ Gli interrupt possono essere di diversi tipo:
 
 - Trap: Azione deliberata da parte del codice del programma, ad esempio una trap nel kernel per una chiamata di sistema.
 - Fault o Eccezione: Azioni non deliberate, come errori di segmentazione o divisione per 0.
-- Interrupt Hardaware: Segnali inviati da dispositivi come stampanti o reti della CPU.
+- Interrupt Hardware: Segnali inviati da dispositivi come stampanti o reti della CPU.
 
 {immagine}
 
