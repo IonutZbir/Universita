@@ -5,10 +5,7 @@ The parent process should aggregate the results from all child processes.
 */
 
 #include <fcntl.h>
-#include <math.h>
-#include <signal.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
