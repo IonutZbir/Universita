@@ -1,7 +1,8 @@
 /*
-Write a program that performs matrix multiplication using parallel processing.
-Create multiple child processes to compute different rows of the result matrix.
-The parent process should wait for all child processes to finish and then print the final result.
+Scrivere un programma che esegue la moltiplicazione tra matrici 3x3 usando la programmazione parallela.
+    - Il primo processo figlio computa la prima colonna.
+    - Il secondo processo figlio computa la seconda colonna.
+    - Il processo padre computa la terza colonna e riceve dai figli i due vettori colonna computati e compone la matrice finale e la stampa.
 */
 
 #include <signal.h>
