@@ -61,6 +61,11 @@ Un buffer di n elementi inizializzato con a -1 viene riempito nel seguente modo:
     `buff[0] = buff[0]; buff[1] = buff[1] + buff[0]; buff[2] = buff[1] + buff[2]`.
 Si proponga una soluzione di mutua esclusione.
 
+3. Scrivere un programma in C con tre thread che operano su un array di dimensione 10. 
+    - Il primo thread crea un array con numeri casuali tra 0 e 100. 
+    - Il secondo thread trova il valore massimo nell'array. 
+    - Il terzo trova il valore minimo. (senza utilizzare pthread_cond_t)
+
 ### Semafori
 
 1. Due thread, il produttore inserisce numeri pari da 0 a 100 in posizioni pari, e numeri dispari da 100 a 200 in posizioni dispari all'interno di un buffer di N elementi,
