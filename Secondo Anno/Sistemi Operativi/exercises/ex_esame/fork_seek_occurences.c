@@ -27,77 +27,81 @@ int str_equals(const char *str1, char *str2) {
 }
 
 int main(int argc, char *argv[]) {
+
+    if (argc < 3) {
+        fprintf(stderr, "[ERROR]: %s file word\n", argv[0]);
+        return -1;
+    }
+
     int first_pipe[2], second_pipe[2];
-    pipe(first_pipe);
-    pipe(second_pipe);
-
     int first_pid, second_pid;
-    int first_fd, second_fd;
 
-    struct stat file_info; // non inizializzi la stat
+    struct stat file_info;
 
-    const char *file_name = argv[2];
-    const char *word_to_find = argv[1];
+    const char *file_name = argv[1];
+    const char *word_to_find = argv[2];
 
     int len = strlen(word_to_find);
-
-    // char *buffer = (char *)malloc(sizeof(char) * 9);
 
     stat(file_name, &file_info);
 
     int file_size = file_info.st_size;
     const int half = file_size / 2;
 
+    if (pipe(first_pipe) < 0 || pipe(second_pipe) < 0) {
+        fprintf(stderr, "[ERROR]: could not create pipes\n");
+        return -1;
+    }
+
     first_pid = fork();
 
     if (first_pid == 0) {
         int i = 0, count = 0;
-        first_fd = open(file_name, O_RDONLY);
+        int file = open(file_name, O_RDONLY);
         close(first_pipe[RD_PIPE]);
         char buffer[len + 1];
 
         while (i <= half) {
-            read(first_fd, buffer, sizeof(buffer));
+            read(file, buffer, sizeof(buffer));
             buffer[len] = '\0';
             count += str_equals(word_to_find, buffer);
             i++;
-            lseek(first_fd, i, SEEK_SET);
+            lseek(file, i, SEEK_SET);
         }
 
         write(first_pipe[WR_PIPE], &count, sizeof(count));
-        close(first_fd);
+        close(file);
         exit(0);
     } else if (first_pid > 0) {
         second_pid = fork();
         if (second_pid == 0) {
             char buffer[len + 1];
             int count = 0, i = half;
-            second_fd = open(file_name, O_RDONLY);
+            int file = open(file_name, O_RDONLY);
             close(second_pipe[RD_PIPE]);
 
             while ((i + len) <= file_size) {
-                lseek(second_fd, i, SEEK_SET);
-                read(second_fd, buffer, sizeof(buffer));
+                lseek(file, i, SEEK_SET);
+                read(file, buffer, sizeof(buffer));
                 buffer[len] = '\0';
                 count += str_equals(word_to_find, buffer);
                 i++;
             }
 
             write(second_pipe[WR_PIPE], &count, sizeof(count));
-            close(second_fd);
+            close(file);
             exit(1);
         } else if (second_pid > 0) {
-
-            int f, s;
+            int x, y;
             close(first_pipe[WR_PIPE]);
             close(second_pipe[WR_PIPE]);
-            waitpid(first_pid, NULL, 0);
-            read(first_pipe[RD_PIPE], &f, sizeof(f));
-            waitpid(second_pid, NULL, 0);
-            read(second_pipe[RD_PIPE], &s, sizeof(s));
 
-            int final = f + s;
-            printf("%s compare %d volte all'interno del file %s\n", argv[1], final, argv[2]);
+            waitpid(first_pid, NULL, 0);
+            read(first_pipe[RD_PIPE], &x, sizeof(x));
+            waitpid(second_pid, NULL, 0);
+            read(second_pipe[RD_PIPE], &y, sizeof(y));
+
+            printf("[INFO]: '%s' compare '%d' volte all'interno del file '%s'\n", word_to_find, x + y, file_name);
             return 0;
         }
     }
