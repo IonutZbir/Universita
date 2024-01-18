@@ -2,7 +2,7 @@
 
 ## Processi
 
-1. Creare un programma che che legge un file e conta le occorenze di una parola nel seguente modo:
+1. Creare un programma che legge un file e conta le occorenze di una parola nel seguente modo:
     - Il primo processo legge dall'inzio alla metà e conta le occorenze della parola.
     - Il secondo processo legge dalla metà fino alla fine e conta le occorenze dell parola.
     - Inviano poi il numero di occorenze al processo padre, il quale le somma e le stampa a video.
@@ -18,7 +18,13 @@
     - Il secondo figlio legge il numero inviato dal padre e lo stampa a video.
 
 4. Due processi leggono dallo stesso file che si trova all'interno di una directory, (es. */data/file.txt*).
-Controllare che il file sia in modalità lettura, altrimenti restituire errore. 
+    
+    **Alternativa** - Usare dirent e readdir per leggere all'interno della directory e controllare se il file esiste o meno. 
+    
+    Controllare che il file sia in modalità lettura, altrimenti restituire errore.
+
+    **Alternativa** - invece di restituire un errore, cambiare i permessi al file con chmod. 
+    
     - Il primo processo legge dall'inizio del file fino a metà, 
     - Il secondo legge dalla metà in poi. I figli mandano il contenuto al padre
     - Il padre lo stampa nel seguente formato: [PID_FIGLIO] -> TESTO
@@ -31,12 +37,19 @@ Controllare che il file sia in modalità lettura, altrimenti restituire errore.
 6. Generare due processi figli che comunicano con il padre. 
     - Uno dei processi genera numeri casuali [0-50] ed invia al padre solo i numeri multipli di 3. 
     - L'altro processo genera numeri casuali [51-100] ed invia al padre solo i numeri multipli di 2.
-    - Il padre stampa i numeri ricevuti ed esegue la loro somma quando la somma > 300. 
+    - Il padre stampa i numeri ricevuti ed esegue la loro somma quando la somma > 130. 
 
 7. Scrivere un programma C che crea un processo figlio.
-    - Il padre legge una numero casuale e la invia al figlio attraverso una pipe.
-    - Il figlio converte fa il quadrato del numero e la invia nuovamente al padre attraverso un'altra pipe.
-    - Il padre stampa la stringa convertita in maiuscolo.
+    - Il padre legge una numero casuale e lo invia al figlio attraverso una pipe.
+    - Il figlio fa il quadrato del numero e lo invia nuovamente al padre solo se il quadrato è pari, attraverso la pipe.
+    - Il padre legge il numero e lo stampa.
+
+8. Scrivere un programma C che svolge le seguenti richieste:
+    - Un processo padre genera due processi figli. Ciascun processo inizializza un proprio array di N interi.
+    - Il primo processo invia al processo padre solo i numeri in posizioni pari, e il secondo processo solo i numeri in posizioni dispari.
+    - Il padre riceve questi numeri e li scrive in un array di N interi, mettendo il posizioni pari i numeri ricevuti dal primo figlio, e in posizioni dispari i numeri ricevuti 
+      dal secondo filgio. 
+    - Il padre stampa l'array e calcola il max e il min.
 
 
 ## Thread
@@ -61,10 +74,11 @@ Un buffer di n elementi inizializzato con a -1 viene riempito nel seguente modo:
     `buff[0] = buff[0]; buff[1] = buff[1] + buff[0]; buff[2] = buff[1] + buff[2]`.
 Si proponga una soluzione di mutua esclusione.
 
-3. Scrivere un programma in C con tre thread che operano su un array di dimensione 10. 
-    - Il primo thread crea un array con numeri casuali tra 0 e 100. 
-    - Il secondo thread trova il valore massimo nell'array. 
-    - Il terzo trova il valore minimo. (senza utilizzare pthread_cond_t)
+3.  Scrivere un programma in C con tre thread che operano su due array di dimensione N inizialmente a 0. 
+    - Il primo thread scrive in un array A numeri casuali tra 1 e 150, scrivendo un numero per volta in posizioni randomiche.
+    - Il secondo thread scrive in un array B numeri cassuali tra 150 e 300, scrivendo un numero per volta in posizioni randomiche. 
+    - Il terzo thread controlla se entrambi gli array sono stati inizializzati, in caso affermativo calcola il massimo in A e in B, calcola il minimo in A e in B. Infine determina 
+    il max{max(A), max(B)} e il min{min(A), min(B)}. 
 
 ### Semafori
 
@@ -75,3 +89,5 @@ iniziliazzato a -1, il consumatore legge dal buffer un numero pari e un numero d
 
 3. Sei thread, un scrittore e 5 lettori. Lo scrittore scrive su un buffer numeri dispari da 0 a 50 nelle posizioni pari e numeri pari da 50 a 100 nelle posizioni dispari. I lettori 
 leggono coppie di numeri (paro, disparo), li somma e li stampa.
+
+
