@@ -37,7 +37,7 @@
 
 14. Cosa è un processo? Quali sono i stati di un processo?
 
-15. Cosa è un thread? Come si possono sincronizzare?
+15. Cosa è un thread? Discutere l'importanza della sincronizzazione e fornire 2 metodi usati per la sincronizzazione.
 
 16. Discutere l'importanza del DMA e il suo funzionamento.
 
@@ -49,6 +49,9 @@
 
 20. Cos'è l'MMU e il TLB? Qual'è il loro ruolo? Descrivere come avviene la gestione di un page fault.
 
+21. Come può essere gestita la memoria RAM libera? Descrivere alcuni schemi di allocazione della memoria.
+
+22. Cosa si intende per astrazione della memoria? 
 
 
 

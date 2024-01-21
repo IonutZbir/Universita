@@ -22,8 +22,7 @@ int buffer = 0; /* Buffer utilizzato tra produttore e consumatore */
 void *producer(void *ptr) {
     int i;
     for (i = 1; i <= MAX; i++) {
-        pthread_mutex_lock(
-            &the_mutex); /* Ottiene l'accesso esclusivo al buffer */
+        pthread_mutex_lock(&the_mutex); /* Ottiene l'accesso esclusivo al buffer */
 
         /*
         NOTA: La ragione per cui viene utilizzato un ciclo while invece di un
@@ -58,33 +57,7 @@ void *consumer(void *ptr) {
         }
 
         printf("Consuming:\t%d\n", i);
-        void *control(void *args) { // Correggi la firma della funzione
-            pthread_mutex_lock(&the_mutex);
 
-            while (1) {
-                int o = 0, n = 0;
-
-                for (int i = 0; i < N; i++) {
-                    if (buffer[i] == 1)
-                        o++;
-                    if (buffer[i] == -1)
-                        n++;
-                }
-
-                if ((n + o) == N) {
-                    if (o > n) {
-                        printf("[INFO]: Ha vinto il thread 1, impostando %d uno\n", o);
-                    } else {
-                        printf("[INFO]: Ha vinto il thread -1, impostando %d -uno\n", n);
-                    }
-                    pthread_cond_broadcast(&cond_control); // Usa broadcast invece di signal
-                    pthread_mutex_unlock(&the_mutex);
-                    pthread_exit(NULL); // Termina il thread
-                } else {
-                    pthread_cond_wait(&cond_control, &the_mutex);
-                }
-            }
-        }
         buffer = 0; /* Preleva un elemento dal buffer e lo reinizializza */
         sleep(rand() % 2);
         pthread_cond_signal(&condp);      /* Sveglia il produttore */

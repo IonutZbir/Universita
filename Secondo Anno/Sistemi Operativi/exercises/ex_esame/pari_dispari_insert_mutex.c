@@ -18,6 +18,8 @@ Si proponga una soluzione di mutua esclusione.
 
 pthread_t threads[NT];
 pthread_mutex_t mutex;
+pthread_cond_t cond;
+
 int done = 0;
 
 int buffer[N];
@@ -45,8 +47,9 @@ void *add_pari(void *args) {
         buffer[pos] = num;
         print_buffer();
 
+        pthread_cond_signal(&cond);
         pthread_mutex_unlock(&mutex);
-        sleep(1);
+        sleep(rand() % 2);
     }
     pthread_exit(NULL);
 }
@@ -65,8 +68,9 @@ void *add_dispari(void *args) {
         buffer[pos] = num;
         print_buffer();
 
+        pthread_cond_signal(&cond);
         pthread_mutex_unlock(&mutex);
-        sleep(1);
+        sleep(rand() % 2);
     }
     pthread_exit(NULL);
 }
@@ -82,21 +86,18 @@ int check_buffer() {
 void *sum(void *args) {
     while (1) {
         pthread_mutex_lock(&mutex);
-        if (check_buffer()) {
-
-            for (int i = 1; i < N; i++) {
-                buffer[i] += buffer[i - 1];
-            }
-
-            printf("[INFO]: Sono il terzo thread, ho effettuato le somme.\n");
-            print_buffer();
-            done = 1;
-            pthread_mutex_unlock(&mutex);
-            pthread_exit(NULL);
+        while (!check_buffer()) {
+            pthread_cond_wait(&cond, &mutex);
+        }
+        done = 1;
+        for (int i = 1; i < N; i++) {
+            buffer[i] += buffer[i - 1];
         }
 
+        printf("[INFO]: Sono il terzo thread, ho effettuato le somme.\n");
+        print_buffer();
         pthread_mutex_unlock(&mutex);
-        sleep(1);
+        pthread_exit(NULL);
     }
 }
 
@@ -108,6 +109,7 @@ int main() {
         buffer[i] = -1;
     }
     pthread_mutex_init(&mutex, NULL);
+    pthread_cond_init(&cond, NULL);
 
     pthread_create(&threads[0], NULL, add_pari, NULL);
     pthread_create(&threads[1], NULL, add_dispari, NULL);
@@ -118,6 +120,7 @@ int main() {
     }
 
     pthread_mutex_destroy(&mutex);
+    pthread_cond_destroy(&cond);
 
     return 0;
 }
