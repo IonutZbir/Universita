@@ -48,6 +48,7 @@ void think_up_data() {
 }
 
 void *reader(void *arg) {
+    int *j = (int *)arg;
     while (TRUE) {
         down(&mutex); // Ottiene accesso esclusivo a rc, in modo da non avere
                       // interferenze da altri lettori
@@ -64,6 +65,8 @@ void *reader(void *arg) {
         // regione critica? Perche i thread devono solo leggere il buffer e non
         // modificarlo, quindi non ci sono rischi di fare danni
 
+        printf("[INFO]: %d\n", *j);
+
         down(&mutex); // Ottiene accesso esclusivo a rc, in modo da non avere
                       // interferenze da altri lettori
 
@@ -75,6 +78,7 @@ void *reader(void *arg) {
         up(&mutex); // Rilascia accesso esclusivo a rc
 
         use_data_read(); // Usa i dati letti (Nota: siamo fuori da zona critica)
+        sleep(1);
     }
 }
 
@@ -89,6 +93,7 @@ void *writer(void *arg) {
         write_database(); // Scrive nel database
 
         up(&db); // Rilascia accesso esclusivo
+        sleep(1);
     }
 }
 
@@ -100,7 +105,7 @@ int main() {
 
     // Creazione degli N lettori
     for (int i = 0; i < NUM_READERS; i++) {
-        pthread_create(&readers[i], NULL, reader, NULL);
+        pthread_create(&readers[i], NULL, reader, (void *)&i);
     }
 
     // Creazione del thread scrittore
