@@ -51,9 +51,13 @@
       dal secondo filgio. 
     - Il padre stampa l'array e calcola il max e il min.
 
-9. Si richiede di implementare un programma in linguaggio C che utilizzi il metodo delle fork per la comunicazione tra processi. 
-   Il programma dovrà creare un file di testo e poi creare due processi figli. Uno dei processi figli dovrà scrivere una sequenza di N numeri interi pari nel file,
-   mentre l'altro processo figlio dovrà scrivere una sequenza di N numeri interi dispari nello stesso file. Il processo padre dovrà leggere i dati dal file e stamparli a video.
+
+9. Si richiede di implementare un programma in linguaggio C che utilizzi il metodo delle fork per la comunicazione tra processi.
+    Il programma dovrà creare un file di testo e poi creare due processi figli. Uno dei processi figli dovrà scrivere una sequenza di
+    N numeri interi pari da 0 a 9 nel file, mentre l'altro processo figlio dovrà scrivere una sequenza di N numeri interi dispari da 0 a 9, attraverso
+    la funzione seek va a scriverli subito dopo la sequenza degli N numeri pari nello stesso file.
+    Il processo padre dovrà leggere i dati dal file e stamparli a video. 
+    (*ATTENTION* bisogna convertire da int a char quando si va a scrivere su file).
 
 ## Thread
 

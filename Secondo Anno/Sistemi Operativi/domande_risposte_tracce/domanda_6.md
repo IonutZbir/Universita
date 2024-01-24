@@ -24,5 +24,5 @@ e si passa alla prossima. L'algoritmo rimuove (se la pagina è sporca) o riscriv
 
 3. Clock
 E' una lista circolare di frame, con un puntatore simile ad una lancetta, se il bit R è 0 la pagina viene rimossa e ne viene inserita una nuova al suo posto.
-Se il bit R è 1, viene azzerrato e la lancetta viene spostata in avanti.
+Se il bit R è 1, viene azzerrato e la lancetta viene spostata in avanti. E' più efficiente di FIFO è Seconda Chance.
 
