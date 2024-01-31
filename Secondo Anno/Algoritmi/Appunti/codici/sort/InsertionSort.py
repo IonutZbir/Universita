@@ -2,11 +2,11 @@ def insertion(array):
     for i in range(1, len(array)):
         while i > 0:
             a = array[i]
-            b = array[i-1]
+            b = array[i - 1]
             if a < b:
                 x = a
                 array[i] = b
-                array[i-1] = x
+                array[i - 1] = x
                 i -= 1
     return array
 

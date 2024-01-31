@@ -33,8 +33,7 @@ void fixHeap(int pos, heap *H) {
     }
 }
 
-void heapify_recursive(
-    heap *H, int pos) { // l'array che sta dentro H non è ancora una heap
+void heapify_recursive(heap *H, int pos) { // l'array che sta dentro H non è ancora una heap
     int left_child = left(pos);
     int right_child = right(pos);
     if (pos < H->heapSize && H->heapSize > 1) {
@@ -77,9 +76,9 @@ void printHeap(heap *H) {
 }
 
 int main() {
-    int a[] = {4, 10, 7, 8, 2, 1, 14, 3, 9, 16};
+    // int a[] = {4, 10, 7, 8, 2, 1, 14, 3, 9, 16};
     // int a[] = {4, 16, 10, 14, 7, 9, 3, 2, 8, 17};
-    // int a[] = { 12, 11, 13, 5, 6, 7 };
+    int a[] = {12, 11, 13, 5, 6, 7, 21};
     int len = ARRAY_SIZE(a);
 
     heap H;
