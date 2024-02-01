@@ -51,7 +51,9 @@ void mergeSort_p(int *arr, int i, int f) {
     merge(arr, i, m, f);
 }
 
-void mergeSort(array *a) { mergeSort_p(a->arr, 0, a->len); }
+void mergeSort(array *a) {
+    mergeSort_p(a->arr, 0, a->len);
+}
 
 int main() {
     int a[] = {7, 6, 5, 4, 4, 3, 2, 1, 1};

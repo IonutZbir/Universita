@@ -53,7 +53,7 @@ Esegue n-1 scansioni. Ad ogni scansione guarda coppie di elementi adiacenti e li
 ```
 BubbleSort(arr)
     for k = 1 to n-2 do 
-        for j = 0 to n-1-k do 
+        for j = 1 to n-1-k do 
             if(arr[j] > arr[j+1]) then
                 scambia arr[j] con arr[j+1]
 ```
