@@ -17,8 +17,8 @@ SelectionSort(arr)
     for k = 1 to n-2 do   
         min = k  
         for j = k+1 to n-1 do   
-            if(arr[j] < arr[m]) then m = j  
-        scambia arr[m] con arr[k]  
+            if(arr[j] < arr[min]) then min = j  
+        scambia arr[min] con arr[k]  
 ```
 ### DEF (Invarianti):
 Gli invarianti sono uno strumento utile per dimostrare la correttezza di un algoritmo, perché permette di 
@@ -251,11 +251,11 @@ che un heap con $n'$ elementi ha
 - altezza $h$
 - è completo fino all'ultimo livello
 
-Vale: $T(n) <= T(n')$ e $n' <= 2n$
+Vale: $T(n) \leq T(n')$ e $n' \leq 2n$
 
-Tempo di esecuzione: $T(n') = 2T(\frac{n'-1}{2}) + O(log(n')) <= 2T(\frac{n'}{2}) + O(log(n'))$
+Tempo di esecuzione: $T(n') = 2T(\frac{n'-1}{2}) + O(log(n')) \leq 2T(\frac{n'}{2}) + O(log(n'))$
 
-Dal Teorema Master => $T(n') = O(n')$, quindi $T(n) <= T(n') = O(n') = O(2n) = O(n)$.
+Dal Teorema Master => $T(n') = O(n')$, quindi $T(n) \leq T(n') = O(n') = O(2n) = O(n)$.
 
 **Alternativa**
 ```

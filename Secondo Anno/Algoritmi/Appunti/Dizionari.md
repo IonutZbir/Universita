@@ -119,6 +119,26 @@ Sia $u$ il nodo contenente l'elemento $e$ da cancellare.
 3. $u$ ha due figli: sostituiscilo con il predecessore (o successore) (v) e rimuovi fisicamente il predecessore 
 (o successore) (che ha al più un figlio).
 
-
+**In conclusione**:
+- Tutte le operazioni hanno complessità temporale $O(h)$ dove $h$ è l'altezza dell'albero.
+- Nel caso peggiore $O(n)$, nel caso di alberi sbilanciati e molto profondi.
 
 ## AVL
+
+#### DEF 
+- Fattore di bilanciamento $\beta(v)$ di un nodo $v$: altezza del sottoalbero sinistro di $v$ - altezza del sottoalbero 
+destro di v. Generalmente $\beta(v)$ è mantenuto come informazione addizionale nel record relativo di $v$.
+- Un albero si dice bilanciato in altezza se ogni nodo $v$ ha fattore di bilanciamento in valore assoluto <= 1.
+- Un albero AVL è un albero BST bilanciato in altezza.
+
+**Corollario**: Un albero AVL con $n$ nodi ha altezza $O(log(n))$.  
+**Dim**: Per dimostrare ciò, di tutti gli alberi AVL andiamo a prendere quelli più sbilanciati, ovvero gli alberi di 
+Fibonacci. Sono alberi AVL di altezza $h$ con il minimo numero di nodi $n_{h}$. Quindi se dimostriamo che gli alberi 
+di Fibonacci hanno altezza $O(log(n))$ allora tutti gli alberi AVL hanno altezza $O(log(n))$.  
+Sia $T_{i}$ l'albero di Fibonacci di altezza $i$. Se a $T_{i}$ tolgo un nodo, o diventa sbilanciato, o cambia la sua 
+altezza. Inoltre ogni nodo (non foglia) ha fattore di bilanciamento pari (in valore assoluto) a 1.  
+$n_{h} = F_{h+3} -1 = \theta(\phi^n) => h = \theta(log(n_{h})) = O(log(n))$ con $n_{h} \leq n$.
+
+L'operazione di search non va a modificare la struttura dell'albero, perciò rimane uguale come nel BST. Le uniche 
+operazioni che cambiano i fattori di bilanciamento di +-1 sono l'insert e la delete. Per mantenere il bilanciamento 
+si usano una serie di **rotaziioni**.
