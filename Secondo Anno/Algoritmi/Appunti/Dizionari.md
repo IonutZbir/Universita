@@ -13,7 +13,9 @@ operazioni:
 ```
 
 Per garantire che le operazioni su un dizionario di $n$ elementi abbiano tempo $O(log(n))$.
+
 **Idee**:
+
 - Definire un albero (binario) tale che ogni operazione richiede tempo $O(h)$ (BST).
 
 - Fare in modo che l'altezza dell'albero sia sempre $O(log(n))$ (AVL)
@@ -24,7 +26,7 @@ E' un albero binario che soddisfa le seguenti proprietà:
 
 - ogni nodo $v$ contiene un elemento `elem(v)` in cui è associata una chiave  `chiave(v)` presa da un dominio totalmente
 ordinato. Per ogni nodo $v$ vale che:
-- le chiavi nel sottoalbero sinistro di $v$ sono <= `chiave(v)`.
+- le chiavi nel sottoalbero sinistro di $v$ sono $\leq$ `chiave(v)`.
 - le chiavi nel sottoalbero destro di $v$ sono > `chiave(v)`.
 
 **Proprietà**:
@@ -141,4 +143,4 @@ $n_{h} = F_{h+3} -1 = \theta(\phi^n) => h = \theta(log(n_{h})) = O(log(n))$ con 
 
 L'operazione di search non va a modificare la struttura dell'albero, perciò rimane uguale come nel BST. Le uniche 
 operazioni che cambiano i fattori di bilanciamento di +-1 sono l'insert e la delete. Per mantenere il bilanciamento 
-si usano una serie di **rotaziioni**.
+si usano una serie di **rotazioni**.
