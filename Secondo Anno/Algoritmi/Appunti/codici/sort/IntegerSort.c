@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void integerSort(int* array, int k, int dim) {
-	k ++;
-	int* y = calloc(k, sizeof(int));
+void integerSort(int *array, int k, int dim) {
+    k++;
+    int *y = calloc(k, sizeof(int));
 
-	for (int i = 0; i < dim; i++) {
-		y[array[i]]++;
-	}
+    for (int i = 0; i < dim; i++) {
+        y[array[i]]++;
+    }
 
-	int j = 0;
-	for (int i = 0; i < k; i++) {
-	    while (y[i] > 0) {
+    int j = 0;
+    for (int i = 0; i < k; i++) {
+        while (y[i] > 0) {
             array[j] = i;
             j++;
             y[i]--;
