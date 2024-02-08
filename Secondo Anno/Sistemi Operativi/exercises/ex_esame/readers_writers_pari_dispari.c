@@ -98,7 +98,9 @@ int main() {
     sem_init(&arr, 0, 1);
 
     for (int i = 0; i < R; i++) {
-        pthread_create(&readers[i], NULL, reader, (void *)&i);
+        int *k = malloc(sizeof(int));
+        *k = i;
+        pthread_create(&readers[i], NULL, reader, (void *)k);
     }
     pthread_create(&writer, NULL, f_writer, NULL);
 
