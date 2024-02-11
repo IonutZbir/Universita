@@ -8,7 +8,7 @@ typedef struct array {
     int *data;
 } array;
 
-int maxRic(int *arr, int start, int end) {
+int maxRic(int *arr, int start, int end) { // trova l ultima occorenza
     if (start > end)
         return -1;
     int m = (start + end) / 2;

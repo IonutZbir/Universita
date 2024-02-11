@@ -82,28 +82,37 @@ int *soluzione3(array a, int x) {
     return output;
 }
 
-int main() {
-    int x = 20; // 26
-    int a[] = {
-        1,
-        2,
-        34,
-    };
-    array v;
-    v.len = ARRAY_SIZE(a);
-    v.data = malloc(v.len * sizeof(int));
-
-    for (int i = 0; i < v.len; i++) {
-        v.data[i] = a[i];
+int binarySearchLastOccurence(int *arr, int n, int start, int end) {
+    if (start > end)
+        return -1;
+    int m = (end + start) / 2;
+    if (arr[m] == n) {
+        int nextInstance = binarySearchLastOccurence(arr, n, m + 1, end);
+        if (nextInstance == -1)
+            return m; // Questo è l'ultimo elemento uguale a n
+        else
+            return nextInstance; // Restituisci l'indice dell'ultima istanza trovata nella parte destra
     }
+    if (arr[m] > n)
+        return binarySearchLastOccurence(arr, n, start, m - 1);
+    else
+        return binarySearchLastOccurence(arr, n, m + 1, end);
+}
 
-    int *res1 = soluzione1(v, x);
-    int *res2 = soluzione2(v, x);
-    int *res3 = soluzione3(v, x);
+int main() {
+    int a[] = {1,
+               1,
+               1,
+               1,
+               3,
+               5,
+               6,
+               7,
+               10};
+    int j = binarySearchLastOccurence(a, a[0], 0, ARRAY_SIZE(a));
 
-    printf("SOLUZIONE 1: %d, %d\n", res1[0], res1[1]);
-    printf("SOLUZIONE 2: %d, %d\n", res2[0], res2[1]);
-    printf("SOLUZIONE 3: %d, %d\n", res3[0], res3[1]);
+    printf("[INFO]: Ultima Occorenza di %d è %d \n", a[0], j);
+    printf("[INFO]: Ci sono %d minimi\n", j + 1);
 
     return 0;
 }
