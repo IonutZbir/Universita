@@ -14,9 +14,9 @@ Sceglie sempre il minimo degli n-k elementi non ancora ordinati, mettendolo in p
 
 ```
 SelectionSort(arr)  
-    for k = 1 to n-2 do   
+    for k = 1 to n-1 do   
         min = k  
-        for j = k+1 to n-1 do   
+        for j = k+1 to n do   
             if(arr[j] < arr[min]) then min = j  
         scambia arr[min] con arr[k]  
 ```
