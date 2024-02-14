@@ -155,7 +155,6 @@ con un'opportuna sequenza di mosse.
 
 L'idea è quella di creare un drafo ausiliario $G'$ dove per ogni nodo $x\in E$, se esiste l'arco $(u, x)$ (entrante) allora esiste anche l'arco $(x, u)$ (uscente).
 
-
 <div style="margin-bottom: 200px">
     <img src="Inverti.png" width=300 style="float: left;" />
     <img src="Inverti1.png" width=300 style="float: right;"/>
@@ -166,5 +165,94 @@ In questo caso il nodo $u$ nel grafo $G$ non è raggiungibile da $s$, ma lo è n
 **Proprietà**: Esiste una sequenza di mosse (cammino) che pemette di spostare la pedina da $s$ a ogni altro nodo in $G$ se e soltanto se esiste un cammino da $s$ a tutti gli altri 
 nodi in $G'$.
 
-**Complessità Temporale**: Costo di una visita BFS, O(n + m), lineare nella dimensione del grafo.
+**Complessità Temporale**: Costo di una visita BFS, $O(n + m)$, lineare nella dimensione del grafo.
 
+## Esercizio 2 del 03/02/2020
+
+La Mintendo ha finalmente rilasciato il gioco Super Ciano Bross. Nel gioco voi dovete aiutare Ciano, un strano tipo basso con eterni problemi di peso e diete e dimagrimenti.
+Siete chiusi in un labirinto, un reticolo di cunicoli di diversa dimensione. Il labirinto è modellato come un grafo diretto e pesato $G = (V, E, w)$ di $n$ nodi ed $m$ archi,
+dove i nodi rappresentano stanze e gli archi cunicoli che uniscono stanze. Per ogni arco $e$, il peso $w(e)$ è la larghezza del corrispondente cunicolo.
+Alcune stanze, diciamo quelle corrispondenti ai nodi dell'insieme $U\subseteq V$ , contengono cibo. Ciano ha sempre fame e quando finisce in una stanza con del cibo lo
+mangia senza pensarci due volte. Se Ciano mangia il cibo nella stanza speciale $u\in U$ , la sua dimensione diventa $c(u)$.
+Lui inizialmente si trova nel nodo $s\in U$ e quindi, dopo aver mangiato, ha dimensione $c(s)$.
+L'uscita è nel nodo $t$. Ciano può chiaramente attraversare solo archi/cunicoli il cui peso è maggiore o uguale alla sua dimensione attuale. 
+Progettate un algoritmo – il più efficiente possibile – che aiuti Ciano a trovare, se c'è, un modo per uscire dal labirinto.
+
+**Idea**:
+
+Creare un grafo ausiliario $G'$ a livelli con $k$ livelli, uno per ciascun nodo $u_{i}\in U$ contente quantità di cibo $c(u_{i})$ diverso rispetto agli altri nodi.
+Inoltre in ogni livello rimuovo i cunicoli (archi) con peso $\leq c(u_{i})$. In questo modo Ciano non potrà mai entrare in un cunicolo la quale larghezza è minore al suo peso.
+
+Per trovare poi l'uscita dal labirinto, si può effettuare una visita DFS con costo $O(n + m)$ lineare nella dimensione del grafo.
+
+<div style="margin-bottom: 250px">
+    <img src="SuperCianoCiccione.png" width=300 style="float: left;" />
+    <img src="SuperCianoCiccioneL.png" width=250 style="float: right;"/>
+</div>
+
+Come è strutturato $G'$:
+
+**Nodi**:
+
+- per ogni $v\in V$ ho $k + 1$ nodi in $G'$
+- un nodo finale $t'$
+
+**Archi**:
+
+- Per ogni nodo $u\in U$ per ciascun livello aggiungo k archi da $u$ verso il nodo corrispondente nel $k-esimo$ livello.
+- Inoltre, nel $k-esimo$ livello corrispondente a $u_{k}$ con valore $c(u_{k})$, tolgo gli archi con peso $\leq$ a $c(u_{k})$.
+
+**Proprietà**: Esiste un cammino per Ciano da $s$ a $t$ in $G$ se e soltanto se esiste un cammino in $G'$ da $s$ a $t'$.
+
+## Esercizio 3 del 28/01/2019
+
+La rete stradale su cui viaggiate è modellata con un grafo orientato e pesato $G = (V, E, w)$, dove il peso $w(u, v)$ di un generico arco $(u, v)\in E$ rappresenta il tempo di percorrenza dell'arco.
+Voi siete su $s\in V$ e volete arrivare sul nodo $t\in V$ nel minor tempo possibile. 
+La vostra macchina è equipaggiata con un moderno meccanismo di turbo. Se attivato lungo un arco, questo meccanismo permette di dimezzare il tempo di percorrenza dell’arco. 
+Il meccanismo però può essere attivato una volta sola.
+
+###### a) Mostrare che la soluzione migliore non consiste sempre nell’attivare il turbo lungo il cammino minimo in $G$ da $s$ a $t$.
+###### b) Progettate un algoritmo efficiente che calcola una soluzione ottima, ovvero una strategia che vi porta a $t$ nel minor tempo possibile.
+
+##### a)
+
+<div style="margin-bottom: 10px;" align=center>
+    <img src="TurboA.png" width=350/>
+</div>
+
+Sia $d_{1} = 36$ la lunghezza del cammino minimo da $s$ a $t$ passando per i nodi $v1, v2, v3, v4$.  
+Sia $d_{2} = 50$ la lunghezza del arco diretto da $s$ a $t$.  
+
+- Se decidessimo di usare il turbo in $d_{1}$, scegliendo magari anche di usarlo sull' arco più lungo, per esempio sull'arco $(v_{1}, v_{2})$, otteremo un tempo $d_{1}' = 31$.  
+- Se decidessimo di usare il turbo in $d_{2}$, otteremo un tempo $d_{2}' = 25$. 
+
+Notiamo quindi che non è detto che è ottimale usare sempre il turbo nel cammino minimo, poiché usandolo nel cammino $d_{2}$ che non è minimo, ottieniamo $d_{2}' \leq d_{1}'$, quindi
+è più effiente usare il turbo nel cammino non minimo $d_{2}$.
+
+##### b)
+
+**Idea**:
+
+L'idea è creare un grafo ausiliario $G'$ a livelli, precisamente con 2 livelli. Poi mediante l'algoritmo di Dijkstra andremo a trovare il cammino minimo da $s$ a $t$.
+
+<div style="margin-bottom: 250px">
+    <img src="TurboB.png" width=300 style="float: left;" />
+    <img src="TurboBL.png" width=250 style="float: right;"/>
+</div>
+
+Come è strutturato $G'$?
+
+**Nodi**
+
+- per ogni $v\in V$ ho $2\cdot v$ in $G'$
+- nodo $t'$ finale
+
+**Archi**:
+
+- per ogni arco $(u, v)$ in $G$ ho l'arco $(u', v')$ in $G'$ con peso $w(u, v)$
+- per ogni arco $(u, v)$ in $G$ ho l'arco $(u, v')$ in $G'$ con peso $\frac{w(u, v)}{2}$
+- due archi $(t, t')$ con peso 0
+
+**Proprietà**: Esiste un cammino minimo in $G$ da $s$ a $t$ usando solo una volta il turbo se e soltanto se esiste un cammino minimo da $s$ a $t'$ in $G'$.
+
+**Complessità Temporale**: $O(m + nlog(n))$, ovvero il costo dell'algoritmo di Dijkstra. Il costo per la creazione di $G'$ è $O(n + m)$
