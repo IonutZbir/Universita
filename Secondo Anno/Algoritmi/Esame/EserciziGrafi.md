@@ -36,7 +36,7 @@ sceglo quello ottimale.
 
 Sia $G = (V, E)$ un grafo diretto con $n$ nodi ed $m$ archi. Ci sono Alice e Bob che vogliono incontrarsi in un nodo di $G$.
 Inizialmente, Alice si trova sul nodo $S_{A}$ ed ha a disposizione $\Delta(A)$ monete di tipo $A$, mentre Bob si trova sul nodo $S_{B}$ ed ha a disposizione $\Delta(B)$ monete di tipo $B$.
-Ad ogni arco $e\in E$, sono associati due interi, $c^{A}_{e}$ e $c^{B}_{e}$, che rappresentano rispettivamente il numero di monete di tipo $A$ che Alice deve pagare per attraversare $e$,
+Ad ogni arco $e\in E$, sono associati due interi, $c_{e}^{A}$ e $c_{e}^{B}$, che rappresentano rispettivamente il numero di monete di tipo $A$ che Alice deve pagare per attraversare $e$,
 e il numero di monete di tipo $B$ che Bob deve pagare per poter attraversare $e$.
 Progettate un algoritmo di complessità $O(m + n log n)$ che calcola, se esiste, un modo per far incontrare Alice e Bob.
 
@@ -106,8 +106,7 @@ Come viene creato il grafo $G'$?
 **Proprietà**: Esiste un cammino da $S$ a $T$ in $G$ se e soltanto se esiste un cammino da $S$ a $T'$ in $G'$. Per trovare questo cammino si può effettuare una visita BFS o DFS, entrambe 
 con costo $O(n + m)$, poiché il numero di livelli è costante ovvero 2.
 
-La costruzione del grafo $G'$ costa $O(n + m)$.
-
+La costruzione del grafo $G'$ costa $O(n + m)$. 
 
 ## Esercizio 2 del 27/09/2023
 
@@ -256,3 +255,17 @@ Come è strutturato $G'$?
 **Proprietà**: Esiste un cammino minimo in $G$ da $s$ a $t$ usando solo una volta il turbo se e soltanto se esiste un cammino minimo da $s$ a $t'$ in $G'$.
 
 **Complessità Temporale**: $O(m + nlog(n))$, ovvero il costo dell'algoritmo di Dijkstra. Il costo per la creazione di $G'$ è $O(n + m)$
+
+## Esercizio 2 del 10/09/2019
+
+Sei un topo che si aggira per i cunicoli di Sogene, dove, fra le altre cose, hai seguito il corso di algoritmi e strutture dati.
+Con le tue competenze hai modellato Sogene come un grafo non orientato e pesato $G = (V, E, w)$ di $n$ nodi ed $m$ archi,
+dove i nodi rappresentano stanze e gli archi cunicoli che uniscono stanze. Per ogni arco e, il peso $w(e)$ è la larghezza del corrispondente cunicolo.
+
+Tu sei largo $L$ e puoi attraversare solo archi il cui peso è almeno $L$. Alcuni nodi contengono del formaggio. Sia $U\in V$ l'insieme di tali nodi. 
+Ora, tu sei nel nodo $s$, devi recuperare un (singolo) pezzo di formaggio in uno dei nodi di $U$ e tornare nella tana al nodo $t$.
+Devi stare attento, perchè una volta recuperato il formaggio la tua dimensione aumenta da $L$ a $L' > L$.
+
+Progetta un algoritmo (possibilmente con complessità temporale lineare) che è in grado di dire se c'è un modo di portare un pezzo di formaggio in $t$.
+
+
