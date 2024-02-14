@@ -50,7 +50,7 @@ nodi $x\in V$.
 - $cost_{A}(x) = d(S_{A, x}) = \sum_{e\in E}^{x} w_{A}(e) = c_{e}^{A}$
 - $cost_{B}(x) = d(S_{B, x}) = \sum_{e\in E}^{x} w_{B}(e) = c_{e}^{B}$
 
-Per ogni nodo $x$, trovo il cammino minimo, e vado a confrontare $\Delta(A) e \Delta(B)$ con $cost_{A}(x)$ e $cost_{B}(x)$. Se Il costo è superiore per tutti i nodi $x$, allora non esiste 
+Per ogni nodo $x$, trovo il cammino minimo, e vado a confrontare $\Delta(A)$ e $\Delta(B)$ con $cost_{A}(x)$ e $cost_{B}(x)$. Se Il costo è superiore per tutti i nodi $x$, allora non esiste 
 uno nodo in cui Alice e Bob si possono incontrare.
 
 ```
@@ -76,6 +76,8 @@ per vincere il livello. Ogni arco $e$ è associato inizialmente uno stato $\sigm
 C'è inoltre un insieme di nodi $B\subseteq V$ che contengono un bottone speciale. Se Ciano è su un nodo $b\in B$ può decidere di schiacciare il bottone e tutti gli archi
 invertono il proprio stato, quelli che erano nello stato on passano allo stato off e quelli che erano nello stato off passano nello stato on.
 Progettate un algoritmo di complessità $O(m + n)$ che calcola, se esiste, una strategia per Super Ciano che lo porta a vincere il livello nel nodo $t$.
+
+**Idea**
 
 L'idea è quella di creare un grafo ausiliario $G'$ a livelli, più precisamente con 2 livelli. Appena Ciano incontra un nodo con un bottone può decidere se premere il bottone e andare 
 nel secondo livello oppure continuare sel primo livello se possibile (se l'arco successivo è on). Nel secondo livello, si invertono on e off, quindi se Ciano preme il bottone perchè 
@@ -105,4 +107,48 @@ Come viene creato il grafo $G'$?
 con costo $O(n + m)$, poiché il numero di livelli è costante ovvero 2.
 
 La costruzione del grafo $G'$ costa $O(n + m)$.
+
+
+## Esercizio 2 del 27/09/2023
+
+Un labirinto è modellato come un grafo non diretto $G = (V, E)$. Voi siete nel nodo $s$ e l’uscita si trova nel nodo $t$. Potete percorrere gli archi, spendendo un minuto per ogni arco. 
+Nel labirinto inoltre c'è un nodo speciale $p$ che è un teletrasporto, e un insieme di nodi $U\in V$ che sono uscite del teletrasporto. 
+Se siete su $p$ potete teletrasportarvi in un qualsiasi nodo $q\in U$ a vostra scelta. Il tempo del teletrasporto è di 3 minuti.
+Progettate un algoritmo efficiente che calcoli la strategia più veloce, se esiste, per uscire dal labirinto.
+
+**Idea**
+
+L'idea è quella di andare a confrontare la distanza da $s$ a $t$ con la minima distanza $const(u_{i})$ dove   
+$const(u_{i}) = d(s, p) + 3 + d(u_{i}, t)$.  
+Essendo un grafo pesato, con pesi tutti 1, possiamo usare una BFS per calcolare le distanze. Per calcolare $d(u_{i}, t)$ invertiamo gli archi del grafo è facciamo una BFS con sorgente $t$.
+
+Di conseguenza abbiamo due casi:
+
+<div style="margin-bottom: 300px">
+    <img src="Lab1.png" width=300 style="float: left;" />
+    <img src="Lab2.png" width=300 style="float: right;"/>
+</div>
+
+```
+1.  BFS(G, s)
+2.  BFS(G, t)
+3.  z = arg(min(const(x))) // dove x è uno dei nodi uscita u
+4.  d = d(s, t)
+5.  if const(z) > d then
+6.      return d
+7.  else
+8.      return const(z)
+```
+
+**Complessità Temporale**: Costo della BFS ovvero $O(n + m)$, lineare nella dimensione del grafo.
+
+## Esercizio 2 del 18/07/2022
+
+Si consideri il seguente gioco giocato su un grafo diretto $G = (V, E)$ con $n$ nodi ed $m$ archi. Una pedina è posizionata inizialmente su un nodo $s$. 
+E' possibile spostare la pedina dalla posizione corrente, diciamo $u$, su un nodo $v$, se esiste un arco diretto $(u, v)\in E$ in $G$. Inoltre, c'è un insieme di nodi speciali $X\in V$. 
+Se la pedina si trova su un nodo speciale $x\in X$ è possibile muovere la pedina anche lungo archi entranti in $x$, oltre quelli uscenti da $x$,
+ovvero è possibile muovere la pedina da $x$ a $v$ se e solo se $(v, x)\in E$ o $(x, v)\in E$, o entrambi.
+Progettare una algoritmo che in tempo $O(m + n)$ decide se, indipendentemente dalla posizione iniziale $s$, è sempre possibile spostare la pedina da $s$ a ogni altro nodo $t$ del grafo
+con un'opportuna sequenza di mosse.
+
 
