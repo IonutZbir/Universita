@@ -151,4 +151,20 @@ ovvero è possibile muovere la pedina da $x$ a $v$ se e solo se $(v, x)\in E$ o 
 Progettare una algoritmo che in tempo $O(m + n)$ decide se, indipendentemente dalla posizione iniziale $s$, è sempre possibile spostare la pedina da $s$ a ogni altro nodo $t$ del grafo
 con un'opportuna sequenza di mosse.
 
+**Idea**:
+
+L'idea è quella di creare un drafo ausiliario $G'$ dove per ogni nodo $x\in E$, se esiste l'arco $(u, x)$ (entrante) allora esiste anche l'arco $(x, u)$ (uscente).
+
+
+<div style="margin-bottom: 200px">
+    <img src="Inverti.png" width=300 style="float: left;" />
+    <img src="Inverti1.png" width=300 style="float: right;"/>
+</div>
+
+In questo caso il nodo $u$ nel grafo $G$ non è raggiungibile da $s$, ma lo è nel grafo $G'$, poiche viene aggiunto l'arco $(x, u)$.
+
+**Proprietà**: Esiste una sequenza di mosse (cammino) che pemette di spostare la pedina da $s$ a ogni altro nodo in $G$ se e soltanto se esiste un cammino da $s$ a tutti gli altri 
+nodi in $G'$.
+
+**Complessità Temporale**: Costo di una visita BFS, O(n + m), lineare nella dimensione del grafo.
 
