@@ -9,25 +9,30 @@ La bicicletta non è il solo mezzo che potete usare. Sapete che ci sono dei nodi
 in cui potete affittare scooter, monopattini e altra roba.
 Avete soldi per affittare un solo mezzo. Per ogni nodo $x\in X$, conoscete due cose:
 
-- il tempo $\tau_{x}$ che vi richiede lo scambio fra la bicicletta e il mezzo che si trova in $x$,
+- il tempo $\tau_{x}$ che vi richiede lo scambio fra la bicicletta e il mezzo che si trova in $x$
 - il fattore di speed-up $\sigma_{x} \leq 1$ del mezzo: con il mezzo preso nel nodo $x$ il tempo di attraversamento di un arco e scende da $w(e)$ a $\sigma_{x}\cdot w(e)$.
 
 Progettate un algoritmo che in tempo $O(m + n log n)$, calcola la strategia che vi porta a $t$ nel minor tempo possibile.
 
-$const(x) = d(s, x) + \tau_{x} + \sigma_{x} \cdot d(x, t)$.
+Quindi per trovare la strategia migliore, bisogna confrontare $d(s, t)$ con $const(v)$ per ogni $v\in V$.
 
-La distanza $d(s, x)$ si può calcolare in tempo $O(m + nlogn)$ usando Dijkstra. Mentre per trovare $d(x, t)$, l'idea è quella di invertire gli archi del grafo $G$ e far partire 
+$const(v) = d(s, v) + \thau_{v} + \sigma_{v} * d(v, t)$ dove:
+
+- se $v\in X$ allora $\thau_{v} = \thau_{x}$ e $\sigma_{v} = \sigma_{x}$.
+- se $v\notin X$ allora $\thau_{v} = 0$ e $\sigma_{v} = 1$.
+
+La distanza $d(s, v)$ si può calcolare in tempo $O(m + nlogn)$ usando Dijkstra. Mentre per trovare $d(v, t)$, l'idea è quella di invertire gli archi del grafo $G$ e far partire 
 l'algoritmo di Dijkstra con sorgente $t$. In tempo costante possiamo accedere alle distanze calcolate.
 
-Per ogni nodo $x$, in tempo costante accedo alla distanza $d(s, x)$ e alla distanza $d(x, t)$ e calcolo $const(x)$, ovvero il costo del cammino passando per il nodo $x$. Di tutti
-questi costi, vado a scegliere il cammino avente costo minimo.
+Per ogni nodo $v$, in tempo costante accedo alla distanza $d(s, v)$ e alla distanza $d(v, t)$ e calcolo $const(v)$, ovvero il costo del cammino passando per il nodo $v$. Di tutti
+questi costi, vado a scegliere il cammino avente costo minimo e lo confronto con $d(s, t)$.
 ```
 1.  Dijkstra(G, s)
 2.  Dijkstra(G, t)
-3.  z = arg(min{const(x)})
+3.  z = arg(min{const(v)})
 4.  return const(z)
 ```
-**Corretteza**: L'algoritmo è corretto poiché l'algoritmo di Dijkstra è corretto. Inoltre per ogni nodo $x$, calcolo il cammino minimo, quindi provo tutti i cammini possibili, e 
+**Corretteza**: L'algoritmo è corretto poiché l'algoritmo di Dijkstra è corretto. Inoltre per ogni nodo $v$, calcolo il cammino minimo, quindi provo tutti i cammini possibili, e 
 sceglo quello ottimale.
 
 **Complessità Temporale**: $T(n) = O(m + nlogn)$.
