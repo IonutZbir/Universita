@@ -55,6 +55,8 @@ nodi $x\in V$.
 
 - $cost_{B}(x) = d(S_{B, x}) = \sum_{e\in E}^{x} w_{B}(e) = c_{e}^{B}$
 
+$\sum_{i=0}^{n}i^2$
+
 Per ogni nodo $x$, trovo il cammino minimo, e vado a confrontare $\Delta(A)$ e $\Delta(B)$ con $cost_{A}(x)$ e $cost_{B}(x)$. Se Il costo è superiore per tutti i nodi $x$, allora non esiste 
 uno nodo in cui Alice e Bob si possono incontrare.
 
