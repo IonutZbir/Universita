@@ -51,11 +51,9 @@ Progettate un algoritmo di complessità $O(m + n log n)$ che calcola, se esiste,
 L'idea è quella di andare a calcolare attraverso l'algoritmo di Dijkstra l'SPT radicato in $S_{A}$ e l'SPT radicato in $S_{B}$. Cosi ottieniamo le distanze dalle 2 sorgenti verso tutti i
 nodi $x\in V$. 
 
-- $cost_{A}(x) = d(S_{A, x}) = \sum_{e\in E}^{x} w_{A}(e) = c_{e}^{A}$
+- $cost_{A}(x) = d(S_{A, x}) = \sum_{e\in E} w_{A}(e) = c_{e}^{A}$
 
-- $cost_{B}(x) = d(S_{B, x}) = \sum_{e\in E}^{x} w_{B}(e) = c_{e}^{B}$
-
-$\sum^{n} i^2$
+- $cost_{B}(x) = d(S_{B, x}) = \sum_{e\in E} w_{B}(e) = c_{e}^{B}$
 
 Per ogni nodo $x$, trovo il cammino minimo, e vado a confrontare $\Delta(A)$ e $\Delta(B)$ con $cost_{A}(x)$ e $cost_{B}(x)$. Se Il costo è superiore per tutti i nodi $x$, allora non esiste 
 uno nodo in cui Alice e Bob si possono incontrare.
