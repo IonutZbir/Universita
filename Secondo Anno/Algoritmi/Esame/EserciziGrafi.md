@@ -16,16 +16,15 @@ Progettate un algoritmo che in tempo $O(m + n log n)$, calcola la strategia che 
 
 Quindi per trovare la strategia migliore, bisogna confrontare $d(s, t)$ con $const(v)$ per ogni $v\in V$.
 
-$const(v) = d(s, v) + \thau_{v} + \sigma_{v} * d(v, t)$ dove:
+$const(v) = d(s, v) + \tau_{v} + \sigma_{v}\cdot d(v, t)$ dove:
 
-- se $v\in X$ allora $\thau_{v} = \thau_{x}$ e $\sigma_{v} = \sigma_{x}$.
-- se $v\notin X$ allora $\thau_{v} = 0$ e $\sigma_{v} = 1$.
+- se $v\in X$ allora $v = x$ e $\tau_{v} = \tau_{x}$ e $\sigma_{v} = \sigma_{x}$.
+- se $v\notin X$ allora $\tau_{v} = 0$ e $\sigma_{v} = 1$.
 
 La distanza $d(s, v)$ si può calcolare in tempo $O(m + nlogn)$ usando Dijkstra. Mentre per trovare $d(v, t)$, l'idea è quella di invertire gli archi del grafo $G$ e far partire 
 l'algoritmo di Dijkstra con sorgente $t$. In tempo costante possiamo accedere alle distanze calcolate.
 
-Per ogni nodo $v$, in tempo costante accedo alla distanza $d(s, v)$ e alla distanza $d(v, t)$ e calcolo $const(v)$, ovvero il costo del cammino passando per il nodo $v$. Di tutti
-questi costi, vado a scegliere il cammino avente costo minimo e lo confronto con $d(s, t)$.
+Per ogni nodo $v$, in tempo costante accedo alla distanza $d(s, v)$ e alla distanza $d(v, t)$ e calcolo $const(v)$, ovvero il costo del cammino passando per il nodo $v$.
 ```
 1.  Dijkstra(G, s)
 2.  Dijkstra(G, t)
