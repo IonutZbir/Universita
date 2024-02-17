@@ -94,7 +94,7 @@ davanti a se l'arco è off e non può procedere, premendo il bottone andrà nel 
 </div>
 
 
-Come viene creato il grafo $G' =${$V'$, $E'$}
+Come viene creato il grafo $G' =$ {$V'$, $E'$}
 
 **Nodi**: 
 
