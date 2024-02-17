@@ -103,7 +103,7 @@ Come viene creato il grafo $G' =${$V', G'$}
 
 **Archi**:
 
-- per ogni nodo $u\in G$ bottone aggiungo due archi $(u'_{1}, u'_{2})$ e $(u'_{2}, u'_{1})$ dove $u'_{1}\in V'_{1}, u'_{2}\in V'_{2}$.
+- per ogni nodo $u\in G$ bottone aggiungo due archi $(u_{1}^{'}, u_{2}^{'})$ e $(u_{2}^{'}, u_{1}^{'})$ dove $u'_{1}\in V'_{1}, u'_{2}\in V'_{2}$.
 - Per ogni arco $(u, v)\in G$ ho l'arco $(u'_{1}, v'_{1})\in G' <=> \sigma(u, v) =$ ON.
 - Per ogni arco $(u, v)\in G$ ho l'arco $(u'_{2}, v'_{2})\in G' <=> \sigma(u, v) =$ OFF. 
 - due archi $(T'_{1}, T')$ e $(T'_{2}, T')$
