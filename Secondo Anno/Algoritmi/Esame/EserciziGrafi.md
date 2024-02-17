@@ -93,11 +93,12 @@ davanti a se l'arco è off e non può procedere, premendo il bottone andrà nel 
     <img src="CianoOnL.png" width=300 style="float: right;"/>
 </div>
 
+
 Come viene creato il grafo $G' =${$V', G'$}
 
 **Nodi**: 
 
-- $|V'| = 2|V| => V' = V'_{1} \dot{\cup} V'_{2}$
+- $|V'| = 2|V| => V' = V'_{1} + V'_{2}$
 - un nodo finale $T'$ 
 
 **Archi**:
@@ -257,7 +258,7 @@ Come è strutturato $G' =$ {$V', E'$}?
 
 **Nodi**
 
-- $|V'| = 2|V| => V' = V'_{1} \dot{\cup} V'_{2}$
+- $|V'| = 2|V| => V' = V'_{1} + V'_{2}$
 - un nodo finale $T'$ 
 
 **Archi**:
