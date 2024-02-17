@@ -262,8 +262,8 @@ Come è strutturato $G' =$ {$V', E'$}?
 
 **Archi**:
 
-- per ogni arco $(u, v)$ in $G$ ho l'arco $(u'_{1}, v'_{1})$ in $G'$ con peso $w(u, v)$
-- per ogni arco $(u, v)$ in $G$ ho l'arco $(u'_{1}, v'_{2})$ in $G'$ con peso $\frac{w(u, v)}{2}$
+- per ogni arco $(u, v)$ in $G$ ho l'arco $(u_{1}', v'_{1})$ in $G'$ con peso $w(u, v)$
+- per ogni arco $(u, v)$ in $G$ ho l'arco $(u_{1}', v'_{2})$ in $G'$ con peso $\frac{w(u, v)}{2}$
 - due archi $(t'_{1}, T')$ e $(t'_{2}, T')$ con peso 0
 
 **Proprietà**: Esiste un cammino minimo in $G$ da $s$ a $t$ usando solo una volta il turbo se e soltanto se esiste un cammino minimo da $S'$ a $T'$ in $G'$.
