@@ -94,20 +94,20 @@ davanti a se l'arco è off e non può procedere, premendo il bottone andrà nel 
 </div>
 
 
-Come viene creato il grafo $G'$ = {$V'$, $E'$}
+Come viene creato il grafo $G^{'} = ${$V^{'}, E^{'}$}
 
 **Nodi**: 
 
-- $|V'| = 2|V| => V' = V'_{1} + V'_{2}$
+- $|V^{'}| = 2|V| => V^{'} = V_{1}^{'} + V_{2}^{'}$
 - un nodo finale $T'$ 
 
 **Archi**:
 
-- per ogni nodo $u\in G$ bottone aggiungo due archi $(u_{1}^{'}, u_{2}^{'})$ e $(u_{2}^{'}, u_{1}^{'})$ dove $u'_{1}\in V'_{1}, u'_{2}\in V'_{2}$.
-- Per ogni arco $(u, v)\in G$ ho l'arco $(u'_{1}, v'_{1})\in G' <=> \sigma(u, v) =$ ON.
-- Per ogni arco $(u, v)\in G$ ho l'arco $(u'_{2}, v'_{2})\in G' <=> \sigma(u, v) =$ OFF. 
-- due archi $(T'_{1}, T')$ e $(T'_{2}, T')$
-- $m' = m + 2\cdot O(n) = O(m)$
+- per ogni nodo $u\in G$ bottone aggiungo due archi $(u_{1}^{'}, u_{2}^{'})$ e $(u_{2}^{'}, u_{1}^{'})$ dove $u_{1}^{'}\in V_{1}^{'}, u_{2}^{'}\in V_{2}^{'}$.
+- Per ogni arco $(u, v)\in G$ ho l'arco $(u_{1}^{'}, v_{1}^{'})\in G^{'} <=> \sigma(u, v) =$ ON.
+- Per ogni arco $(u, v)\in G$ ho l'arco $(u_{2}^{'}, v_{2}^{'})\in G^{'} <=> \sigma(u, v) =$ OFF. 
+- due archi $(T_{1}^{'}, T^{'})$ e $(T_{2}^{'}, T^{'})$
+- $m^{'} = m + 2\cdot O(n) = O(m)$
 
 **Proprietà**: Esiste un cammino da $S$ a $T$ in $G$ se e soltanto se esiste un cammino da $S'$ a $T'$ in $G'$. Per trovare questo cammino si può effettuare una visita BFS o DFS, entrambe 
 con costo $O(n + m)$, poiché il numero di livelli è costante ovvero 2.
@@ -195,7 +195,7 @@ Per trovare poi l'uscita dal labirinto, si può effettuare una visita DFS o BFS 
     <img src="SuperCianoCiccioneL.png" width=250 style="float: right;"/>
 </div>
 
-Come è strutturato $G' =$ {$V', E'$}:
+Come è strutturato $G^{'} =$ {$V^{'}, E^{'}$}:
 
 **Nodi**:
 
@@ -204,15 +204,15 @@ Come è strutturato $G' =$ {$V', E'$}:
 
 **Archi**:
 
-- Per ogni arco $(v, w)\in E$ dove $v\notin U$ ho archi del tipo $(v_{0}, w_{0}) <=>$ $weight(v, w) \geq c(s)$
+- Per ogni arco $(v, w)\in E$ dove $v\notin U$ ho archi del tipo $(v_{0}^{'}, w_{0}^{'}) <=> weight(v, w) \geq c(s)$
 - Per ogni nodo $u\in U$ per ciascun livello aggiungo $k$ archi da $u$ verso il nodo nel $k-esimo$ livello corrispondente a $c(u_{k})$ con peso $w = c(u_{k})$ 
 - Nel $k-esimo$ livello corrispondente a $u_{k}$ con valore $c(u_{k})$, tolgo gli archi con peso $<$ a $c(u_{k})$
-- Infine, ho archi del tipo $(t_{i}, T')$ con peso $+\infty$
+- Infine, ho archi del tipo $(t_{i}, T^{'})$ con peso $+\infty$
 
-**Costo di Costruzione di G'**:
+**Costo di Costruzione di G^{'}**:
 
-- $n' = O((k+1)n) = \theta(nk)$
-- $m' = O(mk)$
+- $n^{'} = O((k+1)n) = \theta(nk)$
+- $m^{'} = O(mk)$
 
 $=> O(k(n + m))$
 
@@ -254,24 +254,25 @@ L'idea è creare un grafo ausiliario $G'$ a livelli, precisamente con 2 livelli.
     <img src="TurboBL.png" width=250 style="float: right;"/>
 </div>
 
-Come è strutturato $G' =$ {$V', E'$}?
+
+Come è strutturato $G^{'} =$ {$V^{'}, E^{'}$}?
 
 **Nodi**
 
-- $|V'| = 2|V| => V' = V'_{1} + V'_{2}$
+- $|V^{'}| = 2|V| => V^{'} = V_{1}^{'} + V_{2}^{'}$
 - un nodo finale $T'$ 
 
 **Archi**:
 
-- per ogni arco $(u, v)$ in $G$ ho l'arco $(u_{1}', v'_{1})$ in $G'$ con peso $w(u, v)$
-- per ogni arco $(u, v)$ in $G$ ho l'arco $(u_{1}', v'_{2})$ in $G'$ con peso $\frac{w(u, v)}{2}$
-- due archi $(t'_{1}, T')$ e $(t'_{2}, T')$ con peso 0
+- per ogni arco $(u, v)$ in $G$ ho l'arco $(u_{1}^{'}, v_{1}^{'})$ in $G^{'}$ con peso $w(u, v)$
+- per ogni arco $(u, v)$ in $G$ ho l'arco $(u_{1}^{'}, v_{2}^{'})$ in $G^{'}$ con peso $\frac{w(u, v)}{2}$
+- due archi $(t_{1}^{'}, T^{'})$ e $(t_{2}^{'}, T^{'})$ con peso 0
 
 **Proprietà**: Esiste un cammino minimo in $G$ da $s$ a $t$ usando solo una volta il turbo se e soltanto se esiste un cammino minimo da $S'$ a $T'$ in $G'$.
 
 **Costo di Costruzione di G'**:
-- $n' = 2\cdot n + 1 = \theta(n)$
-- $m = 3\cdot m + 2 = \theta(m)$
+- $n^{'} = 2\cdot n + 1 = \theta(n)$
+- $m^{'} = 3\cdot m + 2 = \theta(m)$
 
 $=> O(n + m)$
 
