@@ -163,7 +163,7 @@ Un albero binomiale $B_{i}$ è definito ricorsivamente come segue:
 1. $B_{0}$ consiste di un unico nodo 
 2. Per $i > 0$, $B_{i+1}$ è ottenuto fondendo due alberi binomiali $B_i$, ponendo la radice dell'uno come foglia della radice dell'altro.
 
-![Heap Binomiali da 1 a 4](heap_bin.png)
+<img src="img/heap_bin.png">
 
 ### Proprietà
 

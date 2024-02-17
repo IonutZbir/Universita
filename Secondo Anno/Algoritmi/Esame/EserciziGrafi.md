@@ -45,7 +45,7 @@ e il numero di monete di tipo $B$ che Bob deve pagare per poter attraversare $e$
 Progettate un algoritmo di complessità $O(m + n log n)$ che calcola, se esiste, un modo per far incontrare Alice e Bob.
 
 <div align="center" style="margin-bottom: 20px">
-    <img src="Alice_Bob.png" width=400 />
+    <img src="img/Alice_Bob.png" width=400 />
 </div>
 
 L'idea è quella di andare a calcolare attraverso l'algoritmo di Dijkstra l'SPT radicato in $S_{A}$ e l'SPT radicato in $S_{B}$. Cosi ottieniamo le distanze dalle 2 sorgenti verso tutti i
@@ -89,8 +89,8 @@ nel secondo livello oppure continuare nel primo livello (se l'arco successivo è
 davanti a se l'arco è off e non può procedere, premendo il bottone andrà nel secondo livello dove potrà procedere. Ciano può ripetere questo processo finchè non vince.
 
 <div style="margin-bottom: 300px">
-    <img src="CianoOn.png" width=400 style="float: left;" />
-    <img src="CianoOnL.png" width=300 style="float: right;"/>
+    <img src="img/CianoOn.png" width=400 style="float: left;" />
+    <img src="img/CianoOnL.png" width=300 style="float: right;"/>
 </div>
 
 Come viene creato il grafo $G^{'} = (V^{'}, E^{'})$
@@ -129,8 +129,8 @@ Essendo un grafo pesato, con pesi tutti 1, possiamo usare una BFS per calcolare 
 Di conseguenza abbiamo due casi:
 
 <div style="margin-bottom: 300px">
-    <img src="Lab1.png" width=300 style="float: left;" />
-    <img src="Lab2.png" width=300 style="float: right;"/>
+    <img src="img/Lab1.png" width=300 style="float: left;" />
+    <img src="img/Lab2.png" width=300 style="float: right;"/>
 </div>
 
 ```
@@ -160,8 +160,8 @@ con un'opportuna sequenza di mosse.
 L'idea è quella di creare un grafo ausiliario $G'$ dove per ogni nodo $x\in E$, se esiste l'arco $(u, x)$ (entrante) allora esiste anche l'arco $(x, u)$ (uscente).
 
 <div style="margin-bottom: 200px">
-    <img src="Inverti.png" width=300 style="float: left;" />
-    <img src="Inverti1.png" width=300 style="float: right;"/>
+    <img src="img/Inverti.png" width=300 style="float: left;" />
+    <img src="img/Inverti1.png" width=300 style="float: right;"/>
 </div>
 
 In questo caso il nodo $u$ nel grafo $G$ non è raggiungibile da $s$, ma lo è nel grafo $G'$, poiche viene aggiunto l'arco $(x, u)$.
@@ -190,8 +190,8 @@ Inoltre in ogni livello rimuovo i cunicoli (archi) con peso $\leq c(u_{i})$. In 
 Per trovare poi l'uscita dal labirinto, si può effettuare una visita DFS o BFS con costo $O(k(n + m))$ lineare nella dimensione del grafo.
 
 <div style="margin-bottom: 250px">
-    <img src="SuperCianoCiccione.png" width=300 style="float: left;" />
-    <img src="SuperCianoCiccioneL.png" width=250 style="float: right;"/>
+    <img src="img/SuperCianoCiccione.png" width=300 style="float: left;" />
+    <img src="img/SuperCianoCiccioneL.png" width=250 style="float: right;"/>
 </div>
 
 Come è strutturato $G^{'} = (V^{'}, E^{'})$:
@@ -230,7 +230,7 @@ Il meccanismo però può essere attivato una volta sola.
 ##### a)
 
 <div style="margin-bottom: 10px;" align=center>
-    <img src="TurboA.png" width=350/>
+    <img src="img/TurboA.png" width=350/>
 </div>
 
 Sia $d_{1} = 36$ la lunghezza del cammino minimo da $s$ a $t$ passando per i nodi $v1, v2, v3, v4$.  
@@ -249,8 +249,8 @@ Notiamo quindi che non è detto che è ottimale usare sempre il turbo nel cammin
 L'idea è creare un grafo ausiliario $G'$ a livelli, precisamente con 2 livelli. Poi mediante l'algoritmo di Dijkstra andremo a trovare il cammino minimo da $s$ a $t$.
 
 <div style="margin-bottom: 250px">
-    <img src="TurboB.png" width=300 style="float: left;" />
-    <img src="TurboBL.png" width=250 style="float: right;"/>
+    <img src="img/TurboB.png" width=300 style="float: left;" />
+    <img src="img/TurboBL.png" width=250 style="float: right;"/>
 </div>
 
 

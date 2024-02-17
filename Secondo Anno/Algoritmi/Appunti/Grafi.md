@@ -14,7 +14,7 @@ Un grafo $D = (V, A)$ consiste in:
 
 **Terminologia**:
 
-<img style="float: right;" width="250" src="graph.png">
+<img style="float: right;" width="250" src="img/graph.png">
 
 - $n = |V|$ (numero di vertici)
 - $m = |E|$ (numero di archi)

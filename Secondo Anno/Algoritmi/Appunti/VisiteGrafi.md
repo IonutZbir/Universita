@@ -116,9 +116,9 @@ visita DFS(grafo G) -> foresta
 ```
 **Complessità Temporale**: $T(n) = O(n + m)$
 
-<img src="pre_post.png" width=250 sytle="float: left;">
+<img src="img/pre_post.png" width=250 sytle="float: left;">
 
-<img src="pre_post_tree.png" width=250 sytle="float: right;">
+<img src="img/pre_post_tree.png" width=250 sytle="float: right;">
 
 **Proprietà**: Per ogni coppia di nodi $u$ e $v$, gli intervalli `[pre(u), post(u)]` e 
 `[pre(v), post(v)]` o sono disgiunti o l'uno è contenuto nell'altro.
@@ -165,8 +165,8 @@ Un uso importante dell'ordinamento topologico sono le reti delle dipendenze.
 Il problema è di trovare un ordine in cui eseguire i compiti in modo da rispettare le 
 dipendenze.
 
-<img src="DAG.png" width=250 sytle="float: left;">
-<img src="TOP.png" width=500 sytle="float: right;">
+<img src="img/DAG.png" width=250 sytle="float: left;">
+<img src="img/TOP.png" width=500 sytle="float: right;">
 
 **Teorema**: Un grafo diretto $G$ ammette un ordinamento topologico se e solo se $G$ è un 
 DAG.
@@ -213,9 +213,9 @@ $u$ è raggiungibile da $v$ e $v$ è raggiungibile da $u$.
 - massimale: se si aggiunge un qualsiasi vertice a $C$ la proprietà non è più vera 
 
 
-<img src="CFC.png" width=250 sytle="float: left;">
+<img src="img/CFC.png" width=250 sytle="float: left;">
 
-<img src="CFCG.png" width=500 sytle="float: right;">
+<img src="img/CFCG.png" width=500 sytle="float: right;">
 
 Il grafo delle componenti fortemente connesse ha un nodo per ciascuna componenete 
 fortemente connessa e c'è un arco da una componente $C$ a una componente $C'$ se 

@@ -1,7 +1,0 @@
-Function InsertionSort(array):
-    For i from 1 to length(array) - 1:
-        While i > 0 and array[i] < array[i-1]:
-            Swap array[i] and array[i-1]
-            i = i - 1
-    End For
-    Return array

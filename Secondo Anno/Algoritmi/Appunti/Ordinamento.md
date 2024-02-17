@@ -114,8 +114,7 @@ $\theta(n + m)$.
 
 Anche questo algoritmo usa la tecnica del *divide et impera*:
 
-- Divide: sceglie un elemento x della sequenza (perno) e partiziona la sequenza in elementi <= x ed elementi
-> x.
+- Divide: sceglie un elemento x della sequenza (perno) e partiziona la sequenza in elementi <= x ed elementi > x.
 - Risolve i due sottoproblemi ricorsivamente.
 - Impera: restituisci la concatenazione delle due sottosequenze ordinate.
 
