@@ -51,9 +51,9 @@ Progettate un algoritmo di complessità $O(m + n log n)$ che calcola, se esiste,
 L'idea è quella di andare a calcolare attraverso l'algoritmo di Dijkstra l'SPT radicato in $S_{A}$ e l'SPT radicato in $S_{B}$. Cosi ottieniamo le distanze dalle 2 sorgenti verso tutti i
 nodi $x\in V$. 
 
-- $cost_{A}(x) = d(S_{A, x}) = \sum_{e\in E} w_{A}(e) = c_{e}^{A}$
+- $cost_{A}(x) = d(S_{A, x}) = \sum_{e\in E} (w_{A}(e) = c_{e}^{A})$
 
-- $cost_{B}(x) = d(S_{B, x}) = \sum_{e\in E} w_{B}(e) = c_{e}^{B}$
+- $cost_{B}(x) = d(S_{B, x}) = \sum_{e\in E} (w_{B}(e) = c_{e}^{B})$
 
 Per ogni nodo $x$, trovo il cammino minimo, e vado a confrontare $\Delta(A)$ e $\Delta(B)$ con $cost_{A}(x)$ e $cost_{B}(x)$. Se Il costo è superiore per tutti i nodi $x$, allora non esiste 
 uno nodo in cui Alice e Bob si possono incontrare.
@@ -85,30 +85,30 @@ Progettate un algoritmo di complessità $O(m + n)$ che calcola, se esiste, una s
 **Idea**
 
 L'idea è quella di creare un grafo ausiliario $G'$ a livelli, più precisamente con 2 livelli. Appena Ciano incontra un nodo con un bottone può decidere se premere il bottone e andare 
-nel secondo livello oppure continuare sel primo livello se possibile (se l'arco successivo è on). Nel secondo livello, si invertono on e off, quindi se Ciano preme il bottone perchè 
-davanti a se l'arco è off e non può procedere, premendo il bottone andrà nel secondo livello dove potrà procedere.
+nel secondo livello oppure continuare nel primo livello (se l'arco successivo è on). Nel secondo livello, si invertono on e off, quindi se Ciano preme il bottone perchè 
+davanti a se l'arco è off e non può procedere, premendo il bottone andrà nel secondo livello dove potrà procedere. Ciano può ripetere questo processo finchè non vince.
 
 <div style="margin-bottom: 300px">
     <img src="CianoOn.png" width=400 style="float: left;" />
     <img src="CianoOnL.png" width=300 style="float: right;"/>
 </div>
 
-Come viene creato il grafo $G'$?
+Come viene creato il grafo $G' =${$V', G'$}
 
 **Nodi**: 
 
-- per ogni $v\in V$ ho $2\cdot v$.
-- un nodo finale $T$ 
+- $|V'| = 2|V| => V' = V'_{1} \dot{\cup} V'_{2}$
+- un nodo finale $T'$ 
 
 **Archi**:
 
-- per ogni nodo $u\in G$ bottone aggiungo un nuovo arco $(u, u')$ dove $u'\in G'$ con $w(u, u') =$ On.
-- Per ogni arco $(u, v)\in G$ con peso $w$ ho l'arco $(u', v')\in G'$ con peso $w'$. 
-    - Se $w =$ On $=> w' =$ off
-    - Se $w =$ Off $=> w' =$ On.
-- due archi $(T, T')$ e $(T_{0}, T')$ con peso On
+- per ogni nodo $u\in G$ bottone aggiungo due archi $(u'_{1}, u'_{2})$ e $(u'_{2}, u'_{1})$ dove $u'_{1}\in V'_{1}, u'_{2}\in V'_{2}$.
+- Per ogni arco $(u, v)\in G$ ho l'arco $(u'_{1}, v'_{1})\in G' <=> \sigma(u, v) =$ ON.
+- Per ogni arco $(u, v)\in G$ ho l'arco $(u'_{2}, v'_{2})\in G' <=> \sigma(u, v) =$ OFF. 
+- due archi $(T'_{1}, T')$ e $(T'_{2}, T')$
+- $m' = m + 2\cdot O(n) = O(m)$
 
-**Proprietà**: Esiste un cammino da $S$ a $T$ in $G$ se e soltanto se esiste un cammino da $S$ a $T'$ in $G'$. Per trovare questo cammino si può effettuare una visita BFS o DFS, entrambe 
+**Proprietà**: Esiste un cammino da $S$ a $T$ in $G$ se e soltanto se esiste un cammino da $S'$ a $T'$ in $G'$. Per trovare questo cammino si può effettuare una visita BFS o DFS, entrambe 
 con costo $O(n + m)$, poiché il numero di livelli è costante ovvero 2.
 
 La costruzione del grafo $G'$ costa $O(n + m)$. 
@@ -157,7 +157,7 @@ con un'opportuna sequenza di mosse.
 
 **Idea**:
 
-L'idea è quella di creare un drafo ausiliario $G'$ dove per ogni nodo $x\in E$, se esiste l'arco $(u, x)$ (entrante) allora esiste anche l'arco $(x, u)$ (uscente).
+L'idea è quella di creare un grafo ausiliario $G'$ dove per ogni nodo $x\in E$, se esiste l'arco $(u, x)$ (entrante) allora esiste anche l'arco $(x, u)$ (uscente).
 
 <div style="margin-bottom: 200px">
     <img src="Inverti.png" width=300 style="float: left;" />
@@ -187,26 +187,35 @@ Progettate un algoritmo – il più efficiente possibile – che aiuti Ciano a t
 Creare un grafo ausiliario $G'$ a livelli con $k$ livelli, uno per ciascun nodo $u_{i}\in U$ contente quantità di cibo $c(u_{i})$ diverso rispetto agli altri nodi.
 Inoltre in ogni livello rimuovo i cunicoli (archi) con peso $\leq c(u_{i})$. In questo modo Ciano non potrà mai entrare in un cunicolo la quale larghezza è minore al suo peso.
 
-Per trovare poi l'uscita dal labirinto, si può effettuare una visita DFS con costo $O(n + m)$ lineare nella dimensione del grafo.
+Per trovare poi l'uscita dal labirinto, si può effettuare una visita DFS o BFS con costo $O(k(n + m))$ lineare nella dimensione del grafo.
 
 <div style="margin-bottom: 250px">
     <img src="SuperCianoCiccione.png" width=300 style="float: left;" />
     <img src="SuperCianoCiccioneL.png" width=250 style="float: right;"/>
 </div>
 
-Come è strutturato $G'$:
+Come è strutturato $G' =$ {$V', E'$}:
 
 **Nodi**:
 
-- per ogni $v\in V$ ho $k + 1$ nodi in $G'$
-- un nodo finale $t'$
+- per ogni $v\in V$ ho $k + 1$ nodi in $G'$ con $k$ il numero di nodi speciali. Si ha quindi $v_{0}$, $v_{1}$, ..., $v_{k}$ 
+- un nodo finale $T'$
 
 **Archi**:
 
-- Per ogni nodo $u\in U$ per ciascun livello aggiungo k archi da $u$ verso il nodo corrispondente nel $k-esimo$ livello.
-- Inoltre, nel $k-esimo$ livello corrispondente a $u_{k}$ con valore $c(u_{k})$, tolgo gli archi con peso $\leq$ a $c(u_{k})$.
+- Per ogni arco $(v, w)\in E$ dove $v\notin U$ ho archi del tipo $(v_{0}, w_{0}) <=>$ $weight(v, w) \geq c(s)$
+- Per ogni nodo $u\in U$ per ciascun livello aggiungo $k$ archi da $u$ verso il nodo nel $k-esimo$ livello corrispondente a $c(u_{k})$ con peso $w = c(u_{k})$ 
+- Nel $k-esimo$ livello corrispondente a $u_{k}$ con valore $c(u_{k})$, tolgo gli archi con peso $<$ a $c(u_{k})$
+- Infine, ho archi del tipo $(t_{i}, T')$ con peso $+\infty$
 
-**Proprietà**: Esiste un cammino per Ciano da $s$ a $t$ in $G$ se e soltanto se esiste un cammino in $G'$ da $s$ a $t'$.
+**Costo di Costruzione di G'**:
+
+- $n' = O((k+1)n) = \theta(nk)$
+- $m' = O(mk)$
+
+$=> O(k(n + m))$
+
+**Proprietà**: Esiste un cammino per Ciano da $s$ a $t$ in $G$ se e soltanto se esiste un cammino in $G'$ da $S'$ a $T'$.
 
 ## Esercizio 3 del 28/01/2019
 
@@ -225,7 +234,7 @@ Il meccanismo però può essere attivato una volta sola.
 </div>
 
 Sia $d_{1} = 36$ la lunghezza del cammino minimo da $s$ a $t$ passando per i nodi $v1, v2, v3, v4$.  
-Sia $d_{2} = 50$ la lunghezza del arco diretto da $s$ a $t$.  
+Sia $d_{2} = 50$ +la lunghezza del arco diretto da $s$ a $t$.  
 
 - Se decidessimo di usare il turbo in $d_{1}$, scegliendo magari anche di usarlo sull' arco più lungo, per esempio sull'arco $(v_{1}, v_{2})$, otteremo un tempo $d_{1}' = 31$.  
 - Se decidessimo di usare il turbo in $d_{2}$, otteremo un tempo $d_{2}' = 25$. 
@@ -244,22 +253,29 @@ L'idea è creare un grafo ausiliario $G'$ a livelli, precisamente con 2 livelli.
     <img src="TurboBL.png" width=250 style="float: right;"/>
 </div>
 
-Come è strutturato $G'$?
+Come è strutturato $G' =$ {$V', E'$}?
 
 **Nodi**
 
-- per ogni $v\in V$ ho $2\cdot v$ in $G'$
-- nodo $t'$ finale
+- $|V'| = 2|V| => V' = V'_{1} \dot{\cup} V'_{2}$
+- un nodo finale $T'$ 
 
 **Archi**:
 
-- per ogni arco $(u, v)$ in $G$ ho l'arco $(u', v')$ in $G'$ con peso $w(u, v)$
-- per ogni arco $(u, v)$ in $G$ ho l'arco $(u, v')$ in $G'$ con peso $\frac{w(u, v)}{2}$
-- due archi $(t, t')$ con peso 0
+- per ogni arco $(u, v)$ in $G$ ho l'arco $(u'_{1}, v'_{1})$ in $G'$ con peso $w(u, v)$
+- per ogni arco $(u, v)$ in $G$ ho l'arco $(u'_{1}, v'_{2})$ in $G'$ con peso $\frac{w(u, v)}{2}$
+- due archi $(t'_{1}, T')$ e $(t'_{2}, T')$ con peso 0
 
-**Proprietà**: Esiste un cammino minimo in $G$ da $s$ a $t$ usando solo una volta il turbo se e soltanto se esiste un cammino minimo da $s$ a $t'$ in $G'$.
+**Proprietà**: Esiste un cammino minimo in $G$ da $s$ a $t$ usando solo una volta il turbo se e soltanto se esiste un cammino minimo da $S'$ a $T'$ in $G'$.
 
-**Complessità Temporale**: $O(m + nlog(n))$, ovvero il costo dell'algoritmo di Dijkstra. Il costo per la creazione di $G'$ è $O(n + m)$
+**Costo di Costruzione di G'**:
+- $n' = 2\cdot n + 1 = \theta(n)$
+- $m = 3\cdot m + 2 = \theta(m)$
+
+$=> O(n + m)$
+
+**Complessità Temporale**: $O(m + nlog(n))$, ovvero il costo dell'algoritmo di Dijkstra.
+
 
 ## Esercizio 2 del 10/09/2019
 
