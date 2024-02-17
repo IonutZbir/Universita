@@ -195,7 +195,7 @@ Per trovare poi l'uscita dal labirinto, si può effettuare una visita DFS o BFS 
     <img src="SuperCianoCiccioneL.png" width=250 style="float: right;"/>
 </div>
 
-Come è strutturato $G^{'} =$ {$V^{'}, E^{'}$}:
+Come è strutturato $G^{'}=${$V^{'}, E^{'}$}:
 
 **Nodi**:
 
@@ -255,7 +255,7 @@ L'idea è creare un grafo ausiliario $G'$ a livelli, precisamente con 2 livelli.
 </div>
 
 
-Come è strutturato $G^{'} =$ {$V^{'}, E^{'}$}?
+Come è strutturato $G^{'}=${$V^{'}, E^{'}$}:
 
 **Nodi**
 
