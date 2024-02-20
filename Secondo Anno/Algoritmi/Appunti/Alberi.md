@@ -1,7 +1,7 @@
 # Alberi
 
 ### DEF
-Sono grafi diretti, in cui i dati sono contenuti nei dati e, le relazioni gerarchiche sono definite dagli archi.
+Sono grafi connessi e aciclici, in cui i dati sono contenuti nei nodi e, le relazioni gerarchiche sono definite dagli archi.
 
 Siano $u$ e $v$ nodi:
 
@@ -11,17 +11,17 @@ Siano $u$ e $v$ nodi:
 
 ## Come rappresentare gli Alberi
 
-1. Vettore dei padri
+#### 1. Vettore dei padri
 
-Per un albero con $n$ nodi uso un array con almeno $n$ elementi. Una generica cella $i$ contiene una coppia (info, parent)
+Per un albero con $n$ nodi uso un array con almeno $n$ elementi. Una generica cella $i$ contiene una coppia `(info, parent)`
 dove:
 
-- info: contenuto informativo del nodo $i$
-- parent: indice dell'nodo padre di $i$
+- `info`: contenuto informativo del nodo $i$
+- `parent`: indice dell'nodo padre di $i$
 
-2. Vettore posizionale
+#### 2. Vettore posizionale
 
-E' usato per alberi d-ari (quasi) completi. I nodi sono arrangiati nell'array per livelli. 
+E' usato per alberi $d-ari$ (quasi) completi. I nodi sono arrangiati nell'array per livelli. 
 
 Se gli indici partono da 0, allora:
 - $j$-esimo figlio di $i$ è in posizione $(d\cdot i) + j$.
@@ -33,9 +33,11 @@ Se gli indici partono da 1, allora:
 
 In questo modo, dato un nodo $i$, in tempo $O(1)$ è possibile trovare tutti i suoi figli e, raggiungere il padre.
 
-3. Rappresentazione con puntatori ai figli (nodi con numero limitato di figli).
-4. Rappresentazione con liste di puntatori ai figli (nodi con numero arbitrario di figli).
-5. Rappresentazione di tipo primo figlio-fratello successivo (nodi con numero arbitrario di figli).
+#### Altre rappresentazioni degli alberi 
+
+- Rappresentazione con puntatori ai figli (nodi con numero limitato di figli).
+- Rappresentazione con liste di puntatori ai figli (nodi con numero arbitrario di figli).
+- Rappresentazione di tipo primo figlio-fratello successivo (nodi con numero arbitrario di figli).
 
 ## Visite di alberi
 
