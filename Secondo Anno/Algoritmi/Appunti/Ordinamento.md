@@ -358,7 +358,6 @@ alle $t$ cifre meno significative.
 
 **Costo Temporale**:
 
-- Vengono eseguite $O(log(k))$ passate di BucketSort. Ciascuna passata costa $O(n + b)$ 
-=> $O((n + b) \cdot log(k))$
+- Vengono eseguite $O(log(k))$ passate di BucketSort. Ciascuna passata costa $O(n + b) => O((n + b) \cdot log(k))$
 
 Se b = $\theta(n)$, si ha un costo lineare se k = $O(n^c)$, $c$ costante.
