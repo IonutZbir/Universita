@@ -76,7 +76,7 @@ $$
 =\left(\begin{array}{cc} 
 F_{n+1} & F_{n}\\
 F_{n} & F_{n-1}
-\end{array}\right)^{n}
+\end{array}\right)
 $$
 
 Usando questa proprietà, possiamo progettare il seguento algoritmo:
