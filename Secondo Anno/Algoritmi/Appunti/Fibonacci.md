@@ -73,8 +73,7 @@ $$
 1 & 1\\
 1 & 0
 \end{array}\right)^{n}
-=
-\left(\begin{array}{cc} 
+=\left(\begin{array}{cc} 
 F_{n+1} & F_{n}\\
 F_{n} & F_{n-1}
 \end{array}\right)^{n}
@@ -90,10 +89,7 @@ I =
 1 & 0\\
 0 & 1
 \end{array}\right)
-$$
-$$
-M =
-\left(\begin{array}{cc} 
+; M = \left(\begin{array}{cc} 
 1 & 1\\
 1 & 0
 \end{array}\right)
