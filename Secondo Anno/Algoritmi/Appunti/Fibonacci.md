@@ -89,7 +89,9 @@ I =
 1 & 0\\
 0 & 1
 \end{array}\right)
-; M = \left(\begin{array}{cc} 
+$$
+$$
+M = \left(\begin{array}{cc} 
 1 & 1\\
 1 & 0
 \end{array}\right)
