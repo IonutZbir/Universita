@@ -99,5 +99,9 @@ int main() {
     int res = queryOracolo(o, x, y);
     printf("Ci sono %d numeri tra %d, %d\n", res, x, y);
 
+    int k[] = {1, 1, 1, 1, 2, 2, 2, 2, 2, 2};
+    int j = binarySearchFirstOccurence(k, 2, 0, 10);
+    printf("%d\n", j);
+
     return 0;
 }

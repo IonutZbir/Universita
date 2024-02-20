@@ -13,8 +13,27 @@ int binarySearch(int *arr, int n, int start, int end) {
     else
         return binarySearch(arr, n, m + 1, end);
 }
+int binary_search(int arr[], int low, int high, int x) {
+    if (low > high) {
+        return -1; // Element not found
+    }
 
+    int mid = (low + high) / 2;
+
+    // Check if x is present at mid
+    if (arr[mid] == x) {
+        return mid;
+    }
+
+    // If x is greater, ignore left half
+    if (arr[mid] < x) {
+        return binary_search(arr, mid + 1, high, x);
+    }
+
+    // If x is smaller, ignore right half
+    return binary_search(arr, low, mid - 1, x);
+}
 int main() {
-    int a[] = {1, 3, 3, 5, 5, 4, 10, 20};
-    printf("il numero sta nella posizione:%d\n", binarySearch(a, 3, 0, 8));
+    int a[] = {1, 1, 1, 1, 2, 2, 2, 2, 2, 2};
+    printf("il numero sta nella posizione:%d\n", binary_search(a, 0, 10, 1));
 }
