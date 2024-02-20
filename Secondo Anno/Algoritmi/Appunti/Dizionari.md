@@ -27,7 +27,7 @@ E' un albero binario che soddisfa le seguenti proprietà:
 - ogni nodo $v$ contiene un elemento `elem(v)` in cui è associata una chiave  `chiave(v)` presa da un dominio totalmente
 ordinato. Per ogni nodo $v$ vale che:
 - le chiavi nel sottoalbero sinistro di $v$ sono $\leq$ `chiave(v)`.
-- le chiavi nel sottoalbero destro di $v$ sono > `chiave(v)`.
+- le chiavi nel sottoalbero destro di $v$ sono $>$ `chiave(v)`.
 
 **Proprietà**:
 - Il minimo si trova nell'ultima foglia nel cammino più a sinistra
@@ -91,8 +91,8 @@ min(nodo u) -> nodo
 
 2. Successore e Predecessore
 
-- Il predecessore di un nodo $u$ in un BST è il nodo $v$ nell'albero avente massima chiave <= chiave(u)
-- Il successore di un nodo $u$ in un BST è il nodo $v$ nell'albero avente minima chiave >= chiave(u)
+- Il predecessore di un nodo $u$ in un BST è il nodo $v$ nell'albero avente massima chiave $\leq$ `chiave(u)`
+- Il successore di un nodo $u$ in un BST è il nodo $v$ nell'albero avente minima chiave $\geq$ `chiave(u)`
 
 ```
 Predecessore(nodo u) -> nodo
@@ -117,8 +117,8 @@ Con queste funzioni adesso possiamo definire l'operazione di delete.
 Sia $u$ il nodo contenente l'elemento $e$ da cancellare. 
 
 1. $u$ è una foglia: rimuovila.
-2. $u$ ha un solo figlio: rimuovo $u$ e parent(u).sinistra = figlio di $u$.
-3. $u$ ha due figli: sostituiscilo con il predecessore (o successore) (v) e rimuovi fisicamente il predecessore 
+2. $u$ ha un solo figlio: rimuovo $u$ e `parent(u).sin` = figlio di $u$.
+3. $u$ ha due figli: sostituiscilo con il predecessore (o successore) ($v$) e rimuovi fisicamente il predecessore 
 (o successore) (che ha al più un figlio).
 
 **In conclusione**:
@@ -130,7 +130,7 @@ Sia $u$ il nodo contenente l'elemento $e$ da cancellare.
 #### DEF 
 - Fattore di bilanciamento $\beta(v)$ di un nodo $v$: altezza del sottoalbero sinistro di $v$ - altezza del sottoalbero 
 destro di v. Generalmente $\beta(v)$ è mantenuto come informazione addizionale nel record relativo di $v$.
-- Un albero si dice bilanciato in altezza se ogni nodo $v$ ha fattore di bilanciamento in valore assoluto <= 1.
+- Un albero si dice bilanciato in altezza se ogni nodo $v$ ha fattore di bilanciamento in valore assoluto $\leq 1$.
 - Un albero AVL è un albero BST bilanciato in altezza.
 
 **Corollario**: Un albero AVL con $n$ nodi ha altezza $O(log(n))$.  
@@ -144,3 +144,40 @@ $n_{h} = F_{h+3} -1 = \theta(\phi^n) => h = \theta(log(n_{h})) = O(log(n))$ con 
 L'operazione di search non va a modificare la struttura dell'albero, perciò rimane uguale come nel BST. Le uniche 
 operazioni che cambiano i fattori di bilanciamento di +-1 sono l'insert e la delete. Per mantenere il bilanciamento 
 si usano una serie di **rotazioni**.
+
+#### Ribilanciamento tramite rotazioni
+
+**Rotazione verso destra/sinistra sul nodo $v/u$**
+
+<center>
+<img src="img/Rotations.png" width=600/>
+</center>
+
+- Mantiene la proprietà di ricerca
+- Richiede tempo $O(1)$
+
+Le rotazioni sono effettuate su nodi sbilanciati. Sia $v$ un nodo con profondità massima (nodo critico) con fattore di bilanciamento $\beta(v) = +- 2$, allora 
+esiste un sottoalbero $T$ di $v$ che lo sbilancia, a seconda della posizione di $T$ si hanno 4 casi:
+
+- `Sinistra - Sinistra (SS)` $=>$ $T$ è il sottoalbero sinistro del figlio sinistro di $v$ con $\beta(v) = +2$
+- `Destra - Destra (DD)` $=>$ $T$ è il sottoalbero destro del figlio destra di $v$ con $\beta(v) = -2$
+- `Sinistra - Destra (SD)` $=>$ $T$ è il sottoalbero destro del figlio sinistro di $v$ con $\beta(v) = +2$
+- `Destra - Sinistra (DS)` $=>$ $T$ è il sottoalbero sinistro del figlio destro di $v$ con $\beta(v) = -2$
+
+**Caso SS** $(\beta(v) = +2, h(T_{1} = h + 1))$
+
+<center>
+<img src="img/SS.png" width=300/>
+</center>
+
+Sia $h$ l'altezza del sottoalbero destro di $v$.  
+
+- L'altezza di $T(v) = h + 3$
+- L'altezza di $T(u) = h + 2$ 
+- L'altezza di $T_{3} = h$
+
+$=> \beta(v) = +2$ e lo sbilanciamento è provocato da $T_{1}$. Si applica una rotazione semplice verso sinistra su $v$, bilanciando cosi l'albero.
+
+
+
+
