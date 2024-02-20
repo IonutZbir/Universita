@@ -104,7 +104,7 @@ Merge(arr, sx, cx, dx)
 
     copia AUX in arr[sx:dx]
 ```
-**Lemma**: La procedura Merge fonde due sequenze ordinate di lunghezza n e m in tempo $\theta(n + m)$
+**Lemma**: La procedura Merge fonde due sequenze ordinate di lunghezza $n$ e $m$ in tempo $\theta(n + m)$
 
 **Dim**: Ogni confronto "consuma" un elemente di una delle due sequenze. Ogni posizione di `AUX` è riempita
 in tempo costante. Il numero totale di elementi è $n + m$. Anche la copia del vettore `AUX` in `arr` costa 
@@ -211,7 +211,7 @@ Dato un nodo i, possiamo calcolare il tempo costante
 
 - $sin(i) = 2i$ - **posizione del figlio sinistro**.
 - $des(i) = 2i + 1$ - **posizione del figlio destro**.
-- $padre(i) = \frac{i}{2}$ - *posizione del padre**.
+- $padre(i) = \frac{i}{2}$ - **posizione del padre**.
 
 ### FixHeap
 
