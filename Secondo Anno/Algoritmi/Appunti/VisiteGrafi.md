@@ -130,8 +130,8 @@ Questa proprietà è utile per riconoscere il tipo di arco
 
 | pre/post (u, v)                             | tipo di arco    |
 | ------------------------------------------- | --------------- |
-| $[_{u}[_{v}]_{v}]_{u}$ | in avanti       |
-| $[_{v}$ ___ $[_{u}$ ___ $]_{u}$ ___ $]_{v}$ | all'indietro    |
+| $(_{u}(_{v})_{v})_{u}$ | in avanti       |
+| $(_{v}$ ___ $(_{u}$ ___ $)_{u}$ ___ $)_{v}$ | all'indietro    |
 | $[_{v}$ ___ $]_{v}$ ___ $[_{u}$ ___ $]_{u}$ | trasversali     |
 
 - in avanti: da un vertico $u$ verso un qualche discendente $v$ nell'albero (A, B)
