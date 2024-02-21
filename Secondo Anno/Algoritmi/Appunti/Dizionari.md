@@ -164,7 +164,7 @@ esiste un sottoalbero $T$ di $v$ che lo sbilancia, a seconda della posizione di 
 - `Sinistra - Destra (SD)` $=>$ $T$ è il sottoalbero destro del figlio sinistro di $v$ con $\beta(v) = +2$
 - `Destra - Sinistra (DS)` $=>$ $T$ è il sottoalbero sinistro del figlio destro di $v$ con $\beta(v) = -2$
 
-**Caso SS** $(\beta(v) = +2, h(T_{1} = h + 1))$
+#### Caso SS $(\beta(v) = +2, h(T_{1}) = h + 1)$
 
 <center>
 <img src="img/SS.png" width=300/>
@@ -178,6 +178,49 @@ Sia $h$ l'altezza del sottoalbero destro di $v$.
 
 $=> \beta(v) = +2$ e lo sbilanciamento è provocato da $T_{1}$. Si applica una rotazione semplice verso sinistra su $v$, bilanciando cosi l'albero.
 
+Ci sono due sottocasi possibili:
 
+1. l'altezza di $T_{2} = h =>$ l' altezza dell'albero coinvolto nella rotazione passa da $h + 3$ a $h + 2$
+
+<center>
+<img src="img/SS1.png" width=500/>
+</center>
+
+2. l'altezza di $T_{2} = h + 1 =>$ l'altezza dell'albero coinvolto nella rotazione rimane pari a $h + 3$
+
+<center>
+<img src="img/SS2.png" width=500/>
+</center>
+
+**Osservazioni**
+
+- Dopo la rotazione l'albero è bilanciato (tutti i fattori di bilanciamento sono in modulo $\leq 1$)
+- L'inserimento di un elemento nell'AVL (ovvero, l'aggiunta di una foglia a un albero bilanciato) può provocare solo il sottocaso $(1)$, perché altrimenti l'AVL era gia sbilanciato!
+- Invece, la cancellazione di un elemento dall'AVL (che necessariamente fa diminuire l'altezza di qualche sottoalbero) può provocare entrambi i casi
+
+#### Caso SD $(\beta(v) = +2, h(T_{1}) \noteq h + 1)$
+
+<center>
+<img src="img/SD.png" width=300/>
+</center>
+
+Sia $h$ l'altezza del sottoalbero destro di $v$.
+
+- L'altezza di $T(w) = h + 1$
+- L'altezza di $T_{1} = h$
+- L'altezza di $T(z) = h + 2$
+
+$=> \beta(v) = +2$ e lo sbilanciamento è provocato dal sottoalbero destro di $z$. Applicare due rotazioni semplici: una verso sinistra sul figlio sinistro del nodo critico (nodo $z$),
+l'altra verso destra sul nodo critico (nodo $v$).
+
+<center>
+<img src="img/SD1.png" width=300/>
+</center>
+
+**Osservazioni**
+
+- I fattori di bilanciamento di tutti i nodi tornano ok
+- L'altezza dell'albero dopo la rotazione passa da $h + 3$ a $h + 2$
+- Il caso SD può essere provocato sia da inserimenti (in $T_{2}$ o $T_{3}$), sia da cancellazioni che abbassano di 1 l'altezza di $T_{4}$
 
 

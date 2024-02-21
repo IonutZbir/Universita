@@ -37,7 +37,7 @@ fibonacci3(intero n) -> intero
     sia Fib un array di n interi
     Fib[1] = 1
     Fib[2] = 2
-    for i = 3 to n dello
+    for i = 3 to n do
         Fib[i] = Fib[i - 1] + Fib[i - 2]
     return Fib[n]
 ```
@@ -54,7 +54,7 @@ ma solo gli ultimi due, riducendo lo spazio a poche variabili in tutto.
 fibonacci4(intero n) -> intero
     a = 1
     b = 2
-    for i = 3 to n dello
+    for i = 3 to n do
         c = a + b
         a = b
         b = c
