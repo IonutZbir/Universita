@@ -24,7 +24,7 @@ operazioni:
     increaseKey(elem e, chiave d)
         incrementa della quantità d la chiave dell'elemento e in S.
 
-    decrease(elem e, chiave d)
+    decreaseKey(elem e, chiave d)
         decrementa della quantità d la chiave dell'elemento e in S.
 
     merge(CodaPriorità c1, CodaPriorità c2) -> CodaPriorità
@@ -170,7 +170,7 @@ Un albero binomiale $B_{i}$ è definito ricorsivamente come segue:
 1. Numero di nodi $(|B_{h}|): n = 2^h$.
 2. Grado della radice: $D(n) = log_{2}(n)$.
 3. Altezza: $H(n): h = log_{2}(n)$.
-4. Figli della radice: i sottoalberi radicati nei figli della radice di $G_{h}$ sono $B_{0}$, $B_{1}$,$...$,$B_{h-1}$.
+4. Figli della radice: i sottoalberi radicati nei figli della radice di $G_{h}$ sono $B_{0}$, $B_{1}$,..., $B_{h-1}$.
 
 ### DEF (heap binomiale)
 
