@@ -2,13 +2,13 @@
 
 Per capire quali parti del grafo sono raggiungibili da un certo nodo, eseguo una visita del grafo.
 
-- Una visita di un grafo $G$ permette di esaminare i nodi e gli archi di $G$ in modo sistematico (***Se $G$ è connesso***)
+- Una visita di un grafo $G$ permette di esaminare i nodi e gli archi di $G$ in modo sistematico (***Se** $G$ **è connesso***)
 - genera un albero di visita
 - problema di base in molte applicazioni
 
 ## 1. Visita in Ampiezza - BFS
 
-**Proprietà**: Dato un grafo $G$ non pesato e un nodo $s$ (sorgente), trova tutte le ***distanze/cammini minimi*** da s verso ogni altro nodo $v$.
+**Proprietà**: Dato un grafo $G$ non pesato e un nodo $s$ (sorgente), trova tutte le ***distanze/cammini minimi*** da $s$ verso ogni altro nodo $v$.
 
 Si parte da un nodo, si va in tutti i vicini raggiungibili con un arco, poi andare ai successivi vicini raggiungibili con un altro arco. Quindi prima si visitano i nodi a distanza 1,
 poi a distanza 2, etc... . In parole povere si va per livelli.
@@ -31,7 +31,7 @@ visitaBFS(nodo s) -> albero
     return T
 ```
 
-Restituisce l'albero dei **cammini minimi** con radice s (sorgente)
+Restituisce l'albero dei **cammini minimi** con radice $s$ (sorgente)
 
 **Complessità Temporale**:
 
@@ -130,7 +130,7 @@ Questa proprietà è utile per riconoscere il tipo di arco
 
 | pre/post (u, v)                             | tipo di arco    |
 | ------------------------------------------- | --------------- |
-| $[_{u}$ ___ $[_{v}$ ___ $]_{v}$ ___ $]_{u}$ | in avanti       |
+| $[_{u}$_____$[_{v}$ ___ $]_{v}$ ___ $]_{u}$ | in avanti       |
 | $[_{v}$ ___ $[_{u}$ ___ $]_{u}$ ___ $]_{v}$ | all'indietro    |
 | $[_{v}$ ___ $]_{v}$ ___ $[_{u}$ ___ $]_{u}$ | trasversali     |
 
