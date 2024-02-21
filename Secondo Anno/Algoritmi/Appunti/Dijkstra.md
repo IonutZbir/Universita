@@ -1,7 +1,7 @@
 # Cammini Minimi in Grafi Pesati
 
-**DEF**: Sia $G = (V, E)$ un grafo orientato o non orientato con pesi $w$ reali sugli archi. Il costo o la lunghezza 
-di un cammino $\pi =$ { $v_{1}$, $v_{2}$, ..., $v_{k}$ } è: $w(\pi) = \sum_{i = 1}^k w(v_{i-1}, v{i})$
+**DEF**: Sia $G = (V, E)$ un grafo orientato o non orientato con pesi $w$ reali sugli archi. 
+Il costo o la lunghezza di un cammino $\pi =$ { $v_{1}$, $v_{2}$, ..., $v_{k}$ } è: $w(\pi) = \sum_{i = 1}w(v_{i-1}, v{i})$
 
 **DEF**: Un cammino minimo tra una coppia di vertici $x$ e $y$ è un cammino evente costo minore o uguale a quello di ogni
 altro cammino tra gli stessi vertici (non necessariamento unico).
@@ -34,6 +34,18 @@ Nel caso in cui il grafo non è pesato, SPT coincide con l'albero BFS.
 
 Calcola l'albero dei cammini minimi che le distanze da $s$.
 
+**Idea: Approccio Greedy**
+1. mantiene per ogni nodo $v$ una **stima** per eccesse $D_{sv}$ alla distanza $d(s, v)$. Inizialmente, unica stima finita $D_{ss} = 0$.
+2. mantiene un insieme $X$ di nodi per cui le stime sono **esatte**; e anche un albero $T$ dei cammini minimi verso nodi in $X$ (albero nero). 
+   Inizialmente $X = { s }$, $T$ non ha archi.
+3. ad ogni passo aggiunge a $X$ il nodo $u\in V - X$ la cui stima è minima; aggiunge a $T$ uno specifico arco (arancione) entrante in $u$.
+4. aggiorna le stime guardando i nodi a diacenti a $u$.
+
+I nodi da aggiungere progessivamente a $X$ (e quindi a $T$) sono mantenuti in una **coda di priorità**, associati ad un unico arco (arancione) che li contiene a $T$.  
+La stima per un nodo $y\in V-X$ è: $D_{sy} = min{ D_{sx} + w(x, y): (x, y)\in E, x\in X }$. L'arco che fornisce il minimo e l'arco arancione.  
+Se $y$ è in coda con arco $(x, y)$ associato, e se dopo aver aggiunto $u$ a $T$ troviamo un arco $(u, v)$ tale che $D_{sy} + w(u, y) < D_{sx} + w(x, y)$, allora rimpiazziamo $(x, y)$
+con $(u, y)$, ed aggiorniamo $D_{sy}$.
+
 Assunzione: tutti gli archi hanno peso non negativo, ovvero ogni arco (u, v) del grafo di peso $w(u, v) \geq 0$.
 
 Sia `v.dist` la distanza dal nodo sorgente $s$ a $v$
@@ -46,9 +58,23 @@ Dijkstra(grafo G, nodo s) -> albero
     CodaPriorita CP 
     s.dist = 0
     CP.insert(s, s.dist)
-
- 
+    while (not CP.isEmpty) do 
+        u = CP.deleteMin()
+        X = X U {u}
+        for each (arco(u, v) in G) do 
+            if (v.dist = inf) then
+                v.dist = u.dist + w(u, v) 
+                CP.insert(v, v.dist)
+                rendi u padre di v in T
+            else if (u.dist + w(u, v) < v.dist) then
+                S.decreaseKey(v, v.dist - u.dist - w(u, v))
+                v.dist = u.dist + w(u, v)
+                rendi u nuovo padre di v in T
+    return T
 ```
+
+**Complessità Temporale**: Se si usano gli Heap di Fibonacci allora $T(n) = O(m + n\cdot log n)$.
+
 
 
 
