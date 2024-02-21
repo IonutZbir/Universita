@@ -180,7 +180,7 @@ Un heap binomale è una foresta di alberi binomiali che gode delle seguenti prop
 2. **Informazioni**: ogni nodo $v$ contiene un elemento `elem(v)` ed una chiave `chiave(v)` presa da un dominio totalmente ordinato. 
 3. **Ordinamento a heap**: `chiave(v)` $\ge$ `chiave(parent(v))` per ogni nodo $v$ diverso da un delle radici. 
 
-**Quanti alebri binomiali può avere al massimo un heap binomiale con $n$ nodi?** 
+**Quanti alberi binomiali può avere al massimo un heap binomiale con $n$ nodi?** 
 
 Dalla proprietà di unicità degli alberi binomiali che lo costituiscono, ne deriva che un heap binomiale di $n$ elementi è formato dagli alberi binomiali
 $B_{i0}$, $B_{i1}$, ..., $B_{ih}$, dove $i_{0}$, ..., $i_{h}$ corrispondono alle posizioni degli $1$ nella rappresentazione in base 2 di $n$.  
