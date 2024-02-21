@@ -13,7 +13,7 @@ fibonacci1(intero n) -> intero
 - $\phi' \approx - 0.618$
 
 Il problema di questo algoritmo è la precisione. 
-Infatti la precisione di questa formula dipende dall'approsimazione di $\phi$. Piu è precisa l'approsimazione più l'$n-esimo$ numero di Fibonacci è preciso.
+Infatti la precisione di questa formula dipende dall'approsimazione di $\phi$. Piu è precisa l'approsimazione più l' $n-esimo$ numero di Fibonacci è preciso.
 
 #### 2. Ricorsione
 
