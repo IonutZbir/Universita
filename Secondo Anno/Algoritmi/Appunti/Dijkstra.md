@@ -42,7 +42,7 @@ Calcola l'albero dei cammini minimi che le distanze da $s$.
 4. aggiorna le stime guardando i nodi a diacenti a $u$.
 
 I nodi da aggiungere progessivamente a $X$ (e quindi a $T$) sono mantenuti in una **coda di priorità**, associati ad un unico arco (arancione) che li contiene a $T$.  
-La stima per un nodo $y\in V-X$ è: $D_{sy} = min$ { D_{sx} + w(x, y): (x, y)\in E, x\in X }$. L'arco che fornisce il minimo e l'arco arancione.  
+La stima per un nodo $y\in V-X$ è: $D_{sy} = min$ { $D_{sx} + w(x, y): (x, y)\in E, x\in X$ }. L'arco che fornisce il minimo e l'arco arancione.  
 Se $y$ è in coda con arco $(x, y)$ associato, e se dopo aver aggiunto $u$ a $T$ troviamo un arco $(u, v)$ tale che $D_{sy} + w(u, y) < D_{sx} + w(x, y)$, allora rimpiazziamo $(x, y)$
 con $(u, y)$, ed aggiorniamo $D_{sy}$.
 
