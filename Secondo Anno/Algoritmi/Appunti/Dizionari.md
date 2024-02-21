@@ -227,4 +227,65 @@ l'altra verso destra sul nodo critico (nodo $v$).
 - L'altezza dell'albero dopo la rotazione passa da $h + 3$ a $h + 2$
 - Il caso SD può essere provocato sia da inserimenti (in $T_{2}$ o $T_{3}$), sia da cancellazioni che abbassano di 1 l'altezza di $T_{4}$
 
+### Insert
+
+1. Crea un nuovo nodo $u$ con `elem = e` e `chiave = k`
+2. Inserisci $u$ come in un BST
+3. Ricalcola i fattori di bilanciamento dei nodi nel cammino dalla radice a $u$: sia $v$ il più profondo nodo con fattore di bilanciamento pari a $+-2$ (nodo critico)
+4. Esegui una rotazione opportuna su $v$
+
+**Osservazione**: un solo ribilanciamento è sufficiente, poiché l'altezza dell'albero coinvolto diminuisce di 1 (sottocaso $(1)$ del caso SS o DD, o casi SD o DS),e quindi torna ad 
+essere uguale all'altezza che aveva prima dell'inserimento
+
+### Delete
+
+1. Cancella il nodo come in un BST
+2. Ricalcola il fattore di bilanciamento del padre del nodo eliminato fisicamente (che potrebbe essere diverso dal nodo contenente $e$), ed esegui l'opportuna rotazione semplice o 
+   doppia ove necessario
+3. Ripeti questo passo, sino ad arrivare eventualmente alla radice dell'AVL:
+   - Se l'altezza dell sottoalbero appena ribilanciato è uguale a quella che aveva prima della cancellazione, termina. Invece, se tale altezza è diminuita, risali verso l'alto 
+     (cioè vai nel padre del sottoalbero appena ribilanciato), calcola il fattore di bilanciamento, e applica l'opportuno ribilanciamento.
+
+**Osservazione**: potrebbero essere necessarie $O(log n)$ rotazioni: infatti eventuali diminuzioni di altezza indotte dalle rotazioni possono propagare lo sbilanciamento verso l'alto
+nell'albero (l'altezza del sottoalbero in cui è avvenuta la rotazione diminuisce di 1 rispetto a quella che aveva prima della cancellazione)
+
+Nell' analisi della complessità dell'operazione di `insert/delete` abbiamo implicitamente usato le seguenti tre proprietà:
+
+1. dato un nodo $v$, è possibile conoscere $\beta(v)$ in tempo $O(1)$
+2. dopo aver inserito/cancellato un nodo $v$ nell'albero come se fosse un semplice BST, è possibile ricalcolare i fattori di bilanciamento dei nodi lungo il cammino da $v$ alla radice
+   in tempo $O(log n)$
+3. nell'eseguire le rotazioni necessarie per l'albero, è possibile aggiornare anche i fattori di bilanciamento dei nodi coinvolti in tempo complessivo $O(log n)$
+
+```
+classe AlberoAVL estende AlberoBinarioDiRicerca:
+dati: 
+    albero binario di ricerca T ereditato, più il fattore di bilanciamento di ogni nodo
+operazioni:
+    search(chiave k) -> elem
+        ereditata
+
+    insert(elem e, chiave k)
+        schiama insert() ereditata, poi ricalcola i fattori di bilanciamento ed eventualmente ribilancia tramite rotazioni
+
+    delete(elem e)
+        chiama delete() ereditata, poi ricalcola i fattori di bilanciamento ed eventualmente ribilancia tramite rotazioni
+```
+
+### Riepilogo
+
+Sia $n$ il numero di nodi e $h$ l'altezza dell'albero. Se l'albero è un BST allora l'altezza è $h = h$ mentre se l'albero è un AVL l'altezza $h = log(n)$.
+
+| Operazioni | BST    | AVL         |
+|----------- | ------ | ----------- |
+| Search     | $O(h)$ | $O(log(n))$ |
+| Insert     | $O(h)$ | $O(log(n))$ |
+| Delete     | $O(h)$ | $O(log(n))$ |
+| Min        | $O(h)$ | $O(log(n))$ |
+| Max        | $O(h)$ | $O(log(n))$ |
+| Pred       | $O(h)$ | $O(log(n))$ |
+| Succ       | $O(h)$ | $O(log(n))$ |
+
+
+
+
 
