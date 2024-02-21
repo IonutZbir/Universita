@@ -182,8 +182,8 @@ Un heap binomale è una foresta di alberi binomiali che gode delle seguenti prop
 
 **Quanti alebri binomiali può avere al massimo un heap binomiale con $n$ nodi?** 
 
-Dalla proprietà di unicità degli alberi binomiali che lo costituiscono, ne deriva che un heap binomiale di $n$ elementi è formato dagli alberi binomiali $B_{i0}$, $B_{i1}$, ...,$B_{ih}$, dove $i_{0}$,...,$i_{h}$ corrispondono alle posizioni degli $1$ nella 
-rappresentazione in base 2 di $n$.  
+Dalla proprietà di unicità degli alberi binomiali che lo costituiscono, ne deriva che un heap binomiale di $n$ elementi è formato dagli alberi binomiali
+$B_{i0}$, $B_{i1}$, ..., $B_{ih}$, dove $i_{0}$,...,$i_{h}$ corrispondono alle posizioni degli $1$ nella rappresentazione in base 2 di $n$.  
 => In un heap binomiale con $n$ nodi, vi sono al più $log(n)$ alberi binomiali, ciascun con grado ed altezza $O(log(n))$.
 
 **Procedura ausiliaria**
