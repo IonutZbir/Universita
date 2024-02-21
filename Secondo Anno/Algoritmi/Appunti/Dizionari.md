@@ -198,10 +198,10 @@ Ci sono due sottocasi possibili:
 - L'inserimento di un elemento nell'AVL (ovvero, l'aggiunta di una foglia a un albero bilanciato) può provocare solo il sottocaso $(1)$, perché altrimenti l'AVL era gia sbilanciato!
 - Invece, la cancellazione di un elemento dall'AVL (che necessariamente fa diminuire l'altezza di qualche sottoalbero) può provocare entrambi i casi
 
-#### Caso SD $(\beta(v) = +2, h(T_{1}) \noteq h + 1)$
+#### Caso SD $(\beta(v) = +2, h(T_{1})\neq h + 1)$
 
 <center>
-<img src="img/SD.png" width=300/>
+<img src="img/SD.png" width=250/>
 </center>
 
 Sia $h$ l'altezza del sottoalbero destro di $v$.
@@ -214,7 +214,7 @@ $=> \beta(v) = +2$ e lo sbilanciamento è provocato dal sottoalbero destro di $z
 l'altra verso destra sul nodo critico (nodo $v$).
 
 <center>
-<img src="img/SD1.png" width=300/>
+<img src="img/SD1.png" width=500/>
 </center>
 
 **Osservazioni**
