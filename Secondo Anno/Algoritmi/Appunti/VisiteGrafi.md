@@ -156,7 +156,7 @@ all'indietro.
 - pozzo: nodo in cui ci sono solo archi entranti.
 
 **DEF**: Un ordinamento topologico di un grafo diretto $G = (V, E)$ è una funzione 
-biettiva $\sigma: V$ -> {$1, 2, ..., n$} tale che per ogni arco $(u, v)\in E$, 
+biettiva $\sigma: V$ -> {1, 2, ..., n} tale che per ogni arco $(u, v)\in E$, 
 $\sigma(u) < \sigma(v)$.
 
 Un uso importante dell'ordinamento topologico sono le reti delle dipendenze.
