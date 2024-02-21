@@ -46,6 +46,11 @@ Un grafo (senza cappi o archi paralleli) può avere un numero di archi: $0 \leq 
 
 **TEOREMA**: Sia $T = (V, E)$ un albero; allora $|E| = |V| - 1$.
 
+**Dim** (per induzione su $|V|$):  
+- caso base: $|V| = 1 => |E| = 0 = |V| - 1$ 
+- caso induttivo: $|V| > 1$, sia $n$ il numero di nodi ti $T$. Poiché $T$ è connesso e aciclico ha almeno una foglia (se tutti i nodi avesero grado almeno 2 ci sarebbe un ciclo).
+  Rimuovendo tale foglia si ottiene un grafo connesso e aciclico con $n - 1$ nodi che per ipotesi induttiva ha $n - 2$ archi, $=> T$ ha $n - 1$ archi.
+
 **Per un grafo connesso con $n$ nodi e $m$ archi vale: $n - 1 \leq m \leq \frac{n\cdot (n - 1)}{2} => m = \Omega(n)$ e $m = O(n^2)$**.
 
 **Se una grafo ha $m \geq n - 1$ archi, non è detto che sia connesso. Deve avere almeno $\frac{n\cdot (n - 1)}{2}$ archi**.
