@@ -1,7 +1,7 @@
 # Cammini Minimi in Grafi Pesati
 
 **DEF**: Sia $G = (V, E)$ un grafo orientato o non orientato con pesi $w$ reali sugli archi. Il costo o la lunghezza 
-di un cammino $\pi =$ {$v_{1}$, $v_{2}$, ..., $v_{k}$} è: $w(\pi) = \sum_{i = 1}^{k}w(v_{i-1}, v{i})$
+di un cammino $\pi =$ { $v_{1}$, $v_{2}$, ..., $v_{k}$ } è: $w(\pi) = \sum_{i = 1}^k w(v_{i-1}, v{i})$
 
 **DEF**: Un cammino minimo tra una coppia di vertici $x$ e $y$ è un cammino evente costo minore o uguale a quello di ogni
 altro cammino tra gli stessi vertici (non necessariamento unico).
