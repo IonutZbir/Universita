@@ -44,7 +44,7 @@ operazioni:
 
 ### DEF
 
-- **Struttura**: è completo almeno dino al penultimo livello, e tutte le foglie sull'ultimo livello sono compattate verso sinistra.
+- **Struttura**: è completo almeno fino al penultimo livello, e tutte le foglie sull'ultimo livello sono compattate verso sinistra.
 - **Informazioni**: ogni nodo $v$ contiene `elem(v)` ed una chiave `chiave(v)` presa da un dominio totalmente ordinato. 
 - **Ordinamento**: Ordinamento parziale (inverso) dell'heap (min-heap). $chiave(v) \ge chive(parent(v))$ per ogni nodo $v$ diverso dalla radice. 
 
