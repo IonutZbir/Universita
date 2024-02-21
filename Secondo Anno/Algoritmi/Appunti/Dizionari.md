@@ -35,7 +35,7 @@ ordinato. Per ogni nodo $v$ vale che:
 - Visitando il BST in ordine simmetrico otteniamo un array ordinato in modo crescente.
 
 <center>
-<img src="img/BST.png" width=300/>
+<img src="img/BST.png" width=500/>
 </center>
 
 ### 1. Search
