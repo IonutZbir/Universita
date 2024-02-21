@@ -34,6 +34,10 @@ ordinato. Per ogni nodo $v$ vale che:
 - Il massimo si trova nell'ultima foglia nel cammino più a destra
 - Visitando il BST in ordine simmetrico otteniamo un array ordinato in modo crescente.
 
+<center>
+<img src="img/BST.png" width=300/>
+</center>
+
 ### 1. Search
 
 Traccia un cammino nell'albero partendo dalla radice: su ogni nodo, usa la proprietà di ricerca per decidere se proseguire
