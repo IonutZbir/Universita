@@ -130,7 +130,9 @@ Questa proprietà è utile per riconoscere il tipo di arco
 
 | pre/post (u, v)                             | tipo di arco    |
 | ------------------------------------------- | --------------- |
-| $[_{u}$ ciao $[_{v}$ ciao $]_{v}$ ciao $]_{u}$ | in avanti       |
+| $[_{u}$ 
+ciao 
+$[_{v}$ ciao $]_{v}$ ciao $]_{u}$ | in avanti       |
 | $(_{v}$ ___ $(_{u}$ ___ $)_{u}$ ___ $)_{v}$ | all'indietro    |
 | $[_{v}$ ___ $]_{v}$ ___ $[_{u}$ ___ $]_{u}$ | trasversali     |
 
