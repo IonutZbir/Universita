@@ -254,6 +254,8 @@ operazioni:
     per il numero di operazioni della sequenza. Molto utile quando si vogliono buone 
     prestazioni sull'intera sequenza e non garanzie sulla singola operazione.
 
+### Riepilogo
+
 |           | FindMin     | Insert      | Delete        | DelMin        | IncKey        | DecKey      | Merge       |
 |:---------:|:-----------:|:-----------:|:-------------:|:-------------:|:-------------:|:-----------:|:-----------:|
 | D-Heap    | $(O(1))$    | $O(log(n))$ | $O(log(n))$   | $O(log(n))$   | $O(log(n))$   | $O(log(n))$ | $O(n)$      |
