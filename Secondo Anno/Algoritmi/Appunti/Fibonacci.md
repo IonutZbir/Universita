@@ -23,7 +23,7 @@ fibonacci2(intero n) -> intero
     else return fibonacci2(n - 1) + fibonacci2(n - 2)
 ```
 
-Approccio ricorsivo, usando direttamente la definizione dell'$n-esimo$ numero di Fibonacci.
+Approccio ricorsivo, usando direttamente la definizione dell' $n-esimo$ numero di Fibonacci.
 
 **Complessità Temporale**: $T(n) = O(\phi^n) = o(2^n)$, di conseguenza è un algoritmo lento.
 
