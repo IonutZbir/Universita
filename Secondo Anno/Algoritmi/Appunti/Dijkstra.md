@@ -34,6 +34,10 @@ Nel caso in cui il grafo non è pesato, SPT coincide con l'albero BFS.
 
 Calcola l'albero dei cammini minimi che le distanze da $s$.
 
+<center>
+<img src="img/Dijkstra.png" width=400 />
+<center/>
+
 **Idea: Approccio Greedy**
 1. mantiene per ogni nodo $v$ una **stima** per eccesse $D_{sv}$ alla distanza $d(s, v)$. Inizialmente, unica stima finita $D_{ss} = 0$.
 2. mantiene un insieme $X$ di nodi per cui le stime sono **esatte**; e anche un albero $T$ dei cammini minimi verso nodi in $X$ (albero nero). 
