@@ -124,15 +124,17 @@ visita DFS(grafo G) -> foresta
 `[pre(v), post(v)]` o sono disgiunti o l'uno è contenuto nell'altro.
 
 Se $u$ è antenato di $v$ nell'albero DFS, se `pre(u)` < `pre(v)` < `post(v)` < `post(u)`  
-condizione che rappresentiamo cosi: $[_{u}$ ___ $[_{v}$ ___ $]_{v}$ ___ $]_{u}$
+condizione che rappresentiamo cosi: 
+
+<center>
+<img src="img/PrePost.png" width=200 />
+</center>
 
 Questa proprietà è utile per riconoscere il tipo di arco
 
-| pre/post (u, v)                             | tipo di arco    |
-| ------------------------------------------- | --------------- |
-| $$[_{u}[_{v}]_{v}]_{u}$$ | in avanti       |
-| $(_{v}$ ___ $(_{u}$ ___ $)_{u}$ ___ $)_{v}$ | all'indietro    |
-| $[_{v}$ ___ $]_{v}$ ___ $[_{u}$ ___ $]_{u}$ | trasversali     |
+<center>
+<img src="img/PrePost1.png" width=300 />
+</center>
 
 - in avanti: da un vertico $u$ verso un qualche discendente $v$ nell'albero (A, B)
 - all'indietro: da un vertice $u$ verso un qualche antenato $v$ nell'albero (F, B)
