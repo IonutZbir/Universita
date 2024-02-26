@@ -1,8 +1,10 @@
 /*
-Scrivere un programma che esegue la moltiplicazione tra matrici 3x3 usando la programmazione parallela.
+Scrivere un programma che esegue la moltiplicazione tra matrici 3x3 usando la
+programmazione parallela.
     - Il primo processo figlio computa la prima colonna.
     - Il secondo processo figlio computa la seconda colonna.
-    - Il processo padre computa la terza colonna e riceve dai figli i due vettori colonna computati e compone la matrice finale e la stampa.
+    - Il processo padre computa la terza colonna e riceve dai figli i due
+vettori colonna computati e compone la matrice finale e la stampa.
 */
 
 #include <signal.h>
@@ -29,7 +31,8 @@ void matrix_insert_all(Matrix *m, int mul);
 Matrix matrix_init(int rows, int cols) {
     Matrix m = {NULL, cols, rows};
     m.data = (int **)calloc(rows, sizeof(int *));
-    // primo parametro indica il numero di elementi, il secondo quanti byte allocare per ciascun elemento, inoltre iniziallizza tutto a 0
+    // primo parametro indica il numero di elementi, il secondo quanti byte
+    // allocare per ciascun elemento, inoltre iniziallizza tutto a 0
 
     if (m.data == NULL) {
         fprintf(stderr, "[ERROR]: BUY MORE RAM!!\n");
