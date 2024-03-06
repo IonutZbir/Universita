@@ -73,6 +73,8 @@ Denotiamo con $f(i_{r})$, il tempo di fine del task $i_{r}$.
 
 <img src="img/dimInt.png" width=500/>
 
-
+> [!IMPORTANT]
+> Teorema. L'algoritmo "earliest-finish-time-first" è ottimale
+> Dim (Per Assurdo)
 
 
