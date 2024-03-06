@@ -52,7 +52,7 @@ IntervalScheduling(Tasks)
 **Complessità Temporale**: $T(n) = O(n log n)$.
 
 - Ordiniamo i task in tempo $O(n log n)$. 
-- Per effettuare il controllo della compatibilità con $S$ in tempo costante, possiamo tener traccia di $j^{*}$, ovvero dell'ultimo taskaggiunto a $S$. L'$i-esimo$ task è compatibile con $S$ se solo se $s_{i} \geq f_{j^{*}}$.
+- Per effettuare il controllo della compatibilità con $S$ in tempo costante, possiamo tener traccia di $j^{\star}$, ovvero dell'ultimo taskaggiunto a $S$. L' $i-esimo$ task è compatibile con $S$ se solo se $s_{i} \geq f_{j^{\star}}$.
 
 **Correttezza**:
 
