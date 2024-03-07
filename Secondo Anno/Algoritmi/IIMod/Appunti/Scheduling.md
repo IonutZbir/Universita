@@ -150,7 +150,7 @@ IntervalPartitioning(Tasks)
 > La classe $d$ è aperta perchè dobbiamo schedulare il $j-esimo$ task, che è incompatibile con tutti i task allocati nelle $d - 1$ classi.
 > Quindi ogni $d$ task finisce dopo $s_{j}$.
 > Dato che abbiamo ordinato in funzione del tempo di inizio, ognuno di questi task incompatibili iniziano prima di $s_{j}$.
-> Dunque, abbiamo $d$ task che si sovrappongono al tempo $s_{j} + \epsilon$.
+> Dunque, abbiamo $d$ task che si sovrappongono al tempo $s_{j} + \varepsilon$.
 > Di conseguenza, si usano al più $d$ classi.
 
 
