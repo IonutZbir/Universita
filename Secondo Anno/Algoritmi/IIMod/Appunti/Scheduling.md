@@ -149,7 +149,7 @@ IntervalPartitioning(Tasks)
 > L'algoritmo non schedula mai due incompatibili task nella stessa classe.
 
 > [!IMPORTANT]
-> Teorema: L'algoritmo greedy è ottimale.
+> Teorema: L'algoritmo "earliest-start-time-first" è ottimale.
 > - Sia $d$ il numero di classi che l'algoritmo alloca
 > La classe $d$ è aperta perchè dobbiamo schedulare il $j-esimo$ task, che è incompatibile con tutti i task allocati nelle $d - 1$ classi.
 > Quindi ogni $d$ task finisce dopo $s_{j}$.
