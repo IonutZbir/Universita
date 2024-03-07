@@ -82,6 +82,8 @@ Denotiamo con $f(i_{r})$, il tempo di fine del task $i_{r}$.
 > Applicando il lemma, con $r = k$, otteniamo che $f(i_{k}) \leq f(j_{k})$. Siccome $m > k$, significa che l'ottimale sceglie un 
 > task $k + 1$, che inizia dopo la fine di $j_{k}$, e anche dopo che finische $i_{k}$ (per il lemma). Di conseguenza il task $j_{i + k}$ è compatibile anche con i task selezionati dal greedy, perciò per definizione anche il greedy deve selezionare il task $j_{k + 1}$, ottenendo quindi un insieme di task ottimale, dimostrando quindi che il greedy è ottimo.
 
+<img src="img/ottimo.png" width=500/>
+
 # 2. Interval Partitioning
 
 **Input**
