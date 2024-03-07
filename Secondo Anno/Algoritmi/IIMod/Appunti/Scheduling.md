@@ -132,4 +132,26 @@ IntervalPartitioning(Tasks)
 - Possiamo memorizzare le classi in una coda con priorità, con chiave il tempo di fine di ciascun task.
     - per allocare una nuova classe, `INSERT` la nuova classe nella coda con priorità.
     - per schedulare il $j - esimo$ task nella classe $k$, `INCREASE-KEY` della classe $k$ a $f_{j}$.
-    - per determinare se il $j - esimo$ task è compatibile con una qualunque classe 
+    - per determinare se il $j - esimo$ task è compatibile con una qualunque classe, confrontare $s_{j}$ con `FIND-MIN`.
+- Il numero totale di operazioni sulla coda con priorità è $O(n)$, ognuna di queste con tempo di esecuzione $O(log n)$.
+
+> [!IMPORTANT]
+> DEF: La **profondità** di un insieme di intervalli aperti è il numero massimo di intervalli che contengono un dato punto.
+
+> [!NOTE]
+> Il numero di classi necessarie $\geq$ profondità, inoltre l'algoritmo schedula i task in un numero di classi uguale alla profondità.
+
+> [!NOTE]
+> L'algoritmo non schedula mai due incompatibili task nella stessa classe.
+
+> [!IMPORTANT]
+> Teorema: L'algoritmo greedy è ottimale.
+> - Sia $d$ il numero di classi che l'algoritmo alloca
+> La classe $d$ è aperta perchè dobbiamo schedulare il $j-esimo$ task, che è incompatibile con tutti i task allocati nelle $d - 1$ classi.
+> Quindi ogni $d$ task finisce dopo $s_{j}$.
+> Dato che abbiamo ordinato in funzione del tempo di inizio, ognuno di questi task incompatibili iniziano prima di $s_{j}$.
+> Dunque, abbiamo $d$ task che si sovrappongono al tempo $s_{j} + \eps$.
+> Di conseguenza, si usano al più $d$ classi.
+
+
+
