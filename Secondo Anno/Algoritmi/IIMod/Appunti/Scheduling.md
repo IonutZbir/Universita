@@ -76,8 +76,8 @@ Denotiamo con $f(i_{r})$, il tempo di fine del task $i_{r}$.
 > [!IMPORTANT]
 > Teorema. L'algoritmo "earliest-finish-time-first" è ottimale.  
 > Dim (Per Assurdo)
-> - Siano $i_{1}$, $i_{2}$, ...,$i_{k}$ un insieme di task selezionati dall'algoritmo greedy (ordinati per tempo finale)
-> - Siano $j_{1}$, $j_{2}$, ...,$j_{m}$ un insieme di task di una soluzione ottima (ordinati per tempo finale)
+> - Siano $i_{1}$, $i_{2}$, ..., $i_{k}$ un insieme di task selezionati dall'algoritmo greedy (ordinati per tempo finale)
+> - Siano $j_{1}$, $j_{2}$, ..., $j_{m}$ un insieme di task di una soluzione ottima (ordinati per tempo finale)
 > - Assumiamo che il greedy non è ottimo, allora $m > k$
 > Applicando il lemma, con $r = k$, otteniamo che $f(i_{k}) \leq f(j_{k})$. Siccome $m > k$, significa che l'ottimale sceglie un 
 > task $k + 1$, che inizia dopo la fine di $j_{k}$, e anche dopo che finische $i_{k}$ (per il lemma). Di conseguenza il task $j_{i + k}$ è compatibile anche con i task selezionati dal greedy, perciò per definizione anche il greedy deve selezionare il task $j_{k + 1}$, ottenendo quindi un insieme di task ottimale, dimostrando quindi che il greedy è ottimo.
@@ -114,4 +114,22 @@ Di questi 4, quale andremo a utilizzare? Andiamo per esclusione
 
 Quindi, come possiamo osservare, andando per esclusione è rimasto solo earliest start time.
 
-
+```
+IntervalPartitioning(Tasks)
+    sort tasks in funzione dei tempi di inizio
+    classes = 0
+    for i = 1 to n do 
+        if(Tasks[i] è compatibile con una qualunque classe)
+            schedula il Tasks[i] in una qualunque classe k 
+        else 
+            alloca un nuova classe d + 1
+            schedula il Tasks[i] nella classe d + 1
+            d = d + 1
+    return schedule
+```
+**Complessità Temporale**: $T(n) = O(n log n)$ se:
+- Ordinare in funzione del tempo di inizio in $O(n log n)$.
+- Possiamo memorizzare le classi in una coda con priorità, con chiave il tempo di fine di ciascun task.
+    - per allocare una nuova classe, `INSERT` la nuova classe nella coda con priorità.
+    - per schedulare il $j - esimo$ task nella classe $k$, `INCREASE-KEY` della classe $k$ a $f_{j}$.
+    - per determinare se il $j - esimo$ task è compatibile con una qualunque classe 
