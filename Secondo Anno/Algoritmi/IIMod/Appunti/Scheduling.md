@@ -138,7 +138,7 @@ IntervalPartitioning(Tasks)
 > [!IMPORTANT]
 > DEF: La **profondità** di un insieme di intervalli aperti è il numero massimo di intervalli che contengono un dato punto.
 
-<img src="img/depth.png" width=300/>
+<img src="img/depth.png" width=400/>
 
 > [!NOTE]
 > Il numero di classi necessarie $\geq$ profondità, inoltre l'algoritmo schedula i task in un numero di classi uguale alla profondità.
