@@ -9,7 +9,7 @@ svolgere.
 - Un insieme di $n$ intervalli $I_{1}$, ..., $I_{n}$.
 - L'intervallo $I_{i}$ ha tempo iniziale $s_{i}$ e tempo finale $f_{i}$.
 
-**Possibile Soluzione**:
+**Soluzione Ammissibile**:
 - Un sottoinsieme $S$ di intervalli mutualmente compatibili, tale che 
   $\forall I_{i}, I_{j} \in S$, $I_{i}$, non si sovrappone con $I_{j}$.
 
@@ -74,7 +74,44 @@ Denotiamo con $f(i_{r})$, il tempo di fine del task $i_{r}$.
 <img src="img/dimInt.png" width=500/>
 
 > [!IMPORTANT]
-> Teorema. L'algoritmo "earliest-finish-time-first" è ottimale
+> Teorema. L'algoritmo "earliest-finish-time-first" è ottimale.  
 > Dim (Per Assurdo)
+> - Siano $i_{1}$, $i_{2}$, ...,$i_{k}$ un insieme di task selezionati dall'algoritmo greedy (ordinati per tempo finale)
+> - Siano $j_{1}$, $j_{2}$, ...,$j_{m}$ un insieme di task di una soluzione ottima (ordinati per tempo finale)
+> - Assumiamo che il greedy non è ottimo, allora $m > k$
+> Applicando il lemma, con $r = k$, otteniamo che $f(i_{k}) \leq f(j_{k})$. Siccome $m > k$, significa che l'ottimale sceglie un 
+> task $k + 1$, che inizia dopo la fine di $j_{k}$, e anche dopo che finische $i_{k}$ (per il lemma). Di conseguenza il task $j_{i + k}$ è compatibile anche con i task selezionati dal greedy, perciò per definizione anche il greedy deve selezionare il task $j_{k + 1}$, ottenendo quindi un insieme di task ottimale, dimostrando quindi che il greedy è ottimo.
+
+# 2. Interval Partitioning
+
+**Input**
+- Un insieme $n$ di intervalli $I_{1}$, ..., $I_{n}$
+- L'intervallo $I_{i}$ ha tempo di inzio $s_{i}$ e tempo di fine $f_{i}$
+
+**Soluzione Ammissibile**
+- Una partizione di sottoinsiemi di intervalli (chiamati classi) $C_{1}$, ..., $C_{d}$, tale che ogni $C_{i}$ contiene intervalli
+  mutualmente compatibili.
+
+**Misura (da minimizzare)**
+- il numero di classi
+
+
+## Approccio Greedy (Goloso)
+
+Consideriamo i task in un ordine naturale. Assegna ciascun task ad una classe (poi vedremo come); alloca una nuova classe se 
+nessuna è disponibile.
+
+Come decidere in quale ordine prendere i task? Ci sono 4 possibilità:
+
+1. **[Earliest start time]**, ovvero considera i task in ordine crescente di $s_{i}$ (tempo iniziale).
+2. **[Earliest finish time]**, ovvero considera i task in ordine crescente di $f_{i}$ (tempo finale).
+3. **[Shortest interval]**, ovvero considera i task in ordine crescente di $f_{i} - s_{i}$.
+4. **[Fewest conflicts]**, per ogni task $i$, conta il numero di task in conflitto $c_{i}$. Schedula in ordine crescente di $c_{i}$.
+
+Di questi 4, quale andremo a utilizzare? Andiamo per esclusione
+
+<img src="img/controesempi2.png" width=300/>
+
+Quindi, come possiamo osservare, andando per esclusione è rimasto solo earliest start time.
 
 
