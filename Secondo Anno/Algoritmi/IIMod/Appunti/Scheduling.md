@@ -17,7 +17,7 @@ svolgere.
 - La misura da tenere in considerazione è la cardinalità di $S$, ovvero 
   il numero di intervalli da schedulare.
 
-<img src="img/tasks.png" width=400/>
+<img src="img/sched/tasks.png" width=400/>
 
 ## Approccio Greedy (Goloso)
 
@@ -35,7 +35,7 @@ conflitto $c_{i}$. Schedula in ordine crescente di $c_{i}$.
 
 Di questi 4, quale andremo a utilizzare? Andiamo per esclusione
 
-<img src="img/controesempi.png" width=300/>
+<img src="img/sched/controesempi.png" width=300/>
 
 Quindi, come possiamo osservare, andando per esclusione è rimasto solo 
 earliest finish time.
@@ -71,7 +71,7 @@ Denotiamo con $f(i_{r})$, il tempo di fine del task $i_{r}$.
 > - $r > 1$
 > Supponiamo vera per $r - 1$ la proprietà, ovvero $f(i_{r-1}) \leq f(j_{r-1})$. Adesso l'ottimo sceglie il task $j_{r}$, che a sua volta è compatibile con gli $r-1$ task selezionati dal greedy. Quindi il greedy, avendo i task ordinati per finish time, per forza andrà a guardare task con $f(i_{r}) \leq f(j_{r})$ andando a selezionare o uno che finisce prima, quindi $f(i_{r})$ oppure proprio $f(j_{r})$.
 
-<img src="img/dimInt.png" width=500/>
+<img src="img/sched/dimInt.png" width=500/>
 
 > [!IMPORTANT]
 > Teorema. L'algoritmo "earliest-finish-time-first" è ottimale.  
@@ -82,7 +82,7 @@ Denotiamo con $f(i_{r})$, il tempo di fine del task $i_{r}$.
 > Applicando il lemma, con $r = k$, otteniamo che $f(i_{k}) \leq f(j_{k})$. Siccome $m > k$, significa che l'ottimale sceglie un 
 > task $k + 1$, che inizia dopo la fine di $j_{k}$, e anche dopo che finische $i_{k}$ (per il lemma). Di conseguenza il task $j_{i + k}$ è compatibile anche con i task selezionati dal greedy, perciò per definizione anche il greedy deve selezionare il task $j_{k + 1}$, ottenendo quindi un insieme di task ottimale, dimostrando quindi che il greedy è ottimo.
 
-<img src="img/ottimo.png" width=500/>
+<img src="img/sched/ottimo.png" width=500/>
 
 # 2. Interval Partitioning
 
@@ -112,7 +112,7 @@ Come decidere in quale ordine prendere i task? Ci sono 4 possibilità:
 
 Di questi 4, quale andremo a utilizzare? Andiamo per esclusione
 
-<img src="img/controesempi2.png" width=300/>
+<img src="img/sched/controesempi2.png" width=300/>
 
 Quindi, come possiamo osservare, andando per esclusione è rimasto solo earliest start time.
 
@@ -140,7 +140,7 @@ IntervalPartitioning(Tasks)
 > [!IMPORTANT]
 > DEF: La **profondità** di un insieme di intervalli aperti è il numero massimo di intervalli che contengono un dato punto.
 
-<img src="img/depth.png" width=400/>
+<img src="img/sched/depth.png" width=400/>
 
 > [!NOTE]
 > Il numero di classi necessarie $\geq$ profondità, inoltre l'algoritmo schedula i task in un numero di classi uguale alla profondità.

@@ -7,7 +7,7 @@ sequenza di operazioni del seguente tipo:
 direttamente ai due insiemi).
 - `find(x)`: restituisce il nome dell'insieme a cui appartiene `x` (si suppone di accedere direttamente a `x`).
 
-<img src="img/examples.png" width="300" />
+<img src="img/union/exOperazioni.png" width="400" />
 
 > [!NOTE]
 > Con $n$ elementi posso fare al più $n - 1$ `union`
@@ -38,7 +38,7 @@ operazioni:
         accede alla foglia x corrispondente all'elemento e. Da tale nodo segue il puntatore al padre, che è la radice dell'albero,
         e restituisce il nome memorizzato in tale radice.
 ```
-<img src="img/quickfind.png" width="400" />
+<img src="img/union/quickfind.png" width="400" />
 
 **Complessità Temporale**: 
 - `makeSet(elem e) e find(elem e)` richiedono tempo costante $O(1)$.
@@ -100,7 +100,7 @@ Usiamo una foresta di alberi di altezza anche maggiore di 1 per rappresentare gl
 - `root`: elemento rappresetativo dell'insieme
 - `Rimanenti nodi`: altri elementi dell'insieme (**escluso** l'elemento nella radice)
 
-<img src="img/quickunion.png" width="400" />
+<img src="img/union/quickunion.png" width="400" />
 
 **Complessità Temporale**: 
 - `makeSet(elem e) e `union(name a, name b)` richiedono tempo costante $O(1)$.
@@ -115,7 +115,7 @@ Usiamo una foresta di alberi di altezza anche maggiore di 1 per rappresentare gl
 L'idea è di fare in modo che per ogni insieme, l'albero corrispondente abbia altezza piccola. Quindi nell'unione degli insiemi $A$ e $B$, rendiamo la 
 radice dell'albero **con meno nodi** figlia della radice dell'albero **con più nodi**
 
-<img src="img/quickunion2.png" width="400" />
+<img src="img/union/quickunion2.png" width="400" />
 
 > [!IMPORTANT]
 > Lemma: Con la union by size, dato un albero QuickUnion con size (numero di nodi) $s$ e altezza $h$ vale che $s \geq 2^h$.
@@ -127,7 +127,7 @@ Di conseguenza l'operazione `find` richiede tempo $O(log n)$, quindi l'intera se
 Idea: quando eseguo `find(x)` e attraverso il cammino da $x$ alla radice, comprimo il cammino, ovvero rendo tutti i nodi del cammino, figli della radice.
 In questo modo, anche se la prima `find(x)` avrà un costo maggiore, le successive `find` costeranno di meno.
 
-<img src="img/quickunion3.png" width="400" />
+<img src="img/union/quickunion3.png" width="400" />
 
 > [!IMPORTANT]
 > Teorema (Tarjan e Leeuwen)  
