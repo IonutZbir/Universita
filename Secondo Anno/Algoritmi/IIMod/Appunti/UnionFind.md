@@ -135,4 +135,4 @@ In questo modo, anche se la prima `find(x)` avrà un costo maggiore, le successi
 > $n - 1$ `union` e $m$ `find` hanno un costo di $O(n + m \cdot \alpha(n +m, n))$.
 
 Dove $\alpha(x, y)$ è la funzione inversa della funzione di Ackermann. E' una funzione lentissima infatti $\alpha(m, n) \leq 4$ per ogni scopo pratico,
-(ovvero, per valori ragionevoli di $n$.
+(ovvero, per valori ragionevoli di $n$).
