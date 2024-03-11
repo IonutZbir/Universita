@@ -41,3 +41,5 @@ Guardiamo adesso l'immagine: Gli host sono tutti direttamente connessi a uno dei
 > Multiplexing a Divisione di Tempo (TDM): il tempo viene suddiviso in *frame* di durata fissa, ripartiti in un numero fisso di slot. Ciascun circuito riceve slot periodici e può trasmettere alla massima velocità della banda di frequenza solo nei propri slot temporali.
 
 <img src="img/fdmtdm.png" width="300" />
+
+

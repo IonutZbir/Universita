@@ -6,7 +6,6 @@ genitore(mario, gino).
 genitore(pino, rino).
 genitore(luca, pino).
 
-
 % predicati
 fratello(X, Y) :- 
     genitore(Z, X),

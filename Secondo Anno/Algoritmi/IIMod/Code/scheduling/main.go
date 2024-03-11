@@ -1,22 +1,24 @@
-package	main
+package main
 
-import(
-	"fmt"
+import (
+	"math/rand"
 	"sched/algo"
-	"sched/data_struct"
+	task "sched/data_struct"
 )
 
-func smain() {
-	
+func main() {
 	t := task.Tasks{}.Init()
 	for i := 0; i < 10; i++ {
-		t.Data = append(t.Data, *task.Task{}.Init(float64(i) * 1.32, float64(i) * 1.42))
+		start := rand.Float32() * 50.0
+		finish := rand.Float32() * 100.0
+		if finish < start {
+			c := start
+			start = finish
+			finish = c
+		}
+		t.Data = append(t.Data, *task.Task{}.Init(start, finish))
 	}
-	t.Data[0].Start = 1.43
-	t.Data[0].Finish = 5.01
 
 	sched := algo.IntervalScheduling(t)
-	fmt.Println(sched)
-
+	sched.ToString()
 }
-

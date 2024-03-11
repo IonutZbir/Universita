@@ -1,12 +1,9 @@
 package algo
 
-
-import(
-	"fmt"
-	"sched/data_struct"
+import (
+	task "sched/data_struct"
 	"sort"
 )
-
 
 func IntervalScheduling(intervals *task.Tasks) task.Tasks {
 
@@ -20,7 +17,7 @@ func IntervalScheduling(intervals *task.Tasks) task.Tasks {
 	tasks := intervals.Data
 	last := 0
 
-	fmt.Println(*intervals)
+	intervals.ToString()
 
 	schedule.Data = append(schedule.Data, tasks[last])
 
@@ -32,5 +29,3 @@ func IntervalScheduling(intervals *task.Tasks) task.Tasks {
 	}
 	return *schedule
 }
-
-
