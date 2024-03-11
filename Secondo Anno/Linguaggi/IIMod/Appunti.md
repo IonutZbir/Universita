@@ -21,3 +21,7 @@ fratello(dario, gino) ? vero o falso
 
 unificare: valore associato alla variabile, e sara associato a tutti i nomi in quel istante
 
+funzione -> predicato
+funzionare -> predicare
+ricorsione -> indunzione
+assegnamento -> unificare
