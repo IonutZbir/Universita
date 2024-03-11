@@ -1,4 +1,4 @@
-package task
+package data_struct
 
 import "fmt"
 

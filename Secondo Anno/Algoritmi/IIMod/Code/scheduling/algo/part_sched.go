@@ -1,15 +1,13 @@
 package algo
 
-import(
-	_"fmt"
-	_"sort"
-	"sched/data_struct"
+import (
+	_ "fmt"
+	ds "sched/data_struct"
+	_ "sort"
 )
 
-func IntervalPart(interval *task.Tasks) task.Tasks {
-	schedule := task.Tasks{}.Init()
+func IntervalPart(interval *ds.Tasks) ds.Tasks {
+	schedule := ds.Tasks{}.Init()
 
-
-	
 	return *schedule
 }

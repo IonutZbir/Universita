@@ -1,11 +1,11 @@
 package algo
 
 import (
-	task "sched/data_struct"
+	ds "sched/data_struct"
 	"sort"
 )
 
-func IntervalScheduling(intervals *task.Tasks) task.Tasks {
+func IntervalScheduling(intervals *ds.Tasks) ds.Tasks {
 
 	// Ordino per finish time
 	sort.Slice(intervals.Data, func(i, j int) bool {
@@ -13,7 +13,7 @@ func IntervalScheduling(intervals *task.Tasks) task.Tasks {
 	})
 
 	length := len(intervals.Data)
-	schedule := task.Tasks{}.Init()
+	schedule := ds.Tasks{}.Init()
 	tasks := intervals.Data
 	last := 0
 
