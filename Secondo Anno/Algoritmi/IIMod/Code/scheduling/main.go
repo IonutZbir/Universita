@@ -34,5 +34,5 @@ func main() {
 
 	fmt.Println(hp.FindMin())
 	hp.ToString()
-
+	//hp.PrintTree()
 }
