@@ -1,6 +1,9 @@
 package data_struct
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 type Node struct {
 	Key int
@@ -48,7 +51,7 @@ func (h *DHeap) minChild(nd int) int {
 
 func (h *DHeap) Child(i, j int) int {
 	// return the jth child of i
-	k := (h.Type * i) + j
+	k := (h.Type * i) + j + 1
 	if k < h.HeapSize {
 		return k
 	}
@@ -75,13 +78,10 @@ func (h *DHeap) MoveHigh(index int) {
 }
 
 func (h *DHeap) MoveDown(index int) {
-	for i := index; i < h.HeapSize; {
+	for i := index; i < h.HeapSize; i++ {
 		minC := h.minChild(i)
-		if minC != -1 && h.Data[minC].Key < h.Data[i].Key {
+		if minC >= 0 && h.Data[minC].Key < h.Data[i].Key {
 			h.swap(i, minC)
-			i = minC
-		} else {
-			break
 		}
 	}
 }
@@ -99,27 +99,85 @@ func (h *DHeap) Insert(key, val int) {
 	h.MoveHigh(h.HeapSize - 1)
 }
 
+func (h *DHeap) Delete(index int) {
+	if index > h.HeapSize {
+		fmt.Printf("[Error]: {%v > %v}, DHeap.Delete()\n", index, h.HeapSize)
+		os.Exit(1)
+	}
+	h.swap(index, h.HeapSize-1)
+	h.HeapSize--
+	h.MoveDown(index)
+	h.MoveHigh(index)
+}
+
+func (h *DHeap) DeleteMin() {
+	h.Delete(0)
+}
+
 func (h *DHeap) IncreaseKey(index int, delta int) {
+	if index > h.HeapSize {
+		fmt.Printf("[Error]: {%v > %v}, DHeap.IncreaseKey()\n", index, h.HeapSize)
+		os.Exit(1)
+	}
 	nd := &h.Data[index]
 	nd.Key = nd.Key + delta
 	h.MoveDown(index)
 }
 
 func (h *DHeap) DecreaseKey(index int, delta int) {
-	if index < h.HeapSize {
-		nd := &h.Data[index]
-		nd.Key = nd.Key - delta
-		h.MoveHigh(index)
+	if index > h.HeapSize {
+		fmt.Printf("[Error]: {%v > %v}, DHeap.DecreaseKey()\n", index, h.HeapSize)
+		os.Exit(1)
 	}
+	nd := &h.Data[index]
+	nd.Key = nd.Key - delta
+	h.MoveHigh(index)
+}
+
+func (nd *Node) ToString() { // public
+	nd.toString("", "\n")
+}
+
+func (nd *Node) toString(indent, end string) { // private
+	fmt.Printf("%s(Key: %v, Val: %v)%s", indent, nd.Key, nd.Val, end)
 }
 
 func (h *DHeap) ToString() {
 	fmt.Printf("[")
 	i := 0
 	for ; i < h.HeapSize-1; i++ {
-		fmt.Printf("(Key: %v, Val: %v),", h.Data[i].Key, h.Data[i].Val)
+		h.Data[i].toString("", ",")
 	}
-	fmt.Printf("(Key: %v, Val: %v)\n", h.Data[i].Key, h.Data[i].Val)
+	h.Data[i].toString("", "\n")
 }
 
+func (h *DHeap) PrintTree() { // public
+	fmt.Printf("%v - Heap:\n", h.Type)
+	h.printTree(0, 0)
+}
 
+func (h DHeap) printTree(level, node int) { // private
+	if node > h.HeapSize {
+		return
+	}
+
+	nd := h.Data[node]
+	indent := getIndentation(level)
+	nd.toString(indent, "\n")
+	for i := 0; i < h.Type; i++ {
+		child := h.Child(node, i)
+		if child < 0 {
+			return
+		}
+		h.printTree(level+1, child)
+	}
+}
+
+func getIndentation(indent int) string {
+	byteSlice := make([]byte, indent*4)
+	for i := range byteSlice {
+		byteSlice[i] = ' '
+	}
+	str := string(byteSlice)
+	return str
+}

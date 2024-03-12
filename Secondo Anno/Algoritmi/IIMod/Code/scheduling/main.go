@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"sched/algo"
 	ds "sched/data_struct"
@@ -25,14 +24,27 @@ func main2() {
 }
 
 func main() {
-	hp := ds.DHeap{}.Init(3)
+	hp := ds.DHeap{}.Init(5)
 
 	for i := 0; i < 10; i++ {
 		j := rand.Intn(100)
-		hp.Insert(j, i)
+		val := i
+		key := j
+		hp.Insert(key, val)
 	}
 
-	fmt.Println(hp.FindMin())
 	hp.ToString()
-	//hp.PrintTree()
+
+	m := hp.FindMin()
+	m.ToString()
+	hp.PrintTree()
+
+	hp.Delete(4)
+
+	hp.DeleteMin()
+
+	hp.ToString()
+
+	hp.PrintTree()
+
 }
