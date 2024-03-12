@@ -1,12 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"sched/algo"
 	ds "sched/data_struct"
 )
 
-func main2() {
+func main() {
 	t := ds.Tasks{}.Init()
 	for i := 0; i < 10; i++ {
 		start := rand.Float32() * 50.0
@@ -19,18 +20,23 @@ func main2() {
 		t.Data = append(t.Data, *ds.Task{}.Init(start, finish))
 	}
 
-	sched := algo.IntervalScheduling(t)
-	sched.ToString()
+	schedule := algo.IntervalPart(t)
+	fmt.Println()
+	
+	for _, sched := range schedule {
+		sched.ToString()
+	}
+
 }
 
-func main() {
+func main1() {
 	hp := ds.DHeap{}.Init(5)
 
 	for i := 0; i < 10; i++ {
 		j := rand.Intn(100)
 		val := i
 		key := j
-		hp.Insert(key, val)
+		hp.Insert(float32(key), float32(val))
 	}
 
 	hp.ToString()

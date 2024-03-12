@@ -6,8 +6,8 @@ import (
 )
 
 type Node struct {
-	Key int
-	Val int
+	Key float32
+	Val float32
 }
 
 type DHeap struct {
@@ -16,7 +16,7 @@ type DHeap struct {
 	HeapSize int
 }
 
-func (n Node) Init(key, val int) *Node {
+func (n Node) Init(key, val float32) *Node {
 	return &Node{
 		Key: key,
 		Val: val,
@@ -36,11 +36,11 @@ func (h *DHeap) swap(i, j int) {
 }
 
 func (h *DHeap) minChild(nd int) int {
-	minC := h.Child(nd, 0)
-	for i := 1; i < h.Type; i++ {
+	minC := 0
+	for i := 0; i < h.Type; i++ {
 		j := h.Child(nd, i)
 		if j < 0 {
-			break
+			return -1
 		}
 		if h.Data[minC].Key > h.Data[j].Key {
 			minC = j
@@ -63,12 +63,13 @@ func (h *DHeap) Parent(i int) int {
 }
 
 func (h *DHeap) MoveHigh(index int) {
+	if index >= h.HeapSize {
+		fmt.Printf("[Error]: {%v > %v}, DHeap.MoveHigh()\n", index, h.HeapSize)
+		os.Exit(1)
+	}
 	for i := index; i >= 0; i-- {
 		nd := h.Data[i]
 		j := h.Parent(i)
-		if j < 0 {
-			break
-		}
 		parent := h.Data[j]
 
 		if nd.Key < parent.Key {
@@ -78,6 +79,10 @@ func (h *DHeap) MoveHigh(index int) {
 }
 
 func (h *DHeap) MoveDown(index int) {
+	if index >= h.HeapSize {
+		fmt.Printf("[Error]: {%v > %v}, DHeap.MoveDown()\n", index, h.HeapSize)
+		os.Exit(1)
+	}
 	for i := index; i < h.HeapSize; i++ {
 		minC := h.minChild(i)
 		if minC >= 0 && h.Data[minC].Key < h.Data[i].Key {
@@ -93,14 +98,14 @@ func (h *DHeap) FindMin() *Node {
 	return nil
 }
 
-func (h *DHeap) Insert(key, val int) {
+func (h *DHeap) Insert(key, val float32) {
 	h.Data = append(h.Data, *Node{}.Init(key, val))
 	h.HeapSize++
 	h.MoveHigh(h.HeapSize - 1)
 }
 
 func (h *DHeap) Delete(index int) {
-	if index > h.HeapSize {
+	if index >= h.HeapSize {
 		fmt.Printf("[Error]: {%v > %v}, DHeap.Delete()\n", index, h.HeapSize)
 		os.Exit(1)
 	}
@@ -114,8 +119,8 @@ func (h *DHeap) DeleteMin() {
 	h.Delete(0)
 }
 
-func (h *DHeap) IncreaseKey(index int, delta int) {
-	if index > h.HeapSize {
+func (h *DHeap) IncreaseKey(index int, delta float32) {
+	if index >= h.HeapSize {
 		fmt.Printf("[Error]: {%v > %v}, DHeap.IncreaseKey()\n", index, h.HeapSize)
 		os.Exit(1)
 	}
@@ -124,8 +129,8 @@ func (h *DHeap) IncreaseKey(index int, delta int) {
 	h.MoveDown(index)
 }
 
-func (h *DHeap) DecreaseKey(index int, delta int) {
-	if index > h.HeapSize {
+func (h *DHeap) DecreaseKey(index int, delta float32) {
+	if index >= h.HeapSize {
 		fmt.Printf("[Error]: {%v > %v}, DHeap.DecreaseKey()\n", index, h.HeapSize)
 		os.Exit(1)
 	}
