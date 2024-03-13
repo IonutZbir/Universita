@@ -7,7 +7,7 @@ import (
 
 type Node struct {
 	Key float32
-	Val float32
+	Val Tasks
 }
 
 type DHeap struct {
@@ -16,10 +16,10 @@ type DHeap struct {
 	HeapSize int
 }
 
-func (n Node) Init(key, val float32) *Node {
+func (n Node) Init(key float32) *Node {
 	return &Node{
-		Key: key,
-		Val: val,
+		Key:	key,
+		Val:	*Tasks{}.Init(),
 	}
 }
 
@@ -98,8 +98,10 @@ func (h *DHeap) FindMin() *Node {
 	return nil
 }
 
-func (h *DHeap) Insert(key, val float32) {
-	h.Data = append(h.Data, *Node{}.Init(key, val))
+func (h *DHeap) Insert(key float32, val Task) {
+	nd := Node{}.Init(key)
+	nd.Val.Data = append(nd.Val.Data, val)
+	h.Data = append(h.Data, *nd)
 	h.HeapSize++
 	h.MoveHigh(h.HeapSize - 1)
 }

@@ -29,28 +29,3 @@ func main() {
 
 }
 
-func main1() {
-	hp := ds.DHeap{}.Init(5)
-
-	for i := 0; i < 10; i++ {
-		j := rand.Intn(100)
-		val := i
-		key := j
-		hp.Insert(float32(key), float32(val))
-	}
-
-	hp.ToString()
-
-	m := hp.FindMin()
-	m.ToString()
-	hp.PrintTree()
-
-	hp.Delete(4)
-
-	hp.DeleteMin()
-
-	hp.ToString()
-
-	hp.PrintTree()
-
-}

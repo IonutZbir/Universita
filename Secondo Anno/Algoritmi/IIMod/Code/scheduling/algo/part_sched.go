@@ -1,7 +1,8 @@
 package algo
 
 import (
-	_"fmt"
+	"fmt"
+	_ "fmt"
 	ds "sched/data_struct"
 	"sort"
 )
@@ -17,29 +18,44 @@ func IntervalPart(intervals *ds.Tasks) []ds.Tasks {
 	tasks := intervals.Data
 	length := len(tasks)
 
-	cl := 0
-	pq.Insert(tasks[0].Finish, 0)
-	schedule = append(schedule, *ds.Tasks{}.Init())
+	pq.Insert(tasks[0].Finish, tasks[0])
 
-	for i := 0; i < length; i++ {
+
+	for i := 1; i < length; i++ {
 		task := tasks[i]
 		//task.ToString()
 		//fmt.Println()
 		m := pq.FindMin().Key
-		//fmt.Println("[INFO]: MIN:", m)
+		pq.PrintTree()
+		fmt.Println()
 		if(task.Start >= m){
+			fmt.Printf("[INFO]: %v >= %v? = %v\n", task.Start, m, task.Start >= m)
 			delta := task.Finish - pq.Data[0].Key
-			pq.IncreaseKey(cl, delta)
-			schedule[cl].Data = append(schedule[cl].Data, task)
+			pq.Data[0].Val.Data = append(pq.Data[0].Val.Data, task)
+			pq.IncreaseKey(0, delta)
 		}else {
-			pq.Insert(task.Finish, 0)
-			schedule = append(schedule, *ds.Tasks{}.Init())
-			schedule[cl].Data = append(schedule[cl].Data, task)
-			cl++
+			pq.Insert(task.Finish, task)
 		}
 	}
 
 	pq.PrintTree()
+	nds := 0
+	for i := 0; i < pq.HeapSize; i++ {
+		fmt.Printf("\n%v == %v = %v\n", nds, pq.HeapSize - 1, nds == pq.HeapSize - 1)
+		if nds == pq.HeapSize - 1{
+			break;	
+		}
+		nd := pq.Data[i]
+		for j := 0;  j < len(nd.Val.Data);  j++ {
+			schedule = append(schedule, *ds.Tasks{}.Init())
+			schedule[i].Data = append(schedule[i].Data, nd.Val.Data[j])
+			nds++
+			fmt.Println(nds)
+		}
 	
+	}
+
+	fmt.Println(schedule)
+
 	return schedule
 }
