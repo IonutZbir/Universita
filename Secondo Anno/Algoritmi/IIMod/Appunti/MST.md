@@ -153,7 +153,7 @@ Prim(G, s)
 > In generale, le funzioni di distanza soddisfano determinate proprietà, tipo:
 > - $d(p_{i}, p_{j}) = 0 <=> p_{i} = p_{j}$: **identità dei indiscernibili**.
 > - $d(p_{i}, p_{j}) \geq 0$: **non negatività**
-> - $d(p_{i}, p_{j}) = $d(p_{j}, p_{i}): **simmetria**  
+> - $d(p_{i}, p_{j}) = d(p_{j}, p_{i})$: **simmetria**  
 
 > [!IMPORTANT]
 > - **K-Clustering** classifica gli oggetti in $k$ gruppi non vuoti.  
