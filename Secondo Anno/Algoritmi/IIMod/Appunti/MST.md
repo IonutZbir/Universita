@@ -97,3 +97,8 @@ Kruskal(graph G=(V, E, c))
     - $m$ `find`
 - Usando QuickFind con l'euristica *union by size*: $O(m log n + m + n log n) = O(m log n)$
 - Usando QuickUnion con l'euristica *union by size*: $O(m log n + m log n + n) = O(m log n)$
+
+
+## Algoritmo di Prim 
+
+Parti da un nodo sorgente $s$ e ad ogni passo aggiungi all'albero $T$ l'arco $e$ 
