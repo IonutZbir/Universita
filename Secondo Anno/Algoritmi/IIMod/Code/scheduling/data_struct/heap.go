@@ -18,8 +18,8 @@ type DHeap struct {
 
 func (n Node) Init(key float32) *Node {
 	return &Node{
-		Key:	key,
-		Val:	*Tasks{}.Init(),
+		Key: key,
+		Val: *Tasks{}.Init(),
 	}
 }
 

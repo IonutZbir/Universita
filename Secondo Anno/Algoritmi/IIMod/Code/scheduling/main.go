@@ -21,11 +21,10 @@ func main() {
 	}
 
 	schedule := algo.IntervalPart(t)
-	fmt.Println()
-	
-	for _, sched := range schedule {
+
+	for i, sched := range schedule {
+		fmt.Printf("Class: %v ", i)
 		sched.ToString()
 	}
 
 }
-
