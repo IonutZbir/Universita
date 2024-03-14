@@ -13,7 +13,7 @@ Il costo totale dei pesi dell'albero T, ovvero $c(T) = \sum_{e\in T}c_{e}$
 > Se $G$ ha pesi diversi per ciascun arco, l' MST è unico. In generale, se i pesi sono anche uguali, ci sono $n^{n-2}$ MST di un 
 > grafo con $n$ nodi (Teorema di Cayley).
 
-## Cicli
+### Cycle
 Un **ciclo** è un cammino chiuso nel grafo del tipo `a-b, b-c, ...., y-z, z-a`.
 
 <img src="img/mst/ciclo.png" width="300" />
@@ -30,7 +30,7 @@ Un **ciclo** è un cammino chiuso nel grafo del tipo `a-b, b-c, ...., y-z, z-a`.
 
 <img src="img/mst/ciclop.png" width="200" />
 
-## Cut
+### Cut
 Il **cut** è un sottoinsieme di nodi $S$. (Definito anche come una partizione di $V$: $S$ e $V - S$).
 Il **cutset** $D$ di un cut $S$ è un sottoinsieme di archi con un nodo in $S$ e un nodo in $V - S$.
 
@@ -57,7 +57,7 @@ Il **cutset** $D$ di un cut $S$ è un sottoinsieme di archi con un nodo in $S$ e
 Partendo da una nodo in S, esiste un arco per passare da $S$ a $V - S$. Avendo un ciclo C, allora esiste un arco per 
 passare da $V - S$ a $S$. Di conseguenza, ci sono almeno 2 archi nell'intersezione. In generale ci sono $2\cdot k$ archi nell'intersezione.
 
-## Algoritmo di Kruskal
+## 1. Algoritmo di Kruskal
 
 Considera gli archi ordinati in modo crescente in base al costo. Aggiungi a $T$, che inizialmente è un albero vuoto, gli archi 
 finchè non si crea un ciclo.
@@ -99,6 +99,53 @@ Kruskal(graph G=(V, E, c))
 - Usando QuickUnion con l'euristica *union by size*: $O(m log n + m log n + n) = O(m log n)$
 
 
-## Algoritmo di Prim 
+## 2. Algoritmo di Prim 
 
-Parti da un nodo sorgente $s$ e ad ogni passo aggiungi all'albero $T$ l'arco $e$ 
+Parti da un nodo sorgente $s$ e ad ogni passo aggiungi all'albero $T$ il minimo arco $e$ di tutti gli archi che hanno un nodo in $T$ e un nodo fuori da $T$.
+
+L'algoritmo di Prim si può implementare in maniera semplice ma inefficiente in questo modo:
+- Per $n - 1$, trova il minimo arco che attraversa il il cut definito dall'albero corrente in $O(m)$.
+- In totale, $O(nm)$.
+
+Un'implementazione migliore consiste nel:
+- Mantenere un insieme di nodi esplorati $S$.
+- Usare una coda con priorità per mantenere i nodi non esplorati.
+- Per ogni nodo non esplorato $v$, la priorità di ciascun elemento è `a[v]`: il minimo costo dell'arco incidente $v$ avente l'altra estremità in $S$.
+
+
+```
+Prim(G, s)
+    for each vertex v do a[v] = inf 
+    a[s] = 0
+    Sia Q una coda con priorità
+    Sia S un insime vuoto
+    Sia T un albero con root s
+    for each vertex v do 
+        Q.insert(a[v], v)
+
+    while(not Q.isEmpty())
+        u = Q.deleteMin()
+        aggiunge u a S
+        for each (e = arco(u,v) incidente a u)
+            if((v non è in S) and (w(e) < a[v]))
+                rendi u genitore di v in T
+                delta = w(e) - a[v]
+                Q.decreaseKey(v, delta)
+    
+    return T
+```
+**Correttezza**: E' un immediata conseguenza della cut property, che viene usata esattamente $n - 1$ volte.
+
+
+**Complessità Temporale**:  
+- $O(m + n)$ più il costo delle operazioni sulla coda con priorità.
+- $n$ `insert`, $n$ `deleteMin`, $m$ `decreaseKey`
+- Con un un d-heap o heap binomiale: $O(m log n)$.
+- Con gli heap di Fibonacci: $O(m + n log n)$.
+
+
+
+
+
+
+
