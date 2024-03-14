@@ -24,7 +24,7 @@ Un **ciclo** è un cammino chiuso nel grafo del tipo `a-b, b-c, ...., y-z, z-a`.
 > - Supponiamo che $f$ appartiene a $T^{\star}$.
 > - Cancellando $f$ da $T^{\star}$, si crea un cut $S$ in $T^{\star}$.
 > - L'arco $f$ sta sia nel ciclo $C$ e sia nel cutset $D$ corrsipondente a $S$. Allora esiste un altro arco, $e$ che sta sia in $C$ che in $D$.
-> - $T^{'} = T^{\star} \cup \left\{ e \right\} - \left\{ f \right\}$ è ancora uno spanning tree.
+> - $T^{'} = T^{\star} \cup ( e ) - ( f )$ è ancora uno spanning tree.
 > - Siccome $c_{e} \leq c_{f} => cost(T^{'}) \leq cost(T^{\star})$.
 > - Allora $T^{'}$ è un MST che non contiene $f$.
 
@@ -43,7 +43,7 @@ Il **cutset** $D$ di un cut $S$ è un sottoinsieme di archi con un nodo in $S$ e
 > - Supponiamo che $e$ non appartiene a $T^{\star}$.
 > - Aggiungendo $e$ a $T^{\star}$ crea un ciclo $C$ in $T^{\star}$.
 > - L'arco $e$ appartiene sia a $C$ che al cutset $D$ corrsipondente a $S$, allora esiste un altro arco, $f$ che appartiene sia a $C$ che a $D$.
-> - $T^{'} = T^{\star} \cup \left\{ e \right\} - \left\{ f \right\}$ è ancora uno spanning tree.
+> - $T^{'} = T^{\star} \cup ( e ) - ( f )$ è ancora uno spanning tree.
 > - Siccome $c_{e} \leq c_{f} => cost(T^{'}) \leq cost(T^{\star})$.
 > - Allora $T^{'}$ è un MST contenente $e$.
 
