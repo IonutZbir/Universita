@@ -10,7 +10,7 @@ Un `Spanning Tree` di $G$ è un albero $T = (V, F)$ con $T \subseteq E$ tale che
 Il costo totale dei pesi dell'albero T, ovvero $c(T) = \sum_{e\in T}c_{e}$
 
 > [!IMPORTANT]
-> Se $G$ ha pesi diversi per ciascun arco, l' MST è unico. In generale, se i pesi sono anche uguali, ci sono $n^(n-2)$ MST di un 
+> Se $G$ ha pesi diversi per ciascun arco, l' MST è unico. In generale, se i pesi sono anche uguali, ci sono $n^{n-2}$ MST di un 
 > grafo con $n$ nodi (Teorema di Cayley).
 
 ## Cicli
