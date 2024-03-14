@@ -143,8 +143,35 @@ Prim(G, s)
 - Con un un d-heap o heap binomiale: $O(m log n)$.
 - Con gli heap di Fibonacci: $O(m + n log n)$.
 
+## Clustering
 
+> [!IMPORTANT]
+> Dato un insieme $U$ di $n$ oggetti (foto, video, documenti) etichettati $p_{1}$, ..., $p_{n}$, un **clustering** è una classificazione in gruppi coerenti.
 
+> [!IMPORTANT]
+> Una funzione distanza, specifica quanto sono vicini due oggetti.
+> In generale, le funzioni di distanza soddisfano determinate proprietà, tipo:
+> - $d(p_{i}, p_{j}) = 0 <=> p_{i} = p_{j}$: **identità dei indiscernibili**.
+> - $d(p_{i}, p_{j}) \geq 0$: **non negatività**
+> - $d(p_{i}, p_{j}) = $d(p_{j}, p_{i}): **simmetria**  
+
+> [!IMPORTANT]
+> - **K-Clustering** classifica gli oggetti in $k$ gruppi non vuoti.  
+> - **Spacing**: distanza minima fra coppie di oggetti in cluster diversi.
+> - Dato un intero $k$, trovare il k-clustering di spacing massimo.
+
+```
+Single-Linkage_k-clustering(set U)
+    Crea un grafo G=(V, E), dove V = U, corrsipondente a n clusters
+    Trova la coppia di oggetti più vicini tale che ciascun oggetto appartiene a un cluster diverso, e aggiungi un arco tra loro
+    Ripeti n-k volte finché non trovi esattamente k clusters
+```
+
+> [!NOTE]
+> - Si osserva facilmente che questa provedura è esattamente l'algoritmo di Kruskal (con eccezzione che ci fermiamo quando ci sono k componenti connesse).  
+> - La provedura è equivalente a trovare un MST e trogliere gli $k - 1$ archi costosi.
+> - Eseguendo l'algoritmo di Kruskal fino alla fine produce implicitamente una Gerarchia di Clustering, ovvero un k-clustering per 
+> ogni $k = n$, $n-1$, ..., $1$.
 
 
 
