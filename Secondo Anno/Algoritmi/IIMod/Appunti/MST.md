@@ -168,7 +168,7 @@ Single-Linkage_k-clustering(set U)
 ```
 
 > [!NOTE]
-> - Si osserva facilmente che questa provedura è esattamente l'algoritmo di Kruskal (con eccezzione che ci fermiamo quando ci sono k componenti connesse).  
+> - Si osserva facilmente che questa provedura è esattamente l'algoritmo di Kruskal (con eccezione che ci fermiamo quando ci sono k componenti connesse).  
 > - La provedura è equivalente a trovare un MST e trogliere gli $k - 1$ archi costosi.
 > - Eseguendo l'algoritmo di Kruskal fino alla fine produce implicitamente una Gerarchia di Clustering,  
 > ovvero un k-clustering per ogni $k = n$, $n-1$, ..., $1$.
