@@ -13,7 +13,7 @@ func IntervalScheduling(intervals *ds.Tasks) ds.Tasks {
 	})
 
 	length := len(intervals.Data)
-	schedule := ds.Tasks{}.Init()
+	schedule := ds.NewTasks()
 	tasks := intervals.Data
 	last := 0
 

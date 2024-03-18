@@ -10,7 +10,7 @@ type Node struct {
 }
 
 type Set struct {
-	Elems []Node
+	Root *Node
 	Size  int
 }
 
@@ -18,20 +18,35 @@ type UnionFind struct {
 	Data []Set
 }
 
-func (nd Node) Init(val int) *Node {
+func NewNode(val int) *Node {
 	return &Node{
 		Root: nil,
 		Val:  val,
 	}
 }
 
-func (s Set) Init() *Set {
+func NewSet(root *Node) *Set {
 	return &Set{
-		Elems: make([]Node, 0),
-		Size:  0,
+		Root: root,
+		Size:  1,
 	}
 }
 
-func (uf *UnionFind) MakeSet() {
+func (uf *UnionFind) MakeSet(val int) {
+	nd := NewNode(val)
+	root := NewNode(val)
+	nd.Root = root
 
+	s := NewSet(root)
+	uf.Data = append(uf.Data, *s)
 }
+
+func (uf *UnionFind) Find(nd *Node) *Set{
+	return 
+}
+
+func (uf *UnionFind) Union(root1, root2 *Node)  {
+	
+}
+
+

@@ -11,13 +11,13 @@ type Tasks struct {
 	Data []Task
 }
 
-func (Tasks) Init() *Tasks {
+func NewTasks() *Tasks {
 	return &Tasks{
 		Data: make([]Task, 0),
 	}
 }
 
-func (Task) Init(start float32, finish float32) *Task {
+func NewTask(start float32, finish float32) *Task {
 	return &Task{
 		Start:  start,
 		Finish: finish,

@@ -8,7 +8,7 @@ import (
 
 func IntervalPart(intervals *ds.Tasks) []ds.Tasks {
 	schedule := make([]ds.Tasks, 0)
-	pq := ds.DHeap{}.Init(2)
+	pq := ds.NewDHeap(2)
 
 	sort.Slice(intervals.Data, func(i, j int) bool {
 		return intervals.Data[i].Start < intervals.Data[j].Start
@@ -37,7 +37,7 @@ func IntervalPart(intervals *ds.Tasks) []ds.Tasks {
 
 	for i := 0; i < pq.HeapSize; i++ {
 		nd := pq.Data[i]
-		schedule = append(schedule, *ds.Tasks{}.Init())
+		schedule = append(schedule, *ds.NewTasks())
 
 		for j := 0; j < len(nd.Val.Data); j++ {
 			schedule[i].Data = append(schedule[i].Data, nd.Val.Data[j])

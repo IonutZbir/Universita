@@ -16,14 +16,14 @@ type DHeap struct {
 	HeapSize int
 }
 
-func (n Node) Init(key float32) *Node {
+func NewNode(key float32) *Node {
 	return &Node{
 		Key: key,
-		Val: *Tasks{}.Init(),
+		Val: *NewTasks(),
 	}
 }
 
-func (h DHeap) Init(tp int) *DHeap {
+func NewDHeap(tp int) *DHeap {
 	return &DHeap{
 		Data:     make([]Node, 0),
 		Type:     tp,
@@ -99,7 +99,7 @@ func (h *DHeap) FindMin() *Node {
 }
 
 func (h *DHeap) Insert(key float32, val Task) {
-	nd := Node{}.Init(key)
+	nd := NewNode(key)
 	nd.Val.Data = append(nd.Val.Data, val)
 	h.Data = append(h.Data, *nd)
 	h.HeapSize++

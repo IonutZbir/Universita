@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	t := ds.Tasks{}.Init()
+	t := ds.NewTasks()
 	for i := 0; i < 10; i++ {
 		start := rand.Float32() * 50.0
 		finish := rand.Float32() * 100.0
@@ -17,7 +17,7 @@ func main() {
 			start = finish
 			finish = c
 		}
-		t.Data = append(t.Data, *ds.Task{}.Init(start, finish))
+		t.Data = append(t.Data, *ds.NewTask(start, finish))
 	}
 
 	schedule := algo.IntervalPart(t)
