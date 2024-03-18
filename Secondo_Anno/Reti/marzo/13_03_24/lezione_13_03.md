@@ -59,4 +59,6 @@ e non garantisce neanche l'ordine giusto di arrivo.
 
 > [!IMPORTANT]
 > HTTP (*HyperText Transfer Protocol*), è un protocollo a livello di applicazione e costituisce il cuore del Web. Questo protocollo è implementato in 
-> due programmi, client e server in esecuzione su sistemi periferici diversi che comunicano tra loro scambiandosi messaggi HTTP.
+> due programmi, client (Browser) e server in esecuzione su sistemi periferici diversi che comunicano tra loro scambiandosi messaggi HTTP.
+
+
