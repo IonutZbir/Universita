@@ -1,5 +1,8 @@
 from random_word import RandomWords
+from colorama import Fore
+from colorama import Style
 from Gui import *
+
 
 class Hangman:
     def __init__(self):
@@ -12,10 +15,32 @@ class Hangman:
         self.__wordIndex = ""
         self.__charUsed = []
         self.__displayChars = []
+        self.__BOLD = "\033[1m"
+        self.__END = "\033[0m"
         self.__MESSAGES = {
-            "WIN": "You Won!",
-            "LOSE": "You Lost!"
+            "WIN": f"{Fore.GREEN}{self.__BOLD}You Won!{self.__END}{Style.RESET_ALL}",
+            "LOSE": f"{Fore.RED}{self.__BOLD}You Lost!{self.__END}{Style.RESET_ALL}",
+            "USED": f"{Fore.RED} already used...{Style.RESET_ALL}",
+            "INPUT_ERROR": f"{Fore.RED}Enter only one character!{Style.RESET_ALL}",
+            "WORD": f"{Fore.RED}The word to guess was:{Style.RESET_ALL}",
         }
+
+    def __checkInput(self, char):
+        """
+        Controlla se char contiene soltanto un carattere
+
+        Args:
+            char (String): carattere
+
+        Returns:
+            Boolean
+        """
+        if char == "quit":
+            exit()
+        if len(char) != 1 or char == "":
+            return False
+        else:
+            return True
 
     def __getIndexes(self):
         """_summary_
