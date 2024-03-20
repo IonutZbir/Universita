@@ -72,6 +72,8 @@ appartiene(X, [1, 2, 3]) -> elenca gli elementi della lista
 - H2 = b
 - T = c
   
+rivoltata(L, RL) :- vera se RL è la lista L rovesciata
+
 
 
 
