@@ -74,9 +74,17 @@ appartiene(X, [1, 2, 3]) -> elenca gli elementi della lista
   
 rivoltata(L, RL) :- vera se RL è la lista L rovesciata
 
+2+3+1=A+B = +(+(2, 3), 1) = +(A, B)
 
+`A is 2 + 3` 
+prima di unificare, `is` calcola la somma, poi unifica la somma as A
 
+4 is 1 + 3
+- true
+4 is 3 + 2
+- false
 
+is fa due attivita diverse, sia di unificare sia di confronto (= and ==)
 
 
 

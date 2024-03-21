@@ -108,5 +108,13 @@ configurabile).
 
 ### Formato dei messaggi HTTP
 
+#### Messaggio di richiesta
 
+```
+GET /somedir/page.html HTTP/1.1
+Host: www.someschool.edu
+Connection: close
+User-agent: Mozilla/5.0
+
+```
 
