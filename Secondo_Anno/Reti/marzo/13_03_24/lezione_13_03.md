@@ -111,10 +111,65 @@ configurabile).
 #### Messaggio di richiesta
 
 ```
-GET /somedir/page.html HTTP/1.1
-Host: www.someschool.edu
-Connection: close
-User-agent: Mozilla/5.0
-
+GET /somedir/page.html HTTP/1.1\r\n
+Host: www.someschool.edu\r\n
+Connection: close\r\n
+User-Agent: Mozilla/5.0\r\n
+Accept-Language: it\r\n
+Accept: text/html, application/xhtml-xml\r\n
+Accept-Encoding: gzip, deflate\r\n
+Connection: keep-alive\r\n
+\r\n
 ```
 
+Si osserva che il messaggio è scritto in ASCII, in modo che l'utente sia in grado di leggerlo. Inoltre, ciascuna riga è seguita da un carattere di ritorno
+a capo (*carriage return*) e un carattere di nuova linea (*line feed*).
+- **Riga di richiesta**. Questa riga presenta 3 campi, il campo metodo, il campo URL e il campo versione di HTTP. Il campo metodo può assumere diversi 
+valori, tra cui:
+    - *GET*: E' usato per richiere una risorsa al server specificata nell'URL. Spesso è usato anche per inviare dati al server, immettendo i dati da inviare direttamente nell'URL, dopo una (`?`). La stringa creata si chiama *query string* ed è formata da coppie chiiave valore separati da `&`:  
+`/someDir/index?nome=Francesco&cognome=Rossi`.
+    - *POST*: E' uno dei metodi HTTP utilizzati per inviare dati al server. A differenza del metodo GET, i dati inviati con POST non sono visibili nell'URL, il che lo rende più sicuro per l'invio di informazioni sensibili, come password o dati di pagamento.
+    - *HEAD*: Il metodo HEAD viene utilizzato per recuperare le informazioni di intestazione associate a una risorsa specifica, senza trasferire il corpo della risorsa stessa.
+    - *PUT*:l metodo PUT viene utilizzato per aggiornare o creare una risorsa sul server.
+    - *DELETE*: Il metodo DELETE viene utilizzato per eliminare una risorsa specifica dal server.
+- **Righe di intestazione**. Queste righe contengono i cosidetti *hearders*, sono dei metadati che forniscono informazioni aggiuntive sia nella richiesta che nella risposta di una comunicazione HTTP. Sono composte da coppie chiave-valore e servono a specificare vari aspetti della comunicazione. Alcuni di questi campi sono:
+    - *Host*: Hostname o numero di porta del server al quale sarà inviata la richiesta. Obbligatorio in HTTP/1.1; se assente il server può rispondere con un 400 Bad Request.
+    - *User-Agent*: Identifica l'applicazione, il sistema operativo, il *vendor* e/o la versione dello *user agent* che sta effetuando la richiesta.
+    - *Accept*: Tipo di contenuto, espressi come media type, compresi dal client.
+    - *Accept-Language*: Linguaggi naturali  o locali preferiti dal client.
+    - *Accept-Encoding*: Algoritmi di codifica compresi dal client.
+    - *Connection*: Controlla se la connessione rimarrà aperta al termine dello scambio richiesta/risposta. Il valore *close* indica che la connessione sarà chiusa; altrimenti, una lista non vuota di nomi di header, in genere solo keep-alive, che saranno rimossi al primo proxy non trasparente o cache, indica che la connessione rimarrà aperta.
+
+#### Messaggio di risposta
+
+```
+HTTP/1.1 200 OK
+Date: Tue, 08 Sep 2020 15:44:04 GMT
+Server: Apache/2.4.6 (CentOs)
+Last-Modified: Tue, 01 Mar 2016 18:57:50 GMT
+Accept-Ranges: bytes
+Content-Lenght: 2651
+Content-Type: text/html, charset=UTF-8
+\r\n
+(data data data data ...)
+```
+
+Osserviamo che il messaggio di risposta è formato da 3 sezioni:
+- **Riga di stato**, presenta 3 campi: la versione del protocollo, un codice di stato e corrispettivo messaggio di stato.
+    - *1xx Informational*, una risposta intermedia per comunicaro lo stato di connessione o l'avanzamento della richiesta prima di completare l'azione richiesta e inviare una risposta finale.
+    - *2xx Successful*, la richiesta è stata ricevuta con successo, compresa è accettata.  
+    Per esempio `200 OK` significa che la richiesta ha avuto successo, l'oggetto richiesto viene inviato nella rispsota.
+    - *3xx Redirect*, il client deve eseguire ulteriori azioni per soddisfare la richiesta.  
+    Per esempio `301 Moved Permanently`, significa che l'oggetto richiesto è stato trasferito, la nuova posizione è specificata nell'intestatazione `Location`.
+    - *4xx Client Error*, la richiesta è sintatticamente scorretta o non può essere soddisfatta.  
+    Per esempio `404 Not Found`, significa che il documento richiesto non si trova su questo server, oppure `406 Not Acceptable`, l'oggetto richiesto non esiste in una forma che soddisfa i vari `Accept-*`.
+    - *5xx Server Error*, il server ha fallito nel soddisfare una richiesta appartemente valida.  
+    Per esempio `505 HTTP Version Not Supported`, il server non ha la versione di protocollo HTTP.
+- **Righe di intestatazione**:
+    - *Date*, la data e l'ora in cui il messaggio è stato originato.
+    - *Server*, descrive il software usato dal server di origine per gestire la richiesta (troppi dettagli possono aiutare i malintenzionati ad attaccare il server).
+    - *Last-Modified*, la data è l'ora il cui il server di origine crede che l'oggetto sia stato modificato per l'ultima volta.
+    - *Accept-Ranges*, indica il supporto del server ai download parziali: il valore, se diverso da none, indica l'unità che si può usare per esprimere l'intervallo richiesto.
+    - *Content-Lenght*, lunghezza in byte del corpo dell'entità inviato al ricevente (o che sarebbe stato inviato nel caso di una richiesta HEAD).
+    - *Content-Type*, media type nel corpo dell'entità inviato al ricevente (o che sarebbe stato inviato nel caso di una richiesta HEAD).
+- **Corpo**, contiene l'oggetto richiesto.
