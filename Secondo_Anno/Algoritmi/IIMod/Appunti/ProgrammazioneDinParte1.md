@@ -29,3 +29,8 @@ Per risolvere questo problema, possiamo tentare a risolverlo mediante algoritmi 
 
     <img src="img/progdin/dei.png" width="400" />
 
+    Osserviamo che la soluzione migliore a "destra" è 4 mentre a "sinistra" è 5, combinando le due soluzioni ottengo una soluzione non valida, poichè 4 e 
+    5 non formano un insieme indipendente. Esiste però un modo per risolvere i problemi al momento della combinazione delle due soluzione, che però 
+    risulta difficile. Possiamo concludere che anche la tecnica divide et impera non funziona.
+
+
