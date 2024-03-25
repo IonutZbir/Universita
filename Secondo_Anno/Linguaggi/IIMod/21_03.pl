@@ -10,5 +10,6 @@ numeroDiEl([E|T], E, N) :-
     numeroDiEl(T, E, M),
     N is 1 + M.
 numeroDiEl([X|T], E, M) :- /*vero se in testa c'è un qualsiasi elemento*/
+    X \= E,
     numeroDiEl(T, E, M).
     

@@ -8,7 +8,7 @@ concatenazione([H|T], B, [H|L]) :-
 
 rivoltata([], []).
 rivoltata([H|T], RL) :- 
-    concatenazione(RT, [H], RL), /*Creo RL*/ 
+    concatenazione(RT, [H], RL), /*Creo RL è la coda rivoltata concatenta la testa*/ 
 	rivoltata(T, RT).
     
 sottratto(_, [], []). /* H puo non appartene, se lo tolgo H deve appartenere alla lista */
