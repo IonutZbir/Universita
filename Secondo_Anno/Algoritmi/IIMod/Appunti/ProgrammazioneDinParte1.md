@@ -19,18 +19,18 @@ Per risolvere questo problema, possiamo tentare a risolverlo mediante algoritmi 
 2. **Greddy**.  
     L'idea è quella di costruire la soluzione in modo incrementale scegliendo ogni volta il nodo indipendente di valore massimo. Il problema sta nella corretteza di questo algoritmo, in quanto funziona solo per determinate istanze.
     
-    <img src="img/progdin/g1.png" width="350" />
+<img src="img/progdin/g1.png" width="350" />
     
-    <img src="img/progdin/g2.png" width="200" />
+<img src="img/progdin/g2.png" width="200" />
 
-    Si può osservare come nella prima istanza l'algoritmo greedy ha trovato la soluzione ottima, mentre nella seconda istanza la soluzione dell'algoritmo greedy è diversa dalla soluzione ottima. Possiamo concludere che l'algoritmo greedy non funziona. 
+Si può osservare come nella prima istanza l'algoritmo greedy ha trovato la soluzione ottima, mentre nella seconda istanza la soluzione dell'algoritmo greedy è diversa dalla soluzione ottima. Possiamo concludere che l'algoritmo greedy non funziona. 
 3. **Divide Et Impera**.  
     L'idea è quella di dividere a metà il cammino, calcolare il modo ricorsivo l'insieme indipendente di peso massimo sulle due metà e poi combinare le soluzioni. 
 
-    <img src="img/progdin/dei.png" width="400" />
+<img src="img/progdin/dei.png" width="400" />
 
-    Osserviamo che la soluzione migliore a "destra" è 4 mentre a "sinistra" è 5, combinando le due soluzioni ottengo una soluzione non valida, poichè 4 e 
-    5 non formano un insieme indipendente. Esiste però un modo per risolvere i problemi al momento della combinazione delle due soluzione, che però 
-    risulta difficile. Possiamo concludere che anche la tecnica divide et impera non funziona.
+Osserviamo che la soluzione migliore a "destra" è 4 mentre a "sinistra" è 5, combinando le due soluzioni ottengo una soluzione non valida, poichè 4 e 
+5 non formano un insieme indipendente. Esiste però un modo per risolvere i problemi al momento della combinazione delle due soluzione, che però 
+risulta difficile. Possiamo concludere che anche la tecnica divide et impera non funziona.
 
 
