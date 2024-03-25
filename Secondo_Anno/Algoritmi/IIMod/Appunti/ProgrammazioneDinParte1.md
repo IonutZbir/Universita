@@ -20,6 +20,7 @@ Per risolvere questo problema, possiamo tentare a risolverlo mediante algoritmi 
     L'idea è quella di costruire la soluzione in modo incrementale scegliendo ogni volta il nodo indipendente di valore massimo. Il problema sta nella corretteza di questo algoritmo, in quanto funziona solo per determinate istanze.
     
     <img src="img/progdin/g1.png" width="350" />
+    
     <img src="img/progdin/g2.png" width="200" />
 
     Si può osservare come nella prima istanza l'algoritmo greedy ha trovato la soluzione ottima, mentre nella seconda istanza la soluzione dell'algoritmo greedy è diversa dalla soluzione ottima. Possiamo concludere che l'algoritmo greedy non funziona. 
