@@ -86,6 +86,20 @@ prima di unificare, `is` calcola la somma, poi unifica la somma as A
 
 is fa due attivita diverse, sia di unificare sia di confronto (= and ==)
 
+not -> =/=
+
+`cut` (!): taglia un ramo di ricerca all interno dell albero dell alalgoritmo di risoluzione del prolog
+
+
+`fail`: ci fa guardare un altro ramo
+
+
+dato un predicato p :- a, b, c
+
+se cut in tra a e b, una volta guardato a e sorpassato b, non posso tornare indietro ristanziando a. Non possiamo tornare indietro prima del cut. P puo essere verificato solo una volta. 
+
+p :- d. non la posso utilizzare
+
 
 
 
