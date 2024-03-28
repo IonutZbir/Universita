@@ -88,7 +88,12 @@ Nel server autoritativo bisogna poi inserire due record, uno di tipo A per `www.
 Nell'architettura peer-to-peer ci sono coppie di host connessi in modo intermittente, chiamati peer, che comunicano direttamente 
 l'uno con l'altro. I peer non appartengono ai fornitori dei servizi, ma sono computer fissi e portatili e smartphone controllati dagli utenti.
 
+**Confronto tra paradigma client-server e P2P: distribuzione di un file**
 
+
+
+1. Distribuzione file client-server
+2. Distribuzione file P2P
 
 
 
