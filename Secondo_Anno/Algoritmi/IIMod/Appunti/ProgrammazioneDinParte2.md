@@ -15,7 +15,7 @@ Come detto prima, l'algoritmo `earliest finish-time first`, ovvero l'algoritmo g
 Per convenzione, ordiniamo i job in ordine crescente per finish-time, come nell'algoritmo greedy, quindi: $f_{1} \leq f_{2} \leq$...$\leq f_{n}$.
 
 > [!IMPORTANT]
-> **DEF**: $p(j)$ è il più grande indice $i < j$ tale che l'$i-esimo$ job è compatibile con il $j-esimo$ job. Ovvero $i$ è l'intervallo più a destra che finisce prima che inizi $j$.
+> **DEF**: $p(j)$ è il più grande indice $i < j$ tale che l' $i-esimo$ job è compatibile con il $j-esimo$ job. Ovvero $i$ è l'intervallo più a destra che finisce prima che inizi $j$.
 
 <img src="img/progdin/def.png" width="300" />
 
