@@ -24,6 +24,6 @@ Per convenzione, ordiniamo i job in ordine crescente per finish-time, come nell'
 Adesso, abbiamo tutto il necessario per progettare l'algoritmo di programmazione dinamica che risolve questo problema.
 
 > [!IMPORTANT]
-> **DEF**: $OPT(j)$ è il peso massimo di ciascun sottoinsieme di job mutualmente compatibili per i sottoproblemi costituiti dai soli job da $1$ a $j$. 
-
+> **DEF**: $OPT(j)$ è il peso massimo di un qualunque sottoinsieme di job mutualmente compatibili per i sottoproblemi costituiti dai soli job da $1$ a $j$. 
+> **GOAL**: $OPT(n)$ è il peso massimo di un qualunque sottoinsieme di job mutualmente compatibili
 
