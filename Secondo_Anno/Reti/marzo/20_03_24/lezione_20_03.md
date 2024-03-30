@@ -90,8 +90,6 @@ l'uno con l'altro. I peer non appartengono ai fornitori dei servizi, ma sono com
 
 **Confronto tra paradigma client-server e P2P: distribuzione di un file**
 
-
-
 1. Distribuzione file client-server
 2. Distribuzione file P2P
 
