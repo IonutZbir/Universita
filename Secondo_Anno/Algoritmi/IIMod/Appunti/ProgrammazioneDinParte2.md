@@ -98,7 +98,7 @@ Data una sequenza di $n$ numeri, vogliamo trovare la sottosequenza crescente pi√
 <img src="img/progdin/lisopt.png" width="400" />
 
 **Equazione di Bellman**:
-- $OPT[i] = 1 + max${$0, max_{j = 1,2,...,i-1}$ $OPT[i]$} tale che $S[j] < S[i]$.
+- $OPT[i] = 1 + max${ $0, max_{j = 1,2,...,i-1}$ $OPT[i]$ } tale che $S[j] < S[i]$.
 
 # Segmented Least Squares
     
