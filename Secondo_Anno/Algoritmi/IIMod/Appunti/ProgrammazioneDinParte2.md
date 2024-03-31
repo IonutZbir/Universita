@@ -35,7 +35,7 @@ Adesso, abbiamo tutto il necessario per progettare l'algoritmo di programmazione
 
 **Equazione di Bellman**:
 - $OPT(j) = 0$ se $j = 0$. 
-- $OPT(j) = max${$OPT(j - 1), w_{j} + OPT(p(j))$} se $j > 0$. 
+- $OPT(j) = max${ $OPT(j - 1), w_{j} + OPT(p(j))$ } se $j > 0$. 
 
 ```
 Bottom-Up(Intervals I)
