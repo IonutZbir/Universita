@@ -123,7 +123,7 @@ Passiamo adesso alla definizione di "segmented least squares".
 **Equazione di Bellman**
 
 - $OPT(j) = 0$ se j = 0.
-- $OPT(j) = min_{1\leq i\leq j}$ {$ e_{ij} + c + OPT(i - 1) $} se j > 0ù
+- $OPT(j) = min_{1\leq i\leq j}$ { $e_{ij} + c + OPT(i - 1)$ } se j > 0ù
 
 ```
 Segmented-Least-Squares(Points, c)
