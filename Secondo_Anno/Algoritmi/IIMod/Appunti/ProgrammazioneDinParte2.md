@@ -95,8 +95,6 @@ Data una sequenza di $n$ numeri, vogliamo trovare la sottosequenza crescente pi�
 > - $OPT(i)$ è la lunghezza della sottosequenza crescente più lunga `S[1], ..., S[i]` che finisce con `S[i]`.
 > - **GOAL**: $max_{i=1,2,...,n}$ $OPT[i]$.
 
-<img src="img/progdin/lisopt.png" width="400" />
-
 **Equazione di Bellman**:
 - $OPT[i] = 1 + max${ $0, max_{j = 1,2,...,i-1}$ $OPT[i]$ } tale che $S[j] < S[i]$.
 
@@ -142,4 +140,47 @@ Segmented-Least-Squares(Points, c)
 
 # Knapsack Problem 
 
+- Ci sono $n$ elementi, ciascun item $i$ consiste di un valore $v_{i} > 0$ e un peso $w_{i} > 0$.
+- Il valore di un sottoinsieme di elementi è la somma dei valori di ciascun item.
+- Il "knapsack" (bisaccia, zaino, borsa) ha un peso limite $W$.
+- **GOAL**: Inserire gli elementi nella bisaccia massimizzando il valore totale senza superare il peso limite $W$.
 
+| $i$ | $w_{i}$ | $v_{i}$ |
+|:---:|:-------:|:-------:|
+| 1   | 1 USD   | 1 kg    |
+| 2   | 6 USD   | 2 kg    |
+| 3   | 18 USD  | 5 kg    |
+| 4   | 22 USD  | 6 kg    |
+| 5   | 28 USD  | 7kg     |
+
+Supponiamo di avere una bisaccia con peso limite $W$.
+- Il sottoinsieme {1, 2, 5} ha valore 35 USD e peso 10.
+- Il sottoinsieme {3, 4} ha valore 40 USD e peso 11 (*ottimo*).
+
+> [!IMPORTANT]
+> - **DEF**: $OPT(i, w)$: il valore ottimo della bisaccia con gli elementi $1$, ..., $i$, con peso $w$.
+> - **GOAL**: $OPT(n ,W)$.
+> - **Primo Caso**: $OPT(i, w)$ non aggiunge l'item $i$, o perchè non massimizza il valore oppure perche $w_{i} > w$. Allora $OPT(i, w)$ è la soluzione ottima per l'insieme elementi $1$, ..., $i - 1$ con peso $w$.
+> - **Secondo Caso**: $OPT(i, w)$ aggiunge l'item $i$, allora: raccogliamo il valore $v_{i}$, aggiorniamo il peso $w - w_{i}$. $OPT(i, w)$ e la soluzione ottima, per l'insieme di elementi $1$, ..., $i - 1$ con peso $w = w - w_{i}$.
+
+**Equazione di Bellman**
+- $OPT(i, w) = 0$ se i = 0.
+- $OPT(i, w) = OPT(i - 1, w)$ se $w_{i} > w$.
+- $OPT(i, w) = max${ $OPT(i - 1, w)$, $v_{i} + OPT(i - 1, w - w_{i})$ }.
+
+```
+Knapsack(Items, W)
+    for w = 0 to n do 
+        OPT[0, w] = 0
+
+    for i = 1 to n do 
+        for w = 0 to W do 
+            if(wi > w) then
+                OPT[i, w] = OPT[i - 1, w]
+            else 
+                OPT[i, w] = max{ OPT[i - 1, w], vi + OPT[i - 1, w - wi]}
+    return OPT[n, W].
+```
+
+- **Complessità Temporale**: $T(n) = \theta(n\cdot W)$.
+- **Complessità Spaziale**: $S(n) = \theta(n\cdot W)$.
