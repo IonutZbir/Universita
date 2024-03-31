@@ -30,7 +30,7 @@ Adesso, abbiamo tutto il necessario per progettare l'algoritmo di programmazione
 - Caso 1. $OPT(j)$ non seleziona il job $j$. Allora è una soluzione ottima per un sottoproblema costituito dai job rimanenti da $1$ a $j - 1$.
 - Caso 2. $OPT(j)$ seleziona il job $j$. Allora:
     - Raccogliamo il profitto $w_{j}$.
-    - Non possiamo usare job incompatibili, {$p(j) + 1$, $p{j} + 2$, ..., $j - 1$}.
+    - Non possiamo usare job incompatibili, { $p(j) + 1$, $p{j} + 2$, ..., $j - 1$ }.
     - Deve includere la soluzione ottima dei sottoproblemi costituiti dai rimanenti job compatibili $1$, ..., $p(j)$. 
 
 **Equazione di Bellman**:
@@ -123,7 +123,7 @@ Passiamo adesso alla definizione di "segmented least squares".
 **Equazione di Bellman**
 
 - $OPT(j) = 0$ se j = 0.
-- $OPT(j) = min_{1\leq i\leq j}$ {$e_{ij} + c + OPT(i - 1)$} se j > 0ù
+- $OPT(j) = min_{1\leq i\leq j}$ {$ e_{ij} + c + OPT(i - 1) $} se j > 0ù
 
 ```
 Segmented-Least-Squares(Points, c)
