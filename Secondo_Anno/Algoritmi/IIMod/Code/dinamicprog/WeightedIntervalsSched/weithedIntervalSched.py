@@ -84,6 +84,7 @@ def compute_OPT(intervals: list[Job], p: list[int]) -> list[int]:
 
 
 def find_solution(OPT, p: list[int], intervals: list[Job], i: int):
+    print(i)
     if i == 0:
         return []
     elif intervals[i].weight + OPT[p[i]] > OPT[i - 1]:
