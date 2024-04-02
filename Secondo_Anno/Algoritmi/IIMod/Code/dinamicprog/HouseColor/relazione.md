@@ -12,7 +12,6 @@
 >   - $col$ è il colore dell' $i-esima$ casa.
 >   - $val$ è il valore della soluzione ottima fino all' $i-esima$ casa.  
 > - **DEF**: Siano R, G, B, 3 array dove $R[i] = cost(i, red)$, $G[i] = cost(i, green)$, $B[i] = cost(i, blue)$.
-
 >   Sapendo quindi per ogni casa,qual è il suo colore, possiamo determinare la soluzione ottima per questo problema.
 > - **RETURN**: $OPT(n).val$
 
