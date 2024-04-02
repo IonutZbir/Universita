@@ -15,7 +15,7 @@
 >   Sapendo quindi per ogni casa,qual è il suo colore, possiamo determinare la soluzione ottima per questo problema.
 > - **RETURN**: $OPT(n).val$
 
-**Formuala di Bellman**
+**Formula di Bellman**
 
 - $OPT(i) = (val_{i}, col_{i}) = (min${ $R[i], G[i], B[i]$ } $, color)$ se $i = 1$ e $color$ è il colore riferito al valore minimo.
 - $OPT(i) = (val_{i}, col_{i}) = (val_{i-1} + min[${ $R[i], G[i], B[i]$ } $\setminus$ { $col_{i-1}$ } $], color)$, se $i \geq 2$ e $color$ è il colore riferito al valore minimo. 
