@@ -30,29 +30,27 @@ def house_coloring(Houses):
 
     OPT[0] = min(R[0], G[0], B[0])
 
-    total_cost = OPT[0][0]
-
     i = 1
     for elem in OPT:
-        new_elem = (0, 0)
-        _, color = elem
+        new_elem = [0, 0]
+        cost, color = elem
 
         if i == n:
             break
 
         if color == "R":
-            new_elem = min(G[i], B[i])
+            new_elem = list(min(G[i], B[i]))
         elif color == "G":
-            new_elem = min(R[i], B[i])
+            new_elem = list(min(R[i], B[i]))
         elif color == "B":
-            new_elem = min(G[i], R[i])
+            new_elem = list(min(G[i], R[i]))
 
-        total_cost += new_elem[0]
+        new_elem[0] += cost
 
-        OPT[i] = new_elem
+        OPT[i] = tuple(new_elem)
         i += 1
 
-    return OPT, total_cost
+    return OPT, OPT[n - 1][0]
 
 
 houses = create_houses()
