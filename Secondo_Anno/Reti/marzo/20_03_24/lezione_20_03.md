@@ -131,4 +131,15 @@ Oltre allo streaming HTTP, è stato sviluppato un altro sistema di streaming bas
 Con DASH, i video nelle varie versioni sono memorizzate nel server HTTP, ognuno a un URL diverso. Il server HTTP ha anche un file descrizione, detto **manifest file** che per ogni versione fornisce il rispettivo URL insieme al bit rate. 
 Il client innanzitutto richiede il manifest file al server per venire a conoscenza delle varie versioni disponibili. Mentre scarica i chunk, misura la velocità di banda, ed esegue un algoritmo per la selezione del prossimo chunk. 
 
+**Reti per la distribuzione di contenuti**
+
+> [!IMPORTANT]
+> **CDN** (*Content Distribution Networks*): gestisce server distribuiti in molti posti diversi, memorizza copie dei video e di altri contenuti web nei server e cerca di dirigere le richieste degli utenti al punto della CDN in grado di offrire il servizio migliore. Possono essere **CDN privata**, cioè priprietaria del fornitore di contenuti, come la CDN di Google che distribuisce i contenuti di Youtube. Alternativamente ci sono **CDN di terze parti** che distribuisce contenuti per conto di molti fornitori di contenuti come Akamai.
+
+Quindi le CDN sono utilizzate per trasmettere contenuti in streaming a centinaia di migliaia di utenti simultanei.  
+Le CDN adottano una delle due politiche:
+- **Enter deep**: installare cluster di server negli ISP di accesso sparsi in tutto il mondo. L'obiettivo è quello di essere vicini agli utenti finali in modo da migliorare il ritardo percepito dall'utente e il throughput.
+- **Bring home**: costruire grandi cluster in pochi punti chiave e interconneterli usando una rete privata ad alta velocità. Questo CDN propongono i loro cluster negli IXP.
+
+
 
