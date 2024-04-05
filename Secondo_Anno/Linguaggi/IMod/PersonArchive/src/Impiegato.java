@@ -37,6 +37,12 @@ public class Impiegato extends Person {
         this.mansione = mansione;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Impiegato{" +
+                "matricola='" + matricola + '\'' +
+                ", livello='" + livello + '\'' +
+                ", mansione='" + mansione + '\'' +
+                '}';
+    }
 }

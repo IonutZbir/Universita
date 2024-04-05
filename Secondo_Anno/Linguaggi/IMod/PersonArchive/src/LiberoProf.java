@@ -26,4 +26,12 @@ public class LiberoProf extends Person{
     public void setIva(String iva) {
         this.iva = iva;
     }
+
+    @Override
+    public String toString() {
+        return "LiberoProf{" +
+                "professione='" + professione + '\'' +
+                ", iva='" + iva + '\'' +
+                '}';
+    }
 }

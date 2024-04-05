@@ -20,23 +20,59 @@ public class PersonArchive{
         return output;
     }
 
+    public ArrayList<String> getInfoGeneral(Scanner sc){
+        System.out.println("Inserire:");
+        System.out.println("Nome:");
+        String nome = this.readInput(sc);
+
+        System.out.println("Cognome:");
+        String cognome = this.readInput(sc);
+
+        System.out.println("Codice Fiscale:");
+        String codice = this.readInput(sc);
+
+        System.out.println("Data di nascita, gg/mm/aaaa:");
+        String rawDate = this.readInput(sc);
+
+        ArrayList<String> info = new ArrayList<>();
+        info.add(nome);
+        info.add(cognome);
+        info.add(codice);
+        info.add(rawDate);
+
+        return info;
+
+    }
+
+    public ArrayList<String> getInfoImpiegato(Scanner sc){
+        System.out.println("Matricola:");
+        String matricola = this.readInput(sc);
+
+        System.out.println("Livello:");
+        String livello = this.readInput(sc);
+
+        System.out.println("Mansione:");
+        String mansione = this.readInput(sc);
+
+        ArrayList<String> info = new ArrayList<>();
+        info.add(matricola);
+        info.add(livello);
+        info.add(mansione);
+
+        return info;
+    }
+
     public void createPerson(int numPerson){
         System.out.println("[Generazione di persone in corso]");
         Scanner sc = new Scanner(System.in);
         for (int i = 0; i < numPerson; i++) {
 
-            System.out.println("Inserire:");
-            System.out.println("Nome:");
-            String nome = this.readInput(sc);
+            ArrayList<String> infoGen = this.getInfoGeneral(sc);
+            String nome = infoGen.get(0);
+            String cognome = infoGen.get(1);
+            String codice = infoGen.get(2);
+            String rawDate = infoGen.get(3);
 
-            System.out.println("Cognome:");
-            String cognome = this.readInput(sc);
-
-            System.out.println("Codice Fiscale:");
-            String codice = this.readInput(sc);
-
-            System.out.println("Data di nascita, gg/mm/aaaa:");
-            String rawDate = this.readInput(sc);
             Date formattedDate = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -44,7 +80,7 @@ public class PersonArchive{
                 formattedDate = sdf.parse(rawDate);
                 System.out.println(rawDate);
             } catch (ParseException e) {
-                System.out.println("Invalid date format. Please use dd/MM/yyyy.");
+                System.out.println("Il format della data è sbagliato. --> dd/MM/yyyy.");
             }
 
             System.out.println("""
@@ -58,14 +94,11 @@ public class PersonArchive{
             System.out.println("Inserire:");
             switch (tipo){
                 case 1:
-                    System.out.println("Matricola:");
-                    String matricola = this.readInput(sc);
+                    ArrayList<String> infoImpiegato = this.getInfoImpiegato(sc);
 
-                    System.out.println("Livello:");
-                    String livello = this.readInput(sc);
-
-                    System.out.println("Mansione:");
-                    String mansione = this.readInput(sc);
+                    String matricola = infoImpiegato.get(0);
+                    String livello = infoImpiegato.get(1);
+                    String mansione = infoImpiegato.get(2);
 
                     Impiegato p = new Impiegato(nome, cognome, codice, formattedDate, matricola, livello, mansione);
                     this.personArchive.put(codice, p);
@@ -97,6 +130,11 @@ public class PersonArchive{
 
     @Override
     public String toString() {
-        return this.personArchive.toString();
+        StringBuilder output = new StringBuilder();
+        int i = 1;
+        for (Map.Entry<String, Person> entry : this.personArchive.entrySet()) {
+            output.append(i).append(" - Codice Fiscale: ").append(entry.getKey()).append("\n").append(entry.getValue()).append("\n");
+        }
+        return output.toString();
     }
 }

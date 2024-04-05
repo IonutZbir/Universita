@@ -16,5 +16,12 @@ public class Disoccupato extends Person{
     public void setRegistroDis(String registroDis) {
         this.registroDis = registroDis;
     }
+
+    @Override
+    public String toString() {
+        return "Disoccupato{" +
+                "registroDis='" + registroDis + '\'' +
+                '}';
+    }
 }
 
