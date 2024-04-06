@@ -90,14 +90,15 @@ matricola = "0308984"  # LASCIARE UNA STRINGA
 #     Esercizio globale
 #  Si vuole scrivere un sistema a supporto di coloro che si cimentano dietro ai fornelli
 
+
 def compito(comando, input):
-    if comando == 'cucchiai':
+    if comando == "cucchiai":
         output = cucchiai(input)
-    elif comando == 'rispetta tempi di cottura':
+    elif comando == "rispetta tempi di cottura":
         output = rispetta_tempi_di_cottura(input)
-    elif comando == 'valuta dieta':
+    elif comando == "valuta dieta":
         output = valuta_dieta(input)
-    elif comando == 'conta calorie':
+    elif comando == "conta calorie":
         output = conta_calorie(input)
     else:
         output = False
@@ -120,12 +121,12 @@ def cucchiai(input):
 
 
 def rispetta_tempi_di_cottura(input):
-    ingredienti = input.split(',')
+    ingredienti = input.split(",")
     ingredienti_tempi = []
 
     # Analisi dell'input per ottenere una lista di ingredienti con i relativi tempi di cottura
     for ingrediente in ingredienti:
-        nome, tempo = ingrediente.split(':')
+        nome, tempo = ingrediente.split(":")
         ingredienti_tempi.append((nome, int(tempo)))
 
     # Ordinamento degli ingredienti in base al tempo di cottura
@@ -135,11 +136,11 @@ def rispetta_tempi_di_cottura(input):
     sequenza = ""
     lun = len(ingredienti_tempi)
     for i in range(lun):
-        ingrediente = ingredienti_tempi[lun-1-i][0]
-        tempo_cottura = ingredienti_tempi[lun-1-i][1]
+        ingrediente = ingredienti_tempi[lun - 1 - i][0]
+        tempo_cottura = ingredienti_tempi[lun - 1 - i][1]
 
         if i > 0:
-            tempo = abs(tempo_cottura - ingredienti_tempi[lun-i][1])
+            tempo = abs(tempo_cottura - ingredienti_tempi[lun - i][1])
             if tempo > 1:
                 end = "i"
             else:
@@ -150,22 +151,23 @@ def rispetta_tempi_di_cottura(input):
     sequenza = sequenza[:-1]
     return sequenza
 
+
 def valuta_dieta(file):
-    File = open(file, 'r')
+    File = open(file, "r")
     dict_comuni = {}
     output = set()
     for row in File:
-        piatti = row.split(',')[1:]
+        piatti = row.split(",")[1:]
         for piatto in piatti:
-            if piatto.endswith('\n'):
-                piatto = piatto.split('\n')[0]
+            if piatto.endswith("\n"):
+                piatto = piatto.split("\n")[0]
             if piatto not in dict_comuni:
                 dict_comuni[piatto] = 1
             else:
                 dict_comuni[piatto] += 1
     File.close()
     maxP = max(dict_comuni.values())
-    
+
     for key in dict_comuni:
         if dict_comuni[key] == maxP:
             output.add(key)
@@ -183,15 +185,16 @@ def conta_calorie(s):
     calorie = 0
     len_str = len(s)
     for x in range(len_str):
-        if s[x] == 'C':
+        if s[x] == "C":
             calorie += 5
-            if x > 0 and x<len_str and (s[x - 1] == "P" or s[x + 1] == "P") :
+            if x > 0 and x < len_str and (s[x - 1] == "P" or s[x + 1] == "P"):
                 calorie += 2
-        elif s[x] == 'P':
+        elif s[x] == "P":
             calorie += 5
-        elif s[x] == 'G':
+        elif s[x] == "G":
             calorie += 10
     return calorie
+
 
 # Naturalmente dovrete liberamente definire una funzione per ogni comando.
 # Tale funzione dovrà essere richiamata dalla funzione compito(comando,input)
@@ -308,18 +311,19 @@ class Menu:
             isVegan = isVegan and piatto.adatto_vegani()
             isVeget = isVeget and piatto.adatto_vegetariani()
             piatti += piatto.name + "\n"
-                
+
         output = ""
         if isVegan:
             output += self.name + " (vegano)\n"
         elif isVeget:
             output += self.name + " (vegetariano)\n"
-        else: 
+        else:
             output += self.name + "\n"
-        
+
         output += piatti[:-1]
-        #print(output + "\n")
+        # print(output + "\n")
         return output
+
 
 class Piatto:
 
@@ -344,6 +348,7 @@ class Piatto:
     def nome_piatto(self):
         return self.name
 
+
 # Esercizio 6:
 #
 # Domanda teorica:
@@ -364,12 +369,18 @@ def main():
     test_primo_esercizio = [("110 g", 5), ("2 hg", 10), ("1 kg", 50)]
 
     comando2 = "rispetta tempi di cottura"
-    test_secondo_esercizio = [("riso:15,patate:10,fagioli:20,carote:5,orzo:14",
-                               "inserire fagioli\ndopo 5 minuti, inserire riso\ndopo 1 minuto, inserire orzo\ndopo 4 minuti, inserire patate\ndopo 5 minuti, inserire carote")]
+    test_secondo_esercizio = [
+        (
+            "riso:15,patate:10,fagioli:20,carote:5,orzo:14",
+            "inserire fagioli\ndopo 5 minuti, inserire riso\ndopo 1 minuto, inserire orzo\ndopo 4 minuti, inserire patate\ndopo 5 minuti, inserire carote",
+        )
+    ]
 
     comando3 = "valuta dieta"
     test_terzo_esercizio = [
-        ('piatti1.txt', {"pasta"}), ('piatti2.txt', {"insalata", "fagioli"})]
+        ("piatti1.txt", {"pasta"}),
+        ("piatti2.txt", {"insalata", "fagioli"}),
+    ]
 
     comando4 = "conta calorie"
     test_quarto_esercizio = [("CCGP", 25), ("CPCG", 27), ("CGPC", 27)]
@@ -382,80 +393,126 @@ def main():
 
     esercizi_corretti = 0
 
-    for (input1, expected_output) in test_primo_esercizio:
+    for input1, expected_output in test_primo_esercizio:
         comando = comando1
         output = compito(comando, input1)
         if output != expected_output:
-            print("PRIMO ESERCIZIO\ncomando: " + comando + "------------------------\nERRORE\n" +
-                  ">" + str(output) + "<" +
-                  "\nnon è quanto richiesto come output per input \n>" + str(input1) + "<" +
-                  "\ndovrebbe invece essere così:\n" + ">" + str(
-                      expected_output) + "<")
+            print(
+                "PRIMO ESERCIZIO\ncomando: "
+                + comando
+                + "------------------------\nERRORE\n"
+                + ">"
+                + str(output)
+                + "<"
+                + "\nnon è quanto richiesto come output per input \n>"
+                + str(input1)
+                + "<"
+                + "\ndovrebbe invece essere così:\n"
+                + ">"
+                + str(expected_output)
+                + "<"
+            )
             primo_sorpassa_test_di_base = False
-    if (primo_sorpassa_test_di_base):
+    if primo_sorpassa_test_di_base:
         esercizi_corretti = esercizi_corretti + 1
 
-    for (input1, expected_output) in test_secondo_esercizio:
+    for input1, expected_output in test_secondo_esercizio:
         comando = comando2
         output = compito(comando, input1)
         if output != expected_output:
-            print("SECONDO ESERCIZIO\ncomando: " + comando + "------------------------\nERRORE\n" +
-                  str(output) + "\n non è quanto richiesto come output per input \n" +
-                  str(input1) + "\ndovrebbe invece essere così:\n" + str(expected_output))
+            print(
+                "SECONDO ESERCIZIO\ncomando: "
+                + comando
+                + "------------------------\nERRORE\n"
+                + str(output)
+                + "\n non è quanto richiesto come output per input \n"
+                + str(input1)
+                + "\ndovrebbe invece essere così:\n"
+                + str(expected_output)
+            )
             secondo_sorpassa_test_di_base = False
-    if (secondo_sorpassa_test_di_base):
+    if secondo_sorpassa_test_di_base:
         esercizi_corretti = esercizi_corretti + 1
 
-    for (input1, expected_output) in test_terzo_esercizio:
+    for input1, expected_output in test_terzo_esercizio:
         comando = comando3
         output = compito(comando, input1)
 
         if output != expected_output:
-            print("\n\nTERZO ESERCIZIO\ncomando: " + comando + "------------------------\nERRORE\n" + str(
-                output) + "\nnon sembra essere giusto rispetto all'input\n" + str(
-                input1) + "\ndovrebbe invece essere così:\n" + str(expected_output))
+            print(
+                "\n\nTERZO ESERCIZIO\ncomando: "
+                + comando
+                + "------------------------\nERRORE\n"
+                + str(output)
+                + "\nnon sembra essere giusto rispetto all'input\n"
+                + str(input1)
+                + "\ndovrebbe invece essere così:\n"
+                + str(expected_output)
+            )
             terzo_sorpassa_test_di_base = False
-    if (terzo_sorpassa_test_di_base):
+    if terzo_sorpassa_test_di_base:
         esercizi_corretti = esercizi_corretti + 1
 
-    for (input1, expected_output) in test_quarto_esercizio:
+    for input1, expected_output in test_quarto_esercizio:
         comando = comando4
         output = compito(comando, input1)
         if output != expected_output:
-            print("QUARTO ESERCIZIO\ncomando: " + comando + "------------------------\nERRORE\n" + str(
-                output) + "\nnon è quanto richiesto per gli input \n" + str(input1) +
-                "\ndovrebbe invece essere così:\n" + str(expected_output))
+            print(
+                "QUARTO ESERCIZIO\ncomando: "
+                + comando
+                + "------------------------\nERRORE\n"
+                + str(output)
+                + "\nnon è quanto richiesto per gli input \n"
+                + str(input1)
+                + "\ndovrebbe invece essere così:\n"
+                + str(expected_output)
+            )
             quarto_sorpassa_test_di_base = False
-    if (quarto_sorpassa_test_di_base):
+    if quarto_sorpassa_test_di_base:
         esercizi_corretti = esercizi_corretti + 1
 
     gestoreMenu = Menu("menu della domenica")
-    gestoreMenu.aggiungi_piatto(Piatto("pasta al sugo vegetale", [
-                                "passata", "sale", "olio", "carota", "cipolla", "sedano"]))
-
-    quinto_sorpassa_test_di_base = quinto_sorpassa_test_di_base and gestoreMenu.stampa_menu() == "menu della domenica (vegano)\npasta al sugo vegetale"
-
     gestoreMenu.aggiungi_piatto(
-        Piatto("uovo fritto", ["uova", "sale", "olio"]))
+        Piatto(
+            "pasta al sugo vegetale",
+            ["passata", "sale", "olio", "carota", "cipolla", "sedano"],
+        )
+    )
 
-    quinto_sorpassa_test_di_base = quinto_sorpassa_test_di_base and gestoreMenu.stampa_menu(
-    ) == "menu della domenica (vegetariano)\npasta al sugo vegetale\nuovo fritto"
+    quinto_sorpassa_test_di_base = (
+        quinto_sorpassa_test_di_base
+        and gestoreMenu.stampa_menu()
+        == "menu della domenica (vegano)\npasta al sugo vegetale"
+    )
+
+    gestoreMenu.aggiungi_piatto(Piatto("uovo fritto", ["uova", "sale", "olio"]))
+
+    quinto_sorpassa_test_di_base = (
+        quinto_sorpassa_test_di_base
+        and gestoreMenu.stampa_menu()
+        == "menu della domenica (vegetariano)\npasta al sugo vegetale\nuovo fritto"
+    )
 
     gestoreMenu.aggiungi_piatto(Piatto("bistecca", ["carne"]))
 
-    quinto_sorpassa_test_di_base = quinto_sorpassa_test_di_base and gestoreMenu.stampa_menu(
-    ) == "menu della domenica\npasta al sugo vegetale\nuovo fritto\nbistecca"
+    quinto_sorpassa_test_di_base = (
+        quinto_sorpassa_test_di_base
+        and gestoreMenu.stampa_menu()
+        == "menu della domenica\npasta al sugo vegetale\nuovo fritto\nbistecca"
+    )
 
     gestoreMenu.aggiungi_piatto(Piatto("carote", ["carote"]))
 
-    quinto_sorpassa_test_di_base = quinto_sorpassa_test_di_base and gestoreMenu.stampa_menu(
-    ) == "menu della domenica\npasta al sugo vegetale\nuovo fritto\nbistecca\ncarote"
+    quinto_sorpassa_test_di_base = (
+        quinto_sorpassa_test_di_base
+        and gestoreMenu.stampa_menu()
+        == "menu della domenica\npasta al sugo vegetale\nuovo fritto\nbistecca\ncarote"
+    )
 
-    
     if not quinto_sorpassa_test_di_base:
         print("\n\n\nESERCIZIO CLASSI\n\n\nPer esercizio delle classi, non corretto\n")
 
-    if (quinto_sorpassa_test_di_base):
+    if quinto_sorpassa_test_di_base:
         esercizi_corretti = esercizi_corretti + 1
 
     print("\n\n\n\n **               ^ ^ ^                **")
@@ -464,13 +521,32 @@ def main():
 
     print(
         " ** CONTROLLARE LA RIGA DI VALUTAZIONE **\n Il numero di esercizi che passano il test di correttezza è ",
-        esercizi_corretti, end=" ")
-    print(" quindi NON puoi consegnare" if esercizi_corretti <
-          2 else ".  Consegna il compito!")
-    print(" Riga valutazione: " + nome + ":" + cognome + ":" + matricola + ":" + str(
-        primo_sorpassa_test_di_base) + ":" + str(secondo_sorpassa_test_di_base) + ":" + str(
-        terzo_sorpassa_test_di_base), ":" + str(quarto_sorpassa_test_di_base), ":" + str(quinto_sorpassa_test_di_base),
-        ":", risposta_teorica)
+        esercizi_corretti,
+        end=" ",
+    )
+    print(
+        " quindi NON puoi consegnare"
+        if esercizi_corretti < 2
+        else ".  Consegna il compito!"
+    )
+    print(
+        " Riga valutazione: "
+        + nome
+        + ":"
+        + cognome
+        + ":"
+        + matricola
+        + ":"
+        + str(primo_sorpassa_test_di_base)
+        + ":"
+        + str(secondo_sorpassa_test_di_base)
+        + ":"
+        + str(terzo_sorpassa_test_di_base),
+        ":" + str(quarto_sorpassa_test_di_base),
+        ":" + str(quinto_sorpassa_test_di_base),
+        ":",
+        risposta_teorica,
+    )
 
 
 main()

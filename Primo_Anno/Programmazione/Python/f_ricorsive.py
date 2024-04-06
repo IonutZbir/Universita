@@ -1,6 +1,8 @@
 import os
 from colorama import Fore
 from colorama import Style
+
+
 def max_list_ric(l):
     if len(l) == 1:
         return l[0]
@@ -19,19 +21,21 @@ def max_list_ric2(l):
         else:
             return m
 
+
 def count_int(l: list[int]):
     """Conta gli interi contenenti in un lista e nelle sottoliste usando la ricorsione
     [1, [0, 1], 2]
     Args:
         l (list): list of integers or list of lists with integers
     """
-    
+
     if l == []:
         return 0
     if type(l[0]) in (int, float, bool, str, type(None)):
         return 1 + count_int(l[1:])
     elif type(l[0]) == list:
         return 0 + count_int(l[0]) + count_int(l[1:])
+
 
 def deep_clone(l):
     b = []
@@ -42,29 +46,32 @@ def deep_clone(l):
             b.append(x)
     return b
 
+
 def explore(dir):
     content = os.listdir(dir)
-    output = ''
+    output = ""
     for c in content:
         full_path = os.path.join(dir, c)
         if os.path.isfile(full_path):
-            output += f'{Fore.BLUE}FILE:{Style.RESET_ALL} {full_path}\n'
+            output += f"{Fore.BLUE}FILE:{Style.RESET_ALL} {full_path}\n"
         elif os.path.isdir(full_path):
-            output += f'{Fore.RED}DIR :{Style.RESET_ALL} {full_path}\n'
+            output += f"{Fore.RED}DIR :{Style.RESET_ALL} {full_path}\n"
     return output
+
 
 def explore_dir(dir):
     content = os.listdir(dir)
-    output = ''
+    output = ""
     for c in content:
         full_path = os.path.join(dir, c)
         if os.path.isfile(full_path):
-            output += f'{Fore.BLUE}FILE:{Style.RESET_ALL} {full_path}\n'
+            output += f"{Fore.BLUE}FILE:{Style.RESET_ALL} {full_path}\n"
         elif os.path.isdir(full_path):
             output += explore_dir(full_path)
     return output
 
-def find_file(dir, extension = 'txt'):
+
+def find_file(dir, extension="txt"):
     content = os.listdir(dir)
     output = []
     for c in content:
@@ -73,11 +80,7 @@ def find_file(dir, extension = 'txt'):
             output.append(full_path)
         elif os.path.isdir(full_path):
             output.extend(find_file(full_path, extension))
-    return (output)
-
-x = find_file("D:\\Università\\Programmazione", 'py')
-print(x)
-for i in x:
-    print(i)
+    return output
 
 
+x = find_file("D:\\Università\\Programmazione", "py")
