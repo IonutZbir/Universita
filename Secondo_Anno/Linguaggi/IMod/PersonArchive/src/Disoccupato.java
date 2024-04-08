@@ -17,6 +17,7 @@ public class Disoccupato extends Person{
         this.registroDis = registroDis;
     }
 
+
     @Override
     public String toString() {
         return "Disoccupato{" +
