@@ -79,7 +79,7 @@ In UDP non esiste handshaking tra le entità di invio e di ricezione a livello d
 - Lato mittente: Gli viene passato un messaggio applicativo, determina i valori dei campi di intestazione del segmento UDP, poi crea il segmento e lo invia al livello di rete.
 - Lato ricevente: Riceve il segmento dal livello di rete, controlla il valore del campo di intestazione UDP checksum, estrare il messaggio applicativo e lo consegna alla socket appropriata.
 
-<img src="img/muldem.png" width="300" />
+<img src="img/UDP.png" width="300" />
 
 **Checksum UDP**
 
