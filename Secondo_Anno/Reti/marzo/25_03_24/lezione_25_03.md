@@ -46,5 +46,39 @@ Entrambi i segmenti UDP saranno indirizzati allo stesso processo sul computer C,
 
 **Multiplexing e Demultiplexing orientati alla connessione**
 
-La differenza tra una socket TCP e una socket UDP è che una socket TCP è identificata da 4 parametri: **indirizzo IP di origine**, 
+La differenza tra una socket TCP e una socket UDP è che una socket TCP è identificata da 4 parametri: **indirizzo IP di origine**, **numero di porta di origine**, **indirizzo IP di destinazione**, **numero di porta di destinazione**.
+
+- L'applicazione server TCP presenta una "socket di benvenuto" che si pone in attesa di richieste di connessione da parte dei client TCP sula porta 12000.
+- Il client TCP crea una socket e genera un segmento per stabilire la connessione tramite le seguenti linee di codice: 
+```python
+client_socket = socket(AF_INET, SOCK_STREAM)
+client_socket.connect(server_name, 12000)
+```
+- Una richiesta di connessione non è nient'altro che un segmento TCP con un numero di porta di destinazione 12000 e uno speciale bit di richiesta di connessione post a 1 nell'intestazione. Il segmento include anche un numero di porta di origine, scelto dal client.
+- Il sistema operativo dell'host che esegue il processo server, quando riceve il segmento con la richiesta di connessione con porta di destinazione 12000, localizza il processo server in attesa di accettare connessioni sulla porta 12000. Il processo server crea quindi una nuova connessione `connection_socket, addr = server_socket.accept()` 
+- Inoltre il livello di trasporto sul server prende nota dei seguenti valori nel segmento con la richiesta di connessione:
+    1.  Numero di porta di origine nel segmento
+    2.  Indirizzo IP dell'host di origine
+    3.  Numero di porta di destinazione nel segmento
+    4.  Il proprio indirizzo IP 
+
+Tutti i segmenti successivi la cui porta di origine, indirizzo IP di origine, porta di destinazione e indirizzo IP di destinazione coincidono con tali valori verranno diretti verso questa socket.
+
+## Trasporto non orientato alla connessione: UDP
+
+UPD fa il minimo che un protocollo di trasporto debba fare. A parte la funzione di multiplexing/demultiplexing e una forma di controllo semplice, non aggiunge nulla a IP. UDP prende i messaggi dal processo applicativo, aggiunge il numero di porta di origine e di destinazione per il multiplexing/demultiplexing, aggiunge altri due piccoli campi e passa il segmento al livello di rete.
+In UDP non esiste handshaking tra le entità di invio e di ricezione a livello di trasporto. Per questo motivo, si dice che UDP è **non orientato alla connessione**.
+
+Perche esiste UDP?
+
+- Controllo più preciso a livello di applicazione su quali dato sono inviati e quando, dimunendo il ritardo di trasmissione, dato che non deve effettuare controlli.
+- Nessuna connessione stabilita, che potrebbe aggiungere ritardo.
+- Nessun stato di connessione.
+- Minor spazio usato per l'itestazione del pacchetto, UDP aggiunge 8 byte mentre TCP ne aggiunge 20.
+
+<img src="img/usiUdp.png" width="500" />
+
+
+
+
 
