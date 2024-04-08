@@ -28,8 +28,6 @@ Il multiplexing a livello di trasporto richiede:
 1. Le socket abbiano identificatori unici
 2. Ciascun segmento presenti campi che indichino la socket cui va consegnato il segmento.
 
-<img src="img/muldem.png" width="300" />
-
 Questi sono il **campo del numero di porta di origine** e il **campo del numero di porta di destinazione**. I numeri di porta sono di 16 bit e vanno da 0 a 65535, quelli che vanno da 0 a 1023 sono chiamati **numeri di porta noti** e sono riservati per essere usati da protocolli applicativi noti come HTTP, FTP, DNS etc... .Quindi ogni socket nell'host deve avere un numero di porta e, quando un segmento arriva all'host, il livello di trasporto esamina il numero della porta di destinazione e dirige il segmento verso la socket corrispondente. I dati del segmento passano quindi dalla socket al processo assegnato.
 
 **Multiplexing e Demultiplexing non orientati alla connessione**
@@ -69,16 +67,33 @@ Tutti i segmenti successivi la cui porta di origine, indirizzo IP di origine, po
 UPD fa il minimo che un protocollo di trasporto debba fare. A parte la funzione di multiplexing/demultiplexing e una forma di controllo semplice, non aggiunge nulla a IP. UDP prende i messaggi dal processo applicativo, aggiunge il numero di porta di origine e di destinazione per il multiplexing/demultiplexing, aggiunge altri due piccoli campi e passa il segmento al livello di rete.
 In UDP non esiste handshaking tra le entità di invio e di ricezione a livello di trasporto. Per questo motivo, si dice che UDP è **non orientato alla connessione**.
 
-Perche esiste UDP?
+**Perche esiste UDP?**
 
 - Controllo più preciso a livello di applicazione su quali dato sono inviati e quando, dimunendo il ritardo di trasmissione, dato che non deve effettuare controlli.
 - Nessuna connessione stabilita, che potrebbe aggiungere ritardo.
 - Nessun stato di connessione.
-- Minor spazio usato per l'itestazione del pacchetto, UDP aggiunge 8 byte mentre TCP ne aggiunge 20.
+- Minor spazio usato per l'intestazione del pacchetto, UDP aggiunge 8 byte mentre TCP ne aggiunge 20.
 
 <img src="img/usiUdp.png" width="500" />
 
+- Lato mittente: Gli viene passato un messaggio applicativo, determina i valori dei campi di intestazione del segmento UDP, poi crea il segmento e lo invia al livello di rete.
+- Lato ricevente: Riceve il segmento dal livello di rete, controlla il valore del campo di intestazione UDP checksum, estrare il messaggio applicativo e lo consegna alla socket appropriata.
 
+<img src="img/muldem.png" width="300" />
+
+**Checksum UDP**
+
+Il checksum UDP server per il rilevamento degli errori. In altre parole, viene utilizzato per determinare se i bit del segmento UDP sono stati alterati durante il loro trasferimento da sorgente a destinazione. Il mittente UDP effettua il complemento a 1 della somma di tutte le parole da 16 bit nel segmento, e l'eventuale riporto viene sommato al primo bit. Tale risulato viene posto nel campo *Checksum* del segmento UDP.
+Ipotizziamo di avere 3 parole a 16 bit:
+- Questa è la somma delle prime 2
+$$0110 0110 0110 0000 + 
+  0101 0101 0101 0101 =
+  1011 1011 1011 0101$$
+- Adesso sommiamo il risulato della somma, con la terza parola
+$$1011 1011 1011 0101 +
+  1000 1111 0000 1100 =
+  0100 1010 1100 0010$$
+- Effettuando il complemento a 1, che consiste in invertire i bit, otteniamo: $1011 0101 0011 1101$. In ricezione si sommano le tre parole inziali e il checksum. Se non ci sono errori nel pacchetto, l'adizione farà $1111 1111 1111 1111$, altrimenti se un bit vale 0 sappiamo che è stato introdotto almeno un errore nel pacchetto.
 
 
 
