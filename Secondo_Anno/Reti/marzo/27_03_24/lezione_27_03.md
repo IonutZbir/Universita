@@ -15,7 +15,7 @@ Assumiamo che i pacchetti vengano consegnati nell'ordine con cui sono stati invi
 
 Inoltre, consideriamo solo il caso di **trasferimento dati unidirezionale**. Quindi passiamo adesso a definire man mano il nostro protocollo `rdt`, mediante una macchina a stati finiti. Lo stato successivo è determinato unicamente dall'evento successivo.
 
-#### rdt 1.0, canale affidabile
+### rdt 1.0, canale affidabile
 
 Consideriamo il caso più semplice, in cui il canale sottostante è completamente affidabile.
 
@@ -24,7 +24,7 @@ Consideriamo il caso più semplice, in cui il canale sottostante è completament
 - Mittente: accetta i dati dal livello superiore `rdt_send(data)`, crea il pacchetto `make_pkt(data)` e lo invia sul canale `udt_send(data)`.
 - Ricevente: riceve i dati dal canale sottostante `rdt_rcv(packet)`, rimuove i dati dal pacchetto `extract(packet, data)` e li passa al livello superiore `deliver_data(data)`.
 
-#### rdt 2.0, canale con errori su bit
+### rdt 2.0, canale con errori su bit
 
 Un modello più realistico del canale sottostante è quello in cui i bit in un pacchetto possono essere corrotti.
 Dopo ogni invio di un pacchetto, il mittente si mette in attesa di un feedback da parte del ricevente, che può essere:
@@ -39,12 +39,20 @@ Da notare che quando è in attesa di ACK o NAK, non può riceve altri dati dal l
 
 Anche se sembra funzionare questo protocollo, nella realtà presenta un grave difetto; infatti non abbiamo tenuto conto della possibilità che i pacchetti ACK e NAK possano a loro volta essere dannegiati. Infatti se un ACK o un NAK è corrotto, il mittente non ha modo di sapere se il destinatario abbia ricevuto correttamente l'ultimo blocco di dati trasmesso.
 
-#### rdt 2.1, gestione di ACK o NAK alterati
+### rdt 2.1, gestione di ACK o NAK alterati
 
 Un approccio a questo problema prevede semplicemente che il mittente rinvii il pacchetto di dati corrente a seguito della ricezione di un pacchetto ACK o NAK alterato. Questo approccio introduce **pacchetti duplicati** nel canale. La fondamentale difficoltà insita nella duplicazione di pacchetti che il destinatario non sa se l'ultimo ACK o NAK inviato sia stato ricevuto correttamente dal mittente. Una soluzione a questo nuovo problema consiste nell'aggiungere un campo al pacchetto dati, obbligando il mittente a numerare i propri pacchetti dati con un **numero di sequenza**. Al destinatario sarà sufficiente controllare questo numero per sapere se il pacchetto ricevuto rappresenti un ritrasmissione o meno. 
 Per questo semplice protocollo, un numero di sequenza da 1 bit sarà sufficiente, dato che consentirà al destinatario di sapere se il mittente stia ritrasmettendo un pacchetto o inviandone un già trasmesso. Nel primo caso il numero di sequenza del pacchetto ha lo stesso numero di sequenza del pacchetto appena ricevuto, nel secondo caso il numero di sequenza sarà diverso. Dato che stiamo ipotizzando che il canale non perda pacchetti, i pacchetti ACK e NAK non devono indicare il numero di sequenza del pacchetto di cui rappresentano la notifica. Il mittente sa che un pacchetto ricevuto di tipo ACK o NAK (alterato o meno) è stato generato come risposta al pacchetto dati trasmesso più di recente.
 
 <img src="img/rdt2_1.png" width="400" />
 
+Adesso, gli automi del mittente e del destinatario hanno il doppo degli stati, questo perche il protocollo deve riflettere il fatto che il pacchetto attualmente in invio o in ricezione abbia numero di sequenza 0 o 1.
+
+### rdt2.2, un protocollo senza NAK
+
+- Ha la stessa funzionalità di rdt2.1, utilizzando soltanto gli ACK. Al posto di NAK, il destinatario invia un ACK per l'ultimo pacchetto ricevuto correttamente. Il destinatario deve includere esplicitamente il numero di sequenza del pacchetto con l'ACK.
+- Un ACK duplicato presso il mittente determina la stessa azione del NAK, ovvero sa che il destinatario non ha ricevuto correttamente il pacchetto, e dovrà ritrasmettere il pacchetto corrente.
+
+### rdt3.0, canali con errori e perdite
 
 
