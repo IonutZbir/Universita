@@ -56,3 +56,51 @@ Adesso, gli automi del mittente e del destinatario hanno il doppo degli stati, q
 ### rdt3.0, canali con errori e perdite
 
 Supponiamo ora che il canale di trasmissione, oltre a dannegiare i bit, possa anche *smarrire* i pacchetti, un evento non raro sulle odierne reti di calcolatori. Supponiamo che il mittente spedisca una pacchetto dati e che questo o l'ACK corrispondente del ricevente venga smarrito. In entrambi i casi, il mittente non otterrà alcuna risposta dal destinatario. Se il mittente è disposto ad attendere un tempo per essere certo dello smarrimento del pacchetto, può semplicemente ritrasmettere il pacchetto.
+
+Adesso si pone il problema di scegliere adeguatamente il tempo di attesa, quindi l'approccio adottato nella pratica è scegliere in modo assennato un valore di tempo tale per cui la perdita di pacchetti risulti probabile, anche se non garantita. Se non riceve un ACK in questo lasso di tempo, il pacchetto viene ritrasmesso.
+Ci può essere il caso in cui un pacchetto sperimenta um ritardo particolarmente lungo, anche se nè il pacchetto dati nè il pacchetto ACK sono smarriti, in questo caso c'è la possibilità di **pacchetti di dati duplicati**, ma questo problema è già stato risolto in rdt2.0.
+
+Il mittente non sa se un pacchetto dati sia andato perduto, se sia stato smarrito un ACK o se il pacchetto o l’ACK abbiano semplicemente subìto un notevole ritardo.
+In tutti questi casi, l’azione intrapresa è la stessa: ritrasmettere. Implementare un meccanismo di ritrasmissione basato sul tempo richiede un contatore 
+(count-down timer) in grado di segnalare al mittente l’avvenuta scadenza di un dato lasso di tempo.
+
+<img src="img/rdt3_0.png" width="300" />
+
+Dato che i numeri di sequenza dei pacchetti si alternano tra 0 e 1, il protocollo rdt3.0 viene talvolta detto **protocollo ad alternanza di bit**.
+
+### Protocolli per il trasferimento dati affidabile con pipeline
+
+Il protocollo rdt3.0 è corretto dal punto di vista funzionale, ma è molto lento rispetto alle reti odierne. Il problema delle prestazioni risiede nel fatto che si tratta di un protocollo stop-and-wait.
+
+**Funzionamento rdt3.0 con protocollo stop-and-wait**
+
+Per analizzare la velocita di trasferimento di un protocollo stop-and-wait consideriamo questo caso: due host, ciascuno su una costa degli Stati Uniti. Il ritardo di propagazione (RTT) alla velocità della luce è approssimativamente 30 ms. Supponiamo un collegamento a 1 Gbps con pacchetti di dimensione $L$ di 100 byte.
+
+$$
+d_{t} = \frac{L}{R} = \frac{8000}{10^9} \frac{bit}{bit / s} = 8\mu s
+$$
+
+Se definiamo l'**utilizzo** del mittente come la frazione di tempo in cui il mittente è stato effettivamente occupato nell'invio di bit sul canale, il protocollo stop-and-wait presenta un triste utilizzo del mittente $U_{mittente}$ pari a:
+
+$$
+U_{mittente} = \frac{L / R}{RTT + L / R} = \frac{0.008}{30.008} = 0.0027
+$$
+
+<img src="img/saw.png" width="300" />
+
+Di conseguenza, il throughput è al massimo 267 kbps!
+
+**Funzionamento rdt3.0 con pipeline**
+
+La soluzione a questo problema è semplice. Anziché operare in modalità stop-and-wait, si consente al mittente di inviare più pacchetti senza attendere gli acknowledgement. Questa tecnica è nota come **pipelining**. Di conseguenza il protocollo di trasferimento affidabile cambia un po:
+- L'intervallo di numeri di sequenza disponibili deve essere incrementato dato che ogni pacchetto in transito deve presentare un numero di sequenza univoco e che ci potrebbero essere più pacchetti in transito ancora in attesa di acknowledgement.
+- Ci dovrà essere un buffer sia nel mittente che nel destinatario. Il mittente dovrà memorizzare i pacchetti trasmessi, ma il cui acknowledgement non è ancora ricevuto.
+- Due soluzioni ai errori con pipeline: **Go-Back-N** e **ripetizione selettiva**.
+
+<img src="img/pipe.png" width="300" />
+
+### Go-Back-N (GBN)
+### Ripetizione selettiva
+
+
+
