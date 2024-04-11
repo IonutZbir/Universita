@@ -5,7 +5,7 @@ Date due stringhe $s_{1}$ e $s_{2}$, vogliamo in qualche modo capire quanto sono
 > [!NOTE]
 > - Per esempio: ocurrance e occurrence.
 
-<img src="seqAl/misgapex.png" width="300" />
+<img src="img/seqAl/misgapex.png" width="300" />
 
 Per definire meglio questo concetto, è stato definita **EDIT DISTANCE**.
 > [!IMPORTANT]
@@ -28,7 +28,7 @@ $$cost(M)
 \sum_{j: y_{j} unmatched}{\delta} 
 $$
 
-<img src="seqAl/allineamento.png" width="300" />
+<img src="img/seqAl/allineamento.png" width="300" />
 
 ## Definizione della soluzione
 
@@ -44,4 +44,38 @@ $$
 - $OPT(i, j) = j \cdot \delta$ se $i = 0$. 
 - $OPT(i, j) = i \cdot \delta$ se $j = 0$. 
 - $OPT(i, j) = min${ $\alpha_{x_{i}y_{i}} + OPT(i - 1, j - 1)$, $\delta + OPT(i - 1, j)$, $\delta + OPT(i, j - 1)$ }.
+
+```
+Sequence-Alignment(X, Y, Delta, Alpha)
+    m = Len(X)
+    n = Len(Y)
+    for i = 0 to m do
+        M[i, 0] = i * Delta
+    for i = 0 to n do
+        M[0, j] = j * Delta
+
+    for i = 1 to m do
+        for j = 1 to n do 
+            M[i, j] = min{
+            Alpha[xi, yi] + M[i - 1, j - 1],
+            Delta + M[i - 1, j],
+            Delta + M[i, j - 1]
+            }
+
+    return M[m, n]
+```
+**Complessità Temporale e Spaziale:** 
+$$
+T(n) = \theta(m\cdot n)
+$$
+$$
+S(n) = \theta(m\cdot n)
+$$
+
+# L'algoritmo di Hirschberg
+
+> [!IMPORTANT]
+> - **Teorema di Hirschberg**: Esiste un algoritmo per trovare l'allineamento ottimo in tempo $O(m\cdot n)$ e spazio $O(m + n)$.
+> - E' una combinazione intelligente di *divide et impera* e *programmazione dinamica*.
+
 
