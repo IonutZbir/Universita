@@ -65,12 +65,9 @@ Sequence-Alignment(X, Y, Delta, Alpha)
     return M[m, n]
 ```
 **Complessità Temporale e Spaziale:** 
-$$
-T(n) = \theta(m\cdot n)
-$$
-$$
-S(n) = \theta(m\cdot n)
-$$
+$$T(n) = \theta(m\cdot n)$$
+
+$$S(n) = \theta(m\cdot n)$$
 
 # L'algoritmo di Hirschberg
 
