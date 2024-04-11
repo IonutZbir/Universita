@@ -100,6 +100,10 @@ La soluzione a questo problema è semplice. Anziché operare in modalità stop-a
 <img src="img/pipe.png" width="300" />
 
 ### Go-Back-N (GBN)
+
+
+
+
 ### Ripetizione selettiva
 
 
