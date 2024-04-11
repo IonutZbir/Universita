@@ -25,7 +25,7 @@ $$cost(M)
 =
 \sum_{x_{i}, y_{j}\in M}{\alpha_{x_{i}, y_{j}}} + 
 \sum_{i: x_{i} unmatched}{\delta} + 
-\sum_{j: y_{j} unmatched}{\delta} + 
+\sum_{j: y_{j} unmatched}{\delta} 
 $$
 
 <img src="seqAl/allineamento.png" width="300" />
