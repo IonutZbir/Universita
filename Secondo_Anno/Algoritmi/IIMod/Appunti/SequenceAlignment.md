@@ -20,7 +20,7 @@ Per definire meglio questo concetto, è stato definita **EDIT DISTANCE**.
 > **SEQUENCE ALIGNMENT**
 > - **Goal**: Date due stringhe $X = x_{1}x_{2}...x_{m}$ e $Y = y_{1}y_{2}...y_{3}$, trovare il costo minimo di allineamento.
 > - **Def**: Un *allineamento* $M$ è un insieme ordinato di coppie $x_{i}$ - $y_{i}$ tale che ciascun carattere appare al massimo in una coppia e senza incroci, $x_{i}$ - $y_{j}$ e $x_{i^{'}}$ - $y_{j^{'}}$ si incrociano se $i < i^{'}$ ma $j > j^{'}$.
-> - **Def**: Il *costo* di un allineamento $M$ è:
+> - **Def**: Il *costo* di un allineamento $M$ è:  
 > $$
 > cost(M)
 > =
