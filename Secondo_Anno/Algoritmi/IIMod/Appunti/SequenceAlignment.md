@@ -75,4 +75,57 @@ $$S(n) = \theta(m\cdot n)$$
 > - **Teorema di Hirschberg**: Esiste un algoritmo per trovare l'allineamento ottimo in tempo $O(m\cdot n)$ e spazio $O(m + n)$.
 > - E' una combinazione intelligente di *divide et impera* e *programmazione dinamica*.
 
+> [!NOTE]  
+> **Osservazione**: Per calcolare la prossima colonna/riga della matrice abbiamo bisogno solamente delle prime 2 colonne/righe, pertanto manterremo in memoria solo 2 array alla volta, in questo modo usiamo $O(m + n)$ spazio e non più $O(m\cdot n)$. L'unico problema è che facendo cos', saremo in grado solo dcalcolare il valore ottimo di edit distante, ma non l'allineamento ottimo, non avendo tutti i risultati della matrice.
+
+> [!IMPORTANT]
+> - Sia $f(i, j)$ la lunghezza del cammino minimo da $(0, 0)$ a $(i, j)$.
+> - Possiamo calcolare $f(*, j)$ per ogni $j$ in tempo $O(m\cdot n)$ e spazio $O(m + n)$.
+> - **Lemma**: $f(i, j) = OPT(i, j)$ per ogni $i$ e $j$.
+> - **Dim (per induzione su $i + j$)**: 
+> 1. Caso base: $f(0, 0) = OPT(0, 0) = 0$.
+> 2. Ipotesi Induttiva: assumiamo vero per ogni $(i^{'}, j^{'})$ con $i^{'} + j^{'} < i + j$.
+> 3. L'ultimo arco del cammino minimo a $(i, j)$ va da $(i - 1, j - 1)$, $(i - 1, j)$, oppure $(i, j - 1)$.
+> 4. Quindi 
+$$f(i, j) =$$ 
+$$min(\alpha_{x_{i}, y_{i}} + f(i - 1, j - 1), \delta + f(i - i, j), \delta + f(i, j - 1)) =$$
+Qui applichiamo l'ipotesi induttiva.
+$$min(\alpha_{x_{i}, y_{i}} + OPT(i - 1, j - 1), \delta + OPT(i - i, j), \delta + OPT(i, j - 1)) =$$
+Che è uguale all'equazione di Bellman.
+$$OPT(i, j)$$
+
+<img src="img/seqAl/f.png" width="300" />
+
+> [!IMPORTANT]
+> - Sia $g(i, j)$ la lunghezza del cammino minimo da $(i, j)$ a $(m, n)$.
+> - Possiamo calcolare $g(i, j)$ invertendo l'orientamento degli archi e invertendo i $(0, 0)$ e $(m, n)$.
+> - Possiamo calcolare $g(*, j)$ per ogni $j$ in tempo $O(m\cdot n)$ e spazio $O(m + n)$.
+
+<img src="img/seqAl/g.png" width="300" />
+
+> [!IMPORTANT]
+> - **Oss. 1**: La lunghezza del cammino minimo passante per l'arco $(i, j)$ è $f(i, j) + g(i, j)$.
+> - **Oss. 2**: Sia $q$ l'indice che minimizza $f(q, \frac{n}{2}) + g(q, \frac{n}{2})$. Allora, esiste il cammino minimo da $(0, 0)$ a $(m, n)$ che passa per $(q, \frac{n}{2})$.
+> - A questo punto, possiamo utilizzare la techina **divide et conquer** per questo problema. 
+> - **Divide**: Trova l'indice $q$ che minimizza $f(q, \frac{n}{2}) + g(q, \frac{n}{2})$; salva il nodo $i-j$ come nodo della soluzione.
+> - **Conquer**: Ricorsivamente calcola il valore dell'allineamento ottimo per ciascun pezzo.
+
+<img src="img/seqAl/deq.png" width="300" />
+
+> [!IMPORTANT]
+> - **Complessità Spaziale**: $S(n) = \theta(m + n)$, perche ci sono $\leq n$ chiamate ricorsive, ciascuna usa $\theta(m)$ spazio per calcolare $f$ e $g$.
+> - **Complessità Temporale**: Sia $T(m, n)$ la il tempo di esecuzione dell'algoritmo di Hirschberg su istanze di stringhe di dimensione $m$ e $n$. 
+> - Sia $T(m, n) = T(q, \frac{n}{2}) + T(m - q, \frac{n}{2})$ l'equazione di ricorrenza, usando il metodo della sostituzione otteniamo:
+> - Selezioniamo una costante $c$ tale che: 
+> $$T(m, 2) \leq cm$$
+> $$T(2, n) \leq cn$$
+> $$T(m, n) \leq cmn + T(q, \frac{n}{2}) + T(m - q, \frac{n}{2})$$
+> - Allora: $T(m, n) \leq 2\cdot c\cdot m\cdot n$
+> - Caso base: $m = 2$ e $n = 2$
+> - Ipotesi induttiva: $T(m^{'}, n^{'}) \leq 2m^{'}n^{'}$ per ogni $(m^{'}, n^{'})$ tale che $m^{'} + n^{'} < m + n$.
+> $$T(m, n) \leq T(q, \frac{n}{2}) + T(m - q, \frac{n}{2}) + cm$$
+> $$\leq 2cq\frac{n}{2} + 2(m - q)\frac{n}{2} + cmn$$
+> $$= cqn + cmn - cqn + cmn$$
+> $$= 2mn$$
+
 
