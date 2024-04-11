@@ -76,7 +76,7 @@ $$S(n) = \theta(m\cdot n)$$
 > - E' una combinazione intelligente di *divide et impera* e *programmazione dinamica*.
 
 > [!NOTE]  
-> **Osservazione**: Per calcolare la prossima colonna/riga della matrice abbiamo bisogno solamente delle prime 2 colonne/righe, pertanto manterremo in memoria solo 2 array alla volta, in questo modo usiamo $O(m + n)$ spazio e non più $O(m\cdot n)$. L'unico problema è che facendo cos', saremo in grado solo dcalcolare il valore ottimo di edit distante, ma non l'allineamento ottimo, non avendo tutti i risultati della matrice.
+> **Osservazione**: Per calcolare la prossima colonna/riga della matrice abbiamo bisogno solamente delle prime 2 colonne/righe, pertanto manterremo in memoria solo 2 array alla volta, in questo modo usiamo $O(m + n)$ spazio e non più $O(m\cdot n)$. L'unico problema è che facendo così, saremo in grado solo di calcolare il valore ottimo di edit distante, ma non l'allineamento ottimo, non avendo tutti i risultati della matrice.
 
 > [!IMPORTANT]
 > - Sia $f(i, j)$ la lunghezza del cammino minimo da $(0, 0)$ a $(i, j)$.
