@@ -32,6 +32,22 @@ $$l(W) = \sum_{e\in W} l_{e} < 0$$
 **Single-destination shortest-paths problem**
 - Dato un grafo diretto $G=(V, E)$ con lunghezza degli archi $l_{vw}$, senza cicli negativi e un nodo distinto $t$, trovare il cammino minimo da $v$ a $t$ per ogni nodo $v$.
 
+E' un problema del tutto equivalente del problema dei cammini minimi a singola sorgente, a singola sorgente, o a singola destinazione, il problema algoritmicamente è identico. Avendo l'algoritmo per uno dei due problemi, basta solamente invertire gli archi e scambiare il ruole della destinazione con la sorgente.
 
+**Negative-cycle problem**
+- Dato un grafo diretto $G = (V, E)$, con lunghezza degli archi $l_{vw}$, trovare un ciclo negativo (se esiste). 
 
+Vedremo che questo è un problema relazionato al problema dei cammini minimi, in qualche modo con l'algoritmo di Bellman-Ford, riusciremo a rispondere anche a questo quesito.
 
+### Algoritmo di programmazione dinamica
+
+>[!IMPORTANT]
+> - **DEF**: $OPT(i, v)$: lunghezza del cammino minimo da $v$ a $t$ che utilizza $\leq$ $i$ archi.
+> - **GOAL**: $OPT(n - 1, v)$ per ogni vertice $v$. Per il Lemma 2, se non ci sono cicli negativi, allora esiste un cammino minimo da $v$ a $t$ che è minimo. Quindi vogliamo trovare il cammino minimo che va da $v$ a $t$ che usa al più un arco, il cammino minimo che va da $v$ a $t$ che usa al più 2 archi è cosi via, fino a $n - 1$ archi.
+> - **Caso 1**: Il cammino minimo da $v$ a $t$ usa $\leq$ $i - 1$ archi, allora $OPT(i, v) = OPT(i - 1, v)$.
+> - **Caso 2**: Il cammino minimo da $v$ a $t$ usa esattamente $i$ archi. Se $(v, w)$ è il primo arco nel cammino minimo da $v$ a $t$, con costo $l_{vw}$. Allora seleziona il cammino minimo da $w$ a $t$ utilizzando $\leq$ $i - 1$ archi.
+
+**Equazione di Bellman**
+- $OPT(i, v) = 0$ se $i = 0$ e $v = t$
+- $OPT(i, v) = \infty$ se $i = 0$ e $v \neq t$
+- $OPT(i, v) = \min${ $OPT(i - 1)$,  $\min_{(v,w)\in E}${ $OPT(i - 1) + l_{vw}$ }} se $i > 0$
