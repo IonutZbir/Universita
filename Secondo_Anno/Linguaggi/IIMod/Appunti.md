@@ -100,15 +100,25 @@ se cut in tra a e b, una volta guardato a e sorpassato b, non posso tornare indi
 
 p :- d. non la posso utilizzare
 
+## Definizione di nuovi operatori
 
+:- op(priorità, K, nome)
+dove k puo essere:
+- fx
+- xfx
+- xfy
+- yfx
+la priorità deve essere decrescente
 
+tutti gli operatori sono binari -> albero binario
 
+vogliamo definire l'operatore somma, che deve comportarsi come +.
 
+var(X), true se X è una variabile, false se è unificata
+nonvar(X), true se X è unificato, false altrimenti.
 
+X = 1,
+var(X). -> false
 
-
-
-
-
-
-
+X = 1,
+nonvar(x). -> true
