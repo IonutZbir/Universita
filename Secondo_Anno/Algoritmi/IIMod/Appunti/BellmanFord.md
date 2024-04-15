@@ -51,3 +51,26 @@ Vedremo che questo è un problema relazionato al problema dei cammini minimi, in
 - $OPT(i, v) = 0$ se $i = 0$ e $v = t$
 - $OPT(i, v) = \infty$ se $i = 0$ e $v \neq t$
 - $OPT(i, v) = \min${ $OPT(i - 1)$,  $\min_{(v,w)\in E}${ $OPT(i - 1) + l_{vw}$ }} se $i > 0$
+
+```
+Shortest-paths(V, E, l, t)
+    for each node v:
+        OPT[0, v] = inf
+    OPT[0, t] = 0
+    for i = 1 to n - 1 do:
+        for each node v:
+            OPT[i, v] = OPT[i - 1, v]
+            for each edge(v, w):
+                OPT[i, v] = min{OPT[i, v], OPT[i - 1, w] + l_vw}
+```
+
+> [!IMPORTANT]
+>
+> - **Teorema**: Dato un grafo diretto $G = (V, E)$ senza cicli negativi, l'algoritmo calcola la lunghezza del cammino minimo da $v$ a $t$ per ogni nodo $v$ in tempo $\theta(n\cdot m)$ e spazio $\theta(n^2)$.
+> - **Dimostrazione**: La tabella $OPT$ occupa spazio $\theta(n^2)$. Ogni iterazione costa $\theta(m)$ dato che esaminiamo ciascun nodo una volta sola.
+
+Adesso, rimane solo da trovare i nodi che formano il cammino minimo. Ci sono due approcci:
+1. Mantenere `successor[i, v]`, un puntatore che punta al prossimo nodo del cammino minimo da $v$ a $t$ che usa al più $i$ archi. 
+2. Calcolare `OPT[i, v]`, poi andare a considerare solo gli archi per cui vale $OPT[i, v] = OPT[i - 1, w] + l_{vw}$. Ciascun cammino diretto in questo sottografo è un cammino minimo.
+
+
