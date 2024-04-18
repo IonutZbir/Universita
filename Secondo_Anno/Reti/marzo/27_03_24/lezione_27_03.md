@@ -93,18 +93,47 @@ Di conseguenza, il throughput è al massimo 267 kbps!
 **Funzionamento rdt3.0 con pipeline**
 
 La soluzione a questo problema è semplice. Anziché operare in modalità stop-and-wait, si consente al mittente di inviare più pacchetti senza attendere gli acknowledgement. Questa tecnica è nota come **pipelining**. Di conseguenza il protocollo di trasferimento affidabile cambia un po:
-- L'intervallo di numeri di sequenza disponibili deve essere incrementato dato che ogni pacchetto in transito deve presentare un numero di sequenza univoco e che ci potrebbero essere più pacchetti in transito ancora in attesa di acknowledgement.
-- Ci dovrà essere un buffer sia nel mittente che nel destinatario. Il mittente dovrà memorizzare i pacchetti trasmessi, ma il cui acknowledgement non è ancora ricevuto.
+- L'intervallo di numeri di sequenza disponibili deve essere incrementato dato che ogni pacchetto in transito deve presentare un numero di sequenza univoco e che ci potrebbero essere più pacchetti in transito ancora in attesa di acknowledgment.
+- Ci dovrà essere un buffer sia nel mittente che nel destinatario. Il mittente dovrà memorizzare i pacchetti trasmessi, ma il cui acknowledgment non è ancora ricevuto.
 - Due soluzioni ai errori con pipeline: **Go-Back-N** e **ripetizione selettiva**.
 
 <img src="img/pipe.png" width="300" />
 
 ### Go-Back-N (GBN)
 
+In un protocollo **Go-Back-N** il mittente può trasmettere più pacchetti senza dover attendere alcun acknowledgment, ma non può avere più di un dato numero massimo consentito N di pacchetti in attesa di acknowledgment nella pipeline. 
 
+<img src="img/gbn.png" width="400" />
 
+- L'intervallo `[0, base - 1]` corrisponde ai pacchetti già trasmessi e che hanno ricevuto acknowledgment.
+- L'intervollo `[base, nextseqnum - 1]` corrisponde ai pacchetti inviati, ma che non hanno ancora ricevuto alcun acknowledgment.
+- L'intervallo `[nextseqnum, base + N - 1]` può essere utilizzato per i pacchetti da inviare immediatamente, nel caso arrivassero dati dal livello superiore.
+- Infine, i numeri di sequenza maggiore o uguali a $base + N$ non posson essere utilizzati finché il mittente non riceva un acknowledgment relativo a un pacchetto che si trova nella pipeline ed è ancora privo di acknowledgement.
+
+L'intervallo di numeri di sequenza ammisibili per i pacchetti trasmessi, ma che non hanno ancora ricevuto alcun acknowledgment, può essere visto come una finestra di dimensione $N$ sull'intervallo di numeri di sequenza. Quando il protocollo è in funzione, questa finestra trasla lungo lo spazio dei numeri di sequenza. Per questo motivo, $N$ viene spesso chiamato **ampiezza della finestra** e il protocollo GBN viene detto **protocollo a finestra scorrevole**.
+
+**Il mittente GBN deve rispondere a tre tipi di evento.**
+
+<img src="img/gbn_fsm_mittente.png" width="300" />
+
+1. *Invocazione dall'alto*. Quando viene chaiamata `rdt_send()`, come prima cosa il mittente controlla se la finestra sia piena, ossia se vi siano $N$ pacchetti in sospeso senza acknowledgment. Se la finistra non è piena, crea e invia un pacchetto e le variabili vengono aggiornate di conseguenza. Se la finistra è piena, il mittente restituisce i dati al livello. A livello implementativo, i dati vengono memoriazzati in un buffer oppure viene utilizzato un meccanismo di sincronizzazione che consenta al livello superiore di invocare `rdt_send()` solo quando la finestra non è piena.
+2. *Ricezione di un ACK*. Nel protocollo GBN, l'acknowledgment del pacchetto con il numero di sequenza $n$ verrà considerato un **acknowledgment cumulativo**, che indica che tutti i pacchetti con un numero di sequenza $\leq n$ sono stati correttamente ricevuti.
+3. *Evento di Timeout*. Come nei protocolli stop-and-wait, si usa ancora un contatore per risolvere il problema di pacchetti dati o acknowledgment persi. Quando si verifica un timeout, il mittente invia nuovamente **tutti** i pacchetti spediti che ancora non hanno ricevuto un acknowledgment.  
+
+**Anche le azioni del destinatario GBN sono semplici**
+
+<img src="img/gbn_fsm_ricevente.png" width="300" />
+
+Se un pacchetto con numero di sequenza $n$ viene ricevuto correttamente ed è in ordine (ossia, gli ultimi dati consegnati al livello superiore provengono da un pacchetto con numero di sequenza $n - 1$), il destinatario manda un ACK per quel pacchetto e consegna i suoi dati al livello superiore. In tutti gli altri casi, il destinatario scarta i pacchetti e rimanda un ACK per il pacchetto in ordine ricevuto più di recente.
 
 ### Ripetizione selettiva
 
+I **protocolli a ripetizione selettiva** evitano le ritrasmissioni non necessarie facendo ritrasmettere al mittente solo quei pacchetti sui cui esistono sospetti di errore (ossia, smarrimento o alterazione). 
 
+<img src="img/rpt_sel.png" width="300" />
 
+**Mittente**
+
+1. *Dati ricevuti dall'alto*. Quando si ricevono dati dall'alto, il mittente SR controlla il successivo numero di sequenza disponibile per il pacchetto. Se è all'interno della finestra del mittente, i dati vengono impacchettati e inviati. Altrimenti sono salvati nei buffer o restituiti al livello superiore per una successiva ritrasmissione, come in GBN.
+2. *Timeout*. Vengono usati ancora i contatori per cautelarsi contro la perdita di pacchetti. Ora però ogni pacchetto deve avere un proprio timer logico, dato che al timeout sarà ritrasmesso un solo pacchetto.
+3. *ACK ricevuto*.
