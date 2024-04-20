@@ -67,10 +67,56 @@ Shortest-paths(V, E, l, t)
 > [!IMPORTANT]
 >
 > - **Teorema**: Dato un grafo diretto $G = (V, E)$ senza cicli negativi, l'algoritmo calcola la lunghezza del cammino minimo da $v$ a $t$ per ogni nodo $v$ in tempo $\theta(n\cdot m)$ e spazio $\theta(n^2)$.
-> - **Dimostrazione**: La tabella $OPT$ occupa spazio $\theta(n^2)$. Ogni iterazione costa $\theta(m)$ dato che esaminiamo ciascun nodo una volta sola.
+> - **Dimostrazione**: La tabella $OPT$ occupa spazio $\theta(n^2)$. Ogni iterazione costa $\theta(m)$ dato che esaminiamo ciascun nodo una volta sola. Quindi, andando a considerare per ogni nodo, tutti gli archi uscenti, sommando i gradi di ciascun nodo, otteniamo che il doppio ciclo `for each` costa $\theta(m)$. 
 
 Adesso, rimane solo da trovare i nodi che formano il cammino minimo. Ci sono due approcci:
 1. Mantenere `successor[i, v]`, un puntatore che punta al prossimo nodo del cammino minimo da $v$ a $t$ che usa al più $i$ archi. 
 2. Calcolare `OPT[i, v]`, poi andare a considerare solo gli archi per cui vale $OPT[i, v] = OPT[i - 1, w] + l_{vw}$. Ciascun cammino diretto in questo sottografo è un cammino minimo.
 
+L'algoritmo appena descritto sopra, utilizza memoria $\theta(n^2)$, il che lo rende molto inefficiente. Per rendere l'algoritmo più efficiente possiamo effettuare la seguente ottimizzazione, ovvero di mantere 2 array di lunghezza $n$,  invece di una matrice $n\cdot n$:
+- `d[v]`: la lunghezza del cammino minimo da $v$ a $t$ che abbiamo trovato fin ora.
+- `successor[v]`: nodo successivo a $v$ nel cammino da $v$ a $t$.
 
+Con questa ottimizzazione dello spazio, segue un'ulteriore ottimizzazione. Se `d[w]` non è stato aggiornato nella $i - esima$ iterazione (passata), allora non c'è bisogno di considerare gli archi entranti nella $i - esima$ passata.
+
+```
+Bellman-Ford-Moore(V, E, l, t)
+    for each node v
+        d[v] = inf
+        successor[v] = null
+    d[t] = 0
+    for i = 1 to n - 1 do
+        for each node w
+            if(d[w] != inf) // significa che d[w] è stato aggiornato nelle passate precedenti
+                for each edge (v, w)
+                    if (d[v] > d[w] + l_vw)
+                        d[v] = d[w] + l_vw
+                        successor[v] = w
+        if (d[_] non è stato modificato nell'iterazione i) STOP.
+```
+
+Per capire meglio questo algoritmo proviamo a simularlo con il sequente grafo:
+
+<img src="img/bellmanford/simulazione.png" width="300">
+
+**Ordine dei nodi**: `t, D, C, B, E`.
+
+1. Prima passata,  $i = 0$
+   
+   
+   |     |                                      `t`                                      |                  `D`                  | `C` |                                     `B`                                     |                                   `E`                                   |
+   | :-: | :---------------------------------------------------------------------------: | :-----------------------------------: | :-: | :-------------------------------------------------------------------------: | :---------------------------------------------------------------------: |
+   | `t` |                                       _                                       |                   _                   |  _  |                                      _                                      |                                    _                                    |
+   | `B` | $d[B] = +\infty > d[t] + l_{Bt} = -1 =>$<br>$d[B] = -1$<br>$successor[B] = t$ | $d[B] = -1 < d[D] + l_{DB} = +\infty$ |  _  |                                      _                                      |                                    _                                    |
+   | `C` |  $d[C] = +\infty > d[t] + l_{Ct} = 4 =>$<br>$d[C] = 4$<br>$successor[C] = t$  | $d[C] = 4 < d[D] + l_{DC} = +\infty$  |  _  |    $d[C] = 4 > d[B] + l_{CB} = 2 =>$<br>$d[C] = 2$<br>$successor[C] = B$    |                                    _                                    |
+   | `D` |                                       _                                       |                   _                   |  _  | $d[D] = +\infty > d[B] + l_{DB} = 1 =>$<br>$d[D] = 1$<br>$successor[D] = B$ | $d[D] = 1 > d[E] + l_{DE} = -2 =>$<br>$d[D] = -2$<br>$successor[D] = E$ |
+   | `E` |                                       _                                       |                   _                   |  _  | $d[E] = +\infty > d[B] + l_{EB} = 1 =>$<br>$d[E] = 1$<br>$successor[E] = B$ |                                    _                                    |
+   
+   
+    Quindi, dopo la prima passata, il vettore `d` e `successor` è:
+
+      - $d[t] = 0$, $d[B] = -1$, $d[C] = 2$, $d[D] = -2$, $d[E] = 1$
+      - $successor[t] = null$, $successor[B] = t$, $successor[C] = B$, $successor[D]$ = E, $successor[E] = B$
+  
+2. Seconda passata, $i = 1$
+   Si osserva che nella seconda passata, $d[_]$ non cambia, perciò l'algoritmo termina senza dover fare 4 passate.
