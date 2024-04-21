@@ -146,12 +146,12 @@ Segmented-Least-Squares(Points, c)
 - **GOAL**: Inserire gli elementi nella bisaccia massimizzando il valore totale senza superare il peso limite $W$.
 
 | $i$ | $w_{i}$ | $v_{i}$ |
-|:---:|:-------:|:-------:|
-| 1   | 1 USD   | 1 kg    |
-| 2   | 6 USD   | 2 kg    |
-| 3   | 18 USD  | 5 kg    |
-| 4   | 22 USD  | 6 kg    |
-| 5   | 28 USD  | 7kg     |
+| :-: | :-----: | :-----: |
+|  1  |  1 USD  |  1 kg   |
+|  2  |  6 USD  |  2 kg   |
+|  3  | 18 USD  |  5 kg   |
+|  4  | 22 USD  |  6 kg   |
+|  5  | 28 USD  |   7kg   |
 
 Supponiamo di avere una bisaccia con peso limite $W$.
 - Il sottoinsieme {1, 2, 5} ha valore 35 USD e peso 10.
