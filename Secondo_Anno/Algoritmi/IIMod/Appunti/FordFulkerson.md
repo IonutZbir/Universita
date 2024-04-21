@@ -4,15 +4,15 @@
 
 Una **rete di flusso** è una tupla $G = (V, E, s, t, c)$ dove $G$ è un grafo diretto $(V, E)$ con sorgente $s\in V$ e nodo pozzo $t\in V$. Inoltre, per ogni arco $e\in E$ è definito $c(e)\geq 0$ la capacità dell'arco $e$.
 
-<img src="img/fordfulk/flow.png" width="400">
+<img src="img/fordfulk/flow.png" width="300">
 
 ### Min cut problem
 
 > [!IMPORTANT]
 >
 > - **DEF**: Un **st-cut** è una partizione $(A, B)$ di nodi dove $s\in A$ e $t\in B$
-> - **DEF**: La **capacità** di un cut è la somma di tutte le capacità degli archi uscenti diretta da $A$ in $B$.
-> $$cap(A, B) = \sum_{e\in A} c(e)$$.
+> - **DEF**: La **capacità** di un cut è la somma di tutte le capacità degli archi uscenti diretti da $A$ verso $B$.
+> $$cap(A, B) = \sum_{e\in A} c(e)$$1
 > - **Min cut problem**: Trovare un cut di capacità minima.
  
 <img src="img/fordfulk/st_cut.png" width="400">
@@ -43,7 +43,7 @@ L'algoritmo greedy è il seguente:
 3. Aumenta il flusso lungo il cammino $P$.
 4. Ripeti finché non rimani bloccato.
 
-<img src="img/fordfulk/greedy_max_flow.png" width="400" />
+<img src="img/fordfulk/g2reedy_max_flow.png" width="400" />
 
 > [!NOTE]
 >
@@ -54,3 +54,56 @@ L'algoritmo greedy è il seguente:
 Perché l'algoritmo greedy fallisce? L'algoritmo greedy fallisce perché una volta che l'algoritmo incrementa il flusso su un arco, quel flusso non verrà mai decrementato. Ci serve quindi un meccanismo di "undo" in caso l'algoritmo greedy prenda una decisione sbagliata.
 
 ### Verso l'algortimo, rete residua
+
+La rete residua è lo strumento cardine su cui si basa l'algoritmo di Ford - Fulkerson. È una rete definita a partire dalla rete iniziale e un flusso corrente.
+
+Dato un grafo $G$ e un flusso $f$, da essi definiamo un nuovo grafo $G_{f}$ detta **rete residua**.
+
+> [!IMPORTANT]
+>
+> **DEF**: Dato un grafo $G$ e un flusso $f$ definiamo $G_{f}$ nel seguente modo:
+> 1. I nodi di $G_{f}$ sono gli stessi di $G$.
+> 2. Dato un arco $e = (u, v)\in G$, per il quale abbiamo $f(e)$ e $c(e)$, definiamo **arco rivoltato** $e^{reverse} = (v, u)$
+> 3. Definiamo la **capacità residua** 
+> $$c_{f}(e) = c(e) - f(e) \iff e\in E$$
+> $$c_{f}(e) = f(e^{reverse}) \iff e^{reverse}\in E$$
+
+Dunque, definiamo **rete residua** $G_{f} = (V, E_:{f}, s, t, c_{f})$ tale che:
+$$E_{f} = \{ e:\ f(e) < c(e) \} \cup \{ e: f(e^{reverse}) > 0 \}$$
+
+**Proprietà chive**: $f^{'}$ è un flusso in $G_{f} \iff f + f^{'}$ è un flow in $G$.
+
+<img src="img/fordfulk/residual_network.png" width="300" />
+
+> [!IMPORTANT]
+>
+> - **DEF**: Un **cammino aumentante** è un semplice cammino da $s$ a $t$ nella rete residua $G_{f}$.
+> - **DEF**: La **bottleneck capacity (capacità di collo di bottiglia)** di un cammino aumentante $P$ è la minima capacità residua di un arco in $P$.
+> - **Proprietà**: Sia $f$ un flusso a sia $P$ un cammino aumentante in $G_{f}$. Allora, dopo aver calcolato $f^{'} = AUGMENT(f, c, P)$, il valore del risultante flusso $val(f^{'}) = val(f^{'}) + bottleneck(G_{f}, P)$.
+
+```
+Augment(f, c, P)
+    delta = bottleneck capacity del cammino aumentate P
+    for each edge e in P
+        if(e in E) f(e) = f(e) + delta
+        else f(e_reverse) = f(e_reverse) - delta
+    return f
+```
+
+**Algoritmo dei cammini aumentanti di Ford - Fulkerson**
+
+1. Inzia con $f(e) = 0\ \forall e\in\ E$.
+2. Trova un qualsiasi cammino $P$ nella rete residua $G_{f}$.
+3. Aumenta il flusso lungo il cammino $P$.
+4. Ripeti finché non rimani bloccato.
+
+```
+Ford-Fulkerson(G)
+    for each edge e in E
+        f(e) = 0
+    G_f = rete residua definita da G e f
+    while(esiste un cammino P da s a t in G_f) do
+        f = Augment(f, c, P)
+        Aggiorna G_f
+    return f
+```
