@@ -43,7 +43,7 @@ L'algoritmo greedy è il seguente:
 3. Aumenta il flusso lungo il cammino $P$.
 4. Ripeti finché non rimani bloccato.
 
-<img src="img/fordfulk/g2reedy_max_flow.png" width="400" />
+<img src="img/fordfulk/greedy_max_flow.png" width="400" />
 
 > [!NOTE]
 >
