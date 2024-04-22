@@ -126,13 +126,22 @@ A sua volta, l'host A tiene traccia di:
 - `LastByteSent`: ultimo byte mandato.
 - `LastbyteAcked`: ultimo byte per cui si è ricevuto un acknowledgment
 
-La differenza di questi due variabili esprime la quantità di dati spediti da A per cui non si è ancora ricevuto un acknowledgment. Mantenendo questa quantità sotto il valore di `rwnd`, si garantisce che l'host A non mandi in overflow il buffer di B.
+La differenza di queste due variabili esprime la quantità di dati spediti da A per cui non si è ancora ricevuto un acknowledgment. Mantenendo questa quantità sotto il valore di `rwnd`, si garantisce che l'host A non mandi in overflow il buffer di B.
 $$LastByteSent - LastByteAcked \leq rwnd$$
 
+## Gestione della connessione TCP
 
+Supponiamo che un processo client debba stabilire una connessione TCP con un processo server. La connessione avviene nel seguente modo:
 
+1. Il client invia uno speciale pacchetto TCP al server. Questo pacchetto contiene il bit di intestazione **SYN** posto a 1. Inoltre il client sceglie a caso un numero di sequenza (`client_isn`) iniziale e lo pone nel campo numero di sequenza del segmento SYN iniziale. Questo segmento viene poi inviato al livello IP che lo spedisce.
+2. Quando il datagramma IP contenente il segmento SYN arriva al server, ammesso che arrivi, il server alloca i buffer e le variabili TCP alla connessione e invia un segmento di connessione approvata al client. Questo segmento contiene tre informazioni importanti.
+    - Il bit **SYN** posto a 1.
+    - Il campo **ACK** assume il valore `client_isn + 1`.
+    - Genera il proprio numero di sequenza `server_isn` e lo pone nel campo numero di sequenza.
 
+    Il segmento di connessione approvato viene detto **segmento SYNACK**. 
+3. Alla ricezione del segmento SYNACK anche il client alloca il buffer e le variabili alla connessione. L'host client invia poi al server un altro segmento in risposta al segmento di connessione approvata. Il client pone i valore `server_isn + 1` nel campo ACK dell'intestazione TCP e il bit SYN posto a 0 dato che la connessione è stabilita. 
 
+Notiamo per i due host si scambiano 3 pacchetti per stabilire la connessione, infatti questo procedimento prende il nome di **handshake a 3 vie**.
 
-
-
+Per chiudere la connessione TCP client e server chiudono ciascuno il proprio lato della connessione, inviando il segmento TCP con i bit **FIN** posto a 1. 
