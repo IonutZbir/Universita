@@ -52,14 +52,87 @@ $$EstimatedRTT = (1 - \alpha)\cdot EstimatedRTT + \alpha\cdot SampleRTT$$
 
 Si noti che `EstimatedRTT` è una media ponderata dei valori `SampleRTT`. Tale media attribuisce maggiore importanza ai campioni recenti rispetto a quelli vecchi. In statistica una media costruita in questo modo è detta **media mobile esponenziale ponderata (EWMA)**.
 
-$$EstimatedRTT_{n} = (1 - \alpha)^{n}\cdot Estimated_{n - 1} + \alpha\cdot SampleRTT_{n}$$
+$$EstimatedRTT_{n} = (1 - \alpha)^{n}\cdot EstimatedRTT_{n - 1} + \alpha\cdot SampleRTT_{n}$$
 
 Oltre ad avere una stima di RTT è anche importante possedere la misura della sua variabilità. `DevRTT` è una stima di quanto `SampleRTT` generalmente si discosta da `EstimatedRTT`.
 
-$$DevRTT = (1 - \beta)\cdot DevRTT + \beta\cdot \mid SampleRTT - EstimatedRTT \mid$$
+$$DevRTT = (1 - \beta)\cdot DevRTT + \beta\ \cdot \mid SampleRTT - EstimatedRTT \mid$$
 
 Tipicamente il valore di $\beta$ è 0.25.
 
-Dati i valori di `EstimatedRTT` e `DevRTT`, dobbiamo trovare il valore del timeout. L'intervallo non può essere minore di `EstimatedRTT` ma neanche troppo maggiore, altrimenti TCP non ritrasmetterebbe rapidamente il segmento perduto, il che comporterebbe gravi ritardi sul trasferimento dei dati.
+Dati i valori di `EstimatedRTT` e `DevRTT`, dobbiamo trovare il valore del timeout. L'intervallo non può essere minore di `EstimatedRTT` ma neanche troppo maggiore, altrimenti TCP non ritrasmetterebbe rapidamente il segmento perduto, il che comporterebbe gravi ritardi sul trasferimento dei dati. È pertanto necessario impostare il timeout a `EstimatedRTT` più un certo margine che dovrebbe essere grande quando c'è molta fluttuazione nei valori di `SampleRTT` e piccolo in caso contrario.
+$$TimeoutInterval = EstimatedRTT + 4\cdot\ DevRTT$$
+
+## Trasferimento dati affidabile
+
+TCP crea un **servizo di trasporto dati affidabile** al di sopra del servizio inaffidabile e best-effort IP, assicurando che il flusso di byte che i processi leggono dal buffer di ricezione TCP non sia alterato, non abbia buchi, non presenti duplicazioni e rispetti la sequenza originaria, in altre parole il flusso di dati in arrivo è esattamente quello spedito.
+
+**Mittente TCP**
+
+Osserviamo ora come le azioni del mittente dipendano dal tipo di evento che avviene.
+
+- **Evento** - *Dati ricevuti dall'applicazione*. Viene creato il segmento TCP con numero di sequenza `NextSeqNum` che inizialemente è il numero del primo byte del segmento nel flusso di byte. Successivamente avvia il timer se non già in funzione e passa il segmento a IP e aggiorna `NextSeqNum = NextSeqNum + len(dati)`.
+- **Evento** - *Timeout*. Ritrasmette il segmento che ha causato il timeout, ovvero il segmento che non ha ricevuto ACK con il più piccolo numero di sequenza e riavvia il timer.
+- **Evento** - *ACK rivevuto*. Sia $y$ il ACK ricevuto. Se $y\ > SendBase$ aggiorna $y = SendBase$ e inoltre, se esistono segmenti senza ACK avvia il timer.
+
+**Ricevente TCP**
+
+Osserviamo ora come le azioni del ricevente dipendano dal tipo di evento che avviene.
+
+- **Evento** - Arrivo ordinato di segmento con numero di sequenza atteso. Tutti i dati fino al numero di sequnza atteso sono già stati riscontrati
+    - **Azione** - ACK ritardato. Attende fino a 500 ms per l'arrivo ordinato di un altro segmento. Se in questo intervallo non arriva il successivo, invia un ACK.
+- **Evento** - Arrivo ordinato di segmento con numero di sequenza atteso. Un altro segmento ordinato è in attesa di trasmissione dell'ACK.
+    - **Azione** - Invia immediatamente un singolo ACK cumulativo, riscontrando entrambi i segmenti ordinati.
+- **Evento** - Arrivo non ordinato di segmento con numero di sequenza superiore a quello atteso. Viene rilevato un buco.
+    - **Azione** - Invia immediatamente un *ACK duplicato*, indicando il numero di sequenza del prossimo byte attso (che è l'estremità inferiore del buco).
+- **Evento** - Arrivo di un segmento che colma parzialmente o completamente il buco nei dati ricevuti.
+    - **Azione** - Invia immediatamente un ACK, ammesso che il segmento cominci dall'estremità inferiore del buco.
+
+**Ritrasmissione rapida**
+
+Uno dei problemi legati alle ritrasmissioni è che il periodo di timeout puù rivelarsi relativamente lungo. Quando si smarrisce un segmento, il lungo periodo di timeout impone al mittente di ritardare il nuovo invio del pacchetto in perso, incrementando di conseguenza il ritardo end-to-end. Fortunatamente, il mittente può in molti casi rilevare la perdita dei pacchetti ben prima che si verifichi l'evento di timeout grazie agli **ACK duplicati** relativi a un segmento il cui ACK è già stato ricevuto dal mittente.
+
+Dato che in molti casi il mittente invia un gran numero di segmenti, se uno di questi viene smarrito ci saranno probabilmente molti ACK duplicati. Se il mittente TCP riceve **3 ACK** duplicati con lo stesso data, considera questo evento come indice che il successivo segmento sia andato perduto. Nel caso in cui siano stati ricevuti 3 ACK duplicati, il mittente TCP effettua una **ritrasmissione rapida** rispedendo il segmento mancante prima che scada il timer.
+
+## Controllo di flusso
+
+Gli host riservano dei buffer di ricezione per la connessione TCP. Quando la connessione TCP riceve dei byte corretti e in sequenza, li posiziona nel buffer di ricezione. Il processo applicativo associato legge i dati da questo buffer, anche in un secondo istante, non necessariamente nell'istante in cui arrivano. Se l'applicazione è relativamente lenta nella lettura dei dati può accadere che il mittente mandi in overflow il buffer di ricezione inviando molti dati troppo rapidamente.
+
+TCP offre un **servzio di controllo di flusso** alle proprie applicazioni per evitare che il mittente saturi il buffer ricevente. Il controllo di flusso è pertanto un servizio di confronto sulla velocità, dato che paragona la frequenza di invio del mittente con quella di lettura dell'applicazione ricevente.
+
+Inoltre i mittenti TCP possono essere ralentati anche dalla congestione della rete IP, che prende il nome di **controllo di congestione**.
+
+TCP offre il controllo di flusso facendo mantenere al mittente una variabile chiamata **finestra di ricezione** che, in sostanza, fornisce al mittente un'indicazione dello spazio libero disponibile nel buffer del destinatario.
+
+<img src="img/tcp_buffer_flusso.png" width="300" />
+
+Supponiamo che un host A stia inviando un file di grandi dimensioni ad un host B su una connessione TCP. Questo'ultimo alloca un buffer di ricezione per la connessione, la cui dimensione è denotata come `RcvBuffer`. Definiamo le seguenti variabile:
+
+- `LastByteRead`: numero dell'ultimo byte nel flusso di dati che il processo applicativo in B ha letto dal buffer.
+- `LastByteRcvd`: numero dell'ultimo byte, nel flusso di dati, che proviene dalla rete e che è stato nell buffer di ricezione di B.
+
+Dato che TCP non può mandare in overflow il buffer allocato, dovremo avere per forza:
+$$LastByteRcvd - LastByteRead \leq RvcBuffer$$
+
+La finestra di ricezione, indicata con `rwnd`, viene impostata alla quantità di spazio disponibile nel buffer.
+$$rwnd = RcvBuffer - [LastByteRcvd - LastByteRead]$$
+
+Dato che lo spazio disponibile varia con il tempo, `rwnd` è dinamica.
+
+L'host B comunica all'host A quanto spazio disponibile sia presente nel buffer della connessione, scrivendo il valore corrente di `rwnd` nel campo apposito dei segmenti che manda ad A. L'host B inizializza `rwnd` con il valore di `RcvBuffer`.
+
+A sua volta, l'host A tiene traccia di:
+
+- `LastByteSent`: ultimo byte mandato.
+- `LastbyteAcked`: ultimo byte per cui si è ricevuto un acknowledgment
+
+La differenza di questi due variabili esprime la quantità di dati spediti da A per cui non si è ancora ricevuto un acknowledgment. Mantenendo questa quantità sotto il valore di `rwnd`, si garantisce che l'host A non mandi in overflow il buffer di B.
+$$LastByteSent - LastByteAcked \leq rwnd$$
+
+
+
+
+
+
 
 
