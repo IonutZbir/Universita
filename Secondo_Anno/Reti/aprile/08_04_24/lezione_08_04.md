@@ -46,7 +46,7 @@ Il meccanismo di controllo di congestione TCP fa tener traccia agli estremi dell
 $$LastByteSent - LastByteAcked\ \leq \min\{cwnd, rwnd\}$$
 Assumeremo che il buffer di ricezione sia sufficiente grande, possiamo trascurare il vincolo della finestra di ricezione (che assumiamo sempre maggiore della finestra di congestione)
 
-Tasso di invio: $\approx\ \frac{cwnd}{RTT}\ byte/S$.
+Tasso di invio: $\approx\ \frac{cwnd}{RTT}\ byte/s$.
 
 ### Slow Start
 
