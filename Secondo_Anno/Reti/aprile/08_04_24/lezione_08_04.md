@@ -89,5 +89,81 @@ TCP CUBIC differisce solo leggermente da TCP Reno. La finestra di congestione vi
 - CUBIC aumenta la finestra di congestione ($W$) in funzione del **cubo** della distanza tra l'istante corrente $t$ e $K$.
   - Aumenti maggiori quando ci si allontana maggiormente da $K$.
   - Aumenti minori quando ci si avvicina a $K$.
+
 TCP CUBIC predefinito in Linux è il TCP più diffuso per i web server più comuni.
+
+### Throughput di TCP
+
+Qual è il valore medio di throughput di TCP Reno? Ignorando la fase di slow start abbiamo che:
+
+- $W$: Dimensione (ampiezza) in $byte$ della finestra quando si verifica una perdità. La dimesione media è $0.75\cdot W$
+- Il throughput medio è quindi $\frac{0.75\cdot W}{RTT}$
+
+### Explicit Congestion notification (ECN)
+
+Le implementazioni di TCP spesso implementano un controllo della congestione **assistito dalla rete**. 
+
+**Come funziona?**
+
+A livello di rete vengono utilizzati due bit (quindi 4 possibili valori) nel campo *ToS (Type of Service)* nell'intestazione IP. Se un router è congestionato imposta tali bit e invia il pacchetto IP contrassegnato al destinatario, che quindi informa il mittente.
+
+<img src="img/ecn.png" width="300" />
+
+I bit ECN vengono inolte utilizzati dal mittente per segnalare che mittente e destinatario sono abilitati all'uso di ECN. Quando il destinario TCP riceve un'indicazione di congestione ECN, ne informa il mittente TCP impostando il bit ECE (Explicit Congestion Notification Echo) all'interno di un segmento ACK. Il mittente TCP reagisce dimezzando la finestra di congestione, esattamente come farebbe in caso di perdita di un segmento usando il meccanismo di ritrasmissione rapida, e imposta il bit CWR (Congestion Window Reduced) nell'intestazione del successivo segmento che invia al ricevente.
+
+### Controllo di congestione basato sul ritardo
+
+Se ECN notifica in anticipo il destinatario prima che i buffer sono pieni per evitare la congestione, il secondo approccio basato sul ritardo rileva l'insorgenza della congestione in modo proattivo, prima che si verifichi la perdita di pacchetti.
+
+Questo approccio si basa su TCP Vegas, dove il mittente misura l'RTT del percoso dalla sorgente alla destinazione per tutti i pacchetti riscontrati. 
+- $RTT_{min}$: il valore minimo di tali misurazione per tutti i pacchetti riscontrati.
+- $\frac{cwnd}{RTT_{min}}$: throughput non congestionato con finestra di congestione $cwnd$.
+
+- Se il throughput misurato è "molto vicino" al throughput non congestionato allora bisogna aumentare linearmente $cwnd$.
+- Se il throughput misurato è "molto inferiore" al throughput non congestionato allora bisogna diminuire linearmente $cwnd$.
+
+Quindi, TCP Vegas opera con l'idea "keep the pipe just full, not fuller", ovvero massimizzare il throughput mantendo il ritardo basso.
+
+Il protocollo BBR è utilzzato da Google e si basa su TCP Vegas.
+
+### TCP Fairness e collegamento "collo di bottiglia" congestionato
+
+TCP aumenta la velocità di invio finché non si verifica una perdita di pacchetti all'uscita di un router, tale collegamento è detto **collegamento "collo di bottiglia" (bottleneck)**.
+
+**TCP Fairness**: Se $K$ sessioni TCP condividono lo stesso collegamento a collo di bottiglia con larghezza di banda $R$, ciascuna dovrebbe avere una velocità media $\frac{R}{K}$.
+
+TCP è fair se le connessioni TCP hanno tutte lo stesso $RTT$ e se il numero di sessioni in congestion avoidance è fisso.
+
+**UDP è fair?**
+
+Abbiamo appena visto come il meccanismo della finestra di congestione consenta al controllo di congestione TCP di regolare il tasso di trasmissione (transmission rate) delle applicazioni. Questo è il motivo per cui molte applicazioni multimediali, quali la fonia e la videoconferenza, non fanno uso di TCP: non vogliono che il loro tasso di trasmissione venga ridotto, anche se la rete è molto congestionata. Piuttosto, queste applicazioni preferiscono utilizzare UDP, che non incorpora il controllo di congestione, in modo da poter immettere il proprio audio e video sulla rete a frequenza costante e occasionalmente perdere pacchetti, piuttosto che non perderli, ma dover ridurre il loro tasso di trasmissione a livelli “equi” nei momenti di traffico. Dal punto di vista di TCP, le applicazioni multimediali che fanno uso di UDP non sono fair.
+
+## Evoluzione dei protocolli di trasporto
+
+Abbiamo visto che i principali protolli di trasporto sono UDP e TCP, ma nel corso degli anni sono state sviluppate diverse versioni di TCP, in base alle esigenze e per scenari specifici.
+
+| Scenario                                   | Sfide                                                        |
+| ------------------------------------------ | ------------------------------------------------------------ |
+| Trasferimenti di dati di grandi dimensioni | Molti pacchetti in "volo"; la perdita interrompe la pipeline |
+| Reti wireless                              | Perdita dovuta a collegamenti wireless rumorosi              |
+| Long-delay links                           | RTT estremamente elevato                                     |
+| Reti di data center                        | Sensibilità alla lateza                                      |
+| Background traffic flows                   | Flussi TCP a bassa priorità (in background)                  |
+
+### QUIC: Quick UDP Internet Connections
+
+QUIC è un nuovo protocollo a livello di applicazione, progettato da zero, per migliorare le prestazioni del livello di trasporto per
+HTTP sicuro. QUIC utilizza UDP come protocollo del livello di trasporto sottostante ed è progettato per interfacciarsi in modo specifico a una versione semplificata, ma evoluta, di HTTP/2. Prossimamente, HTTP/3 incorporerà nativamente QUIC.
+
+<img src="img/quic.png" width="300" />
+
+**Caratteristiche di QUIC**
+
+- *Orientato alla connessione*. Come TCP, QUIC richiede una fase di handshaking tra gli endpoint per impostare lo stato della connessione. Tutti i pacchetti QUIC sono crittografati e, QUIC combina l'handshaking necessario per stabilire la connessione con quelli per l'autenticazione e la cifratura.
+- *Flussi (Streams)*. QUIC consente il multiplexing di diversi “flussi” a livello di applicazione attraverso una singola connessione QUIC; inoltre, una volta stabilita una connessione QUIC, nuovi flussi possono essere aggiunti rapidamente. Un flusso è un’astrazione per la consegna bidirezionale affidabile e in ordine dei dati tra due endpoint QUIC.
+- *Trasferimento dati affidabile e con controllo della congestione*. QUIC fornisce un trasferimento dati affidabile a ogni
+flusso QUIC separatamente. Gli algoritmi di trasferimento dati affidabile e di controllo della congestione sono molto simili a quelli usati da TCP.
+
+
+
 
