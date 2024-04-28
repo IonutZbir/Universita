@@ -1,5 +1,6 @@
-/* In prolog è possibile in RT definire regole, predicti e fatti.
- *  E' possibile cambiare il programma in RT 
+/
+    * In prolog è possibile in RT definire regole, predicti e fatti.
+    *  E' possibile cambiare il programma in RT 
 */
 
 /*
