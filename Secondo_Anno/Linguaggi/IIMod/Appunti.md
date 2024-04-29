@@ -122,3 +122,12 @@ var(X). -> false
 
 X = 1,
 nonvar(x). -> true
+
+bagof(N, n(N), L) crea una lista con gli elementi letti con n()
+setof(N, n(N), L) crea una lista/insieme gli elementi letti con n(), ordina pure.
+
+setof(N, L^n(N, L), Lista).
+L deve esistere ma non ci interessa il valore
+voglio tutte le N per cui è vera n(N, L), e L non mi interessa.
+
+setof(N, (L,B)^n(N, L, B), Lista).
