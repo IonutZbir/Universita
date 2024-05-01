@@ -151,9 +151,9 @@ $(*)$ Per la conservazione del flusso, tutti i termini $v\neq s$ sono uguali a 0
 > 3. Non ci sono cammini aumentanti rispetto al flusso $f$. (Se l'algoritmo di Ford-Fulkerson termina, allora f è il flusso massimo).
 >
 > Per dimostrare che queste 3 proprietà sono equivalenti, dobbiamo dimostrare che $1 => 2$, $2 => 3$ e $3 => 1$.
-> - [$1 => 2$] -  Corollario della dualità debole.
-> - [$2 => 3$] - Dimostriamo l'inversa, ovvera che $\neg 3 => \neg 2$. Supponiamo che esiste un cammino aumentante per $f$. Allora possiamo migliorare il flusso $f$ spingendo più flusso lungo il cammino, ma allora $f$ non è il flusso massimo.
-> - [$3 => 1$] - Sia $f$ un flusso per cui non ci sono cammini aumentati. Sia $A$ l'insieme di nodi raggiungibili da $s$ nella rete residua $G_{f}$. Per definizione di $A$: $s \in A$. Per definizione del flusso $f$: $t \notin A$.
+> - $[1 => 2]$ -  Corollario della dualità debole.
+> - $[2 => 3]$ - Dimostriamo l'inversa, ovvera che $\neg 3 => \neg 2$. Supponiamo che esiste un cammino aumentante per $f$. Allora possiamo migliorare il flusso $f$ spingendo più flusso lungo il cammino, ma allora $f$ non è il flusso massimo.
+> - $[3 => 1]$ - Sia $f$ un flusso per cui non ci sono cammini aumentati. Sia $A$ l'insieme di nodi raggiungibili da $s$ nella rete residua $G_{f}$. Per definizione di $A$: $s \in A$. Per definizione del flusso $f$: $t \notin A$.
 > $$val(f) = \sum_{e\ out\ of\ A}f(e)\ - \ \sum_{e\ in\ to\ A}f(e) = \sum_{e\ out\ of\ A}f(e)\ - 0 = cap(A, B)$$
 > - $\sum_{e\ out\ of\ A}f(e)\ = cap(A, B)$, perché se $A$ è l'insieme dei nodi raggiungibi da $s$ nella rete residua allora nel grafo $G_{f}$ esiste un arco $e$ che all'contrario quindi nel grafo $G$ quel arco e che va da $A$ in $B$ è saturo, ovvero $f(e) = c(e)$.
 > - $\sum_{e\ in\ to\ A}f(e) = 0$, perché se $A$ è l'insieme dei nodi raggiungibili da $s$ nella rete residua, se ci sono archi in $G$ da $B$ verso $A$ allora quei archi devono avere flusso 0 perchè perché nel grafo $G_{f}$ quei archi hanno capacità residua $c(e)$.
@@ -202,7 +202,7 @@ Capacity-Scaling(G)
         G_f(Delta) = Delta-rete residua di G rispetto a f
         while(esiste un cammino aumentante da s a t)
             f = Augment(f, c, P)
-            aggiorna G_f(Delta)
+            Aggiorna G_f(Delta)
         Delta = Delta / 2
     return f
 ```
