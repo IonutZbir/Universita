@@ -131,3 +131,14 @@ L deve esistere ma non ci interessa il valore
 voglio tutte le N per cui è vera n(N, L), e L non mi interessa.
 
 setof(N, (L,B)^n(N, L, B), Lista).
+
+## Esercitazione
+
+1. 8 Regine
+
+$x = (x_{i}, y_{i})$
+$x = (x_{j}, y_{j})$
+
+- $x_{i} \neq x_{j}$
+- $y_{i} \neq y_{j}$
+- $\nexists \delta\in (-k, k): (x_{i} = x_{j} + \delta \land y_{i} = y_{j} + \delta) \lor (x_{i} = - \delta \land y_{i} = y_{j} + \delta)$
