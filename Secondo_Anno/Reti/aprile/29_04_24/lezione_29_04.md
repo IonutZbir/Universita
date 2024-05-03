@@ -39,5 +39,50 @@ Per velocizzare questo processo viene utilizzata una Hash Table.
 3. La risposta arriva all'indirizzo di destinazione: 138.76.29.7, 5001.
 4. Il router NAT cambia l'indirizzo di destinazione del datagramma da 38.76.29.7, 5001 a 10.0.0.1, 3345.
 
+## IPv6
 
+Una delle motivazioni iniziali per cui è stato creato IPv6 è la scarsità di indirizzi che IPv4 mette a disposizione.
+
+- **Indirizzamento esteso**: Indirizzi IP da 32 bit a 128.
+- **Intestazione ottimizata di 40 byte**: Intestazione a lunghezza fissa a 40 byte.
+- **Etichettatura dei flussi**: IPv6 presenta una definizione di **flusso**. La trasimissione audio e video può essere trattata come un flusso, ma le applicazioni tradizionali non sono considerate come flusso.
+
+### Formato dei datagrammi IPv6
+
+<img src="img/ipv6.png" width="300" />
+
+- **Versione**. Campo a 4 bit che identifica il numero di versione IP. Porre 4 in questo campo non è però sufficiente a creare un datagramma IPv4 valido.
+- **Classe di traffico**. Attribuisce priorità a datagrammi all'interno di un flusso o proveniente da spefiche applicazioni.
+- **Etichetta di flusso**. Identifica i datagrammi appartenenti allo stesso flusso.
+- **Lunghezza del payload**. Campo a 16 bit che identifica la lunghezza del payload.
+- **Intestazione successiva**. Campo che identifica il protocollo a cui verranno consegnati i contenuti, (TCP o UDP).
+- **Limite di hop**. Cammpo TTL in IPv4.
+- **Indirizzi sorgente e destinazione**. Indirizzi IPv6 della sorgente e della destinazione.
+- **Dati**. Payload che viene passato al protocollo specificato nell'intestazione successiva.
+
+Osserviamo che rispetto a IPv4, mancano i seguenti campi:
+
+- Frammentazione e riassemblaggio.
+- Checksum.
+- Opzioni.
+
+### Passaggio da IPv4 a IPv6
+
+L'approccio alla transizione da IPv4 a IPv6 più diffusamente adottato è noto come **tunneling**. L'idea alla base del tunneling è la seguente: Supponiamo che due nodi IPv6 vogliano utilizzare datagrammi IPv6 ma siano connessi da router intermedi IPv4, che chiameremo **tunnel**.
+
+<img src="img/ipv4_ipv6.png" width="300" />
+
+Il Nodo B, al lato di invio del tunnel, prende l’intero datagramma IPv6 pervenutogli da A e lo pone nel campo dati di un datagramma IPv4. Quest’ultimo viene quindi indirizzato al Nodo E, al lato di ricezione del tunnel e inviato al primo nodo nel tunnel (C). I router IPv4 intermedi instradano il datagramma IPv4, come farebbero per qualsiasi altro datagramma, ignari che questo contenga un datagramma IPv6 completo. Il nodo IPv6, sul lato di ricezione del tunnel, riceverà quindi il datagramma IPv4, determinerà che questo ne contiene uno IPv6 osservando che il valore del campo numero di protocollo nel pacchetto IPv4 è 41 corrispondente a payload IPv4, lo estrarrà e lo instraderà esattamente come se l’avesse ricevuto da un nodo IPv6 adiacente.
+
+**Inoltro generalizzato e SDN**
+
+Nell'inoltro generalizzato, una tabella match-action generalizza il concetto di tabella di inoltro basata sulla destinazione. Poiché le decisioni di inoltro possono essere effettuate utilizzando indirizzi di sorgente e destinazione del livello di rete e/o livello di collegamento, i dispositivi di inoltro sono denominati più accuratamente "packed switch" piuttosto che "router" di livello 3 o "switch" di livello 2.
+
+Ogni occorenza corrispondente a una riga in una tabella di inoltro match-action, nota come **tabella dei flussi** contiene:
+
+- *Un insieme di valori dei campi dell'intestazione* con i quali il pacchetto entrante viene confrontato.
+- *Un insieme di contatori* che vengono aggiornati quando i pacchetti vengono associati a un'occorenza nella tabella dei flussi.
+- *Un insieme di azioni* che devono essere intraprese quando un pacchetto è associato a un'occorenza della tabella di flussi (inoltro, scarto, copia, invio broadcast, modifica).
+
+<img src="img/openflow.png" width="300">
 
