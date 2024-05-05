@@ -74,7 +74,7 @@ L'approccio alla transizione da IPv4 a IPv6 più diffusamente adottato è noto c
 
 Il Nodo B, al lato di invio del tunnel, prende l’intero datagramma IPv6 pervenutogli da A e lo pone nel campo dati di un datagramma IPv4. Quest’ultimo viene quindi indirizzato al Nodo E, al lato di ricezione del tunnel e inviato al primo nodo nel tunnel (C). I router IPv4 intermedi instradano il datagramma IPv4, come farebbero per qualsiasi altro datagramma, ignari che questo contenga un datagramma IPv6 completo. Il nodo IPv6, sul lato di ricezione del tunnel, riceverà quindi il datagramma IPv4, determinerà che questo ne contiene uno IPv6 osservando che il valore del campo numero di protocollo nel pacchetto IPv4 è 41 corrispondente a payload IPv4, lo estrarrà e lo instraderà esattamente come se l’avesse ricevuto da un nodo IPv6 adiacente.
 
-**Inoltro generalizzato e SDN**
+## Inoltro generalizzato e SDN
 
 Nell'inoltro generalizzato, una tabella match-action generalizza il concetto di tabella di inoltro basata sulla destinazione. Poiché le decisioni di inoltro possono essere effettuate utilizzando indirizzi di sorgente e destinazione del livello di rete e/o livello di collegamento, i dispositivi di inoltro sono denominati più accuratamente "packed switch" piuttosto che "router" di livello 3 o "switch" di livello 2.
 
@@ -84,5 +84,46 @@ Ogni occorenza corrispondente a una riga in una tabella di inoltro match-action,
 - *Un insieme di contatori* che vengono aggiornati quando i pacchetti vengono associati a un'occorenza nella tabella dei flussi.
 - *Un insieme di azioni* che devono essere intraprese quando un pacchetto è associato a un'occorenza della tabella di flussi (inoltro, scarto, copia, invio broadcast, modifica).
 
-<img src="img/openflow.png" width="300">
+### Match
+
+Nella figura sotto vengono mostrati gli 11 campi dell'intestazione del pacchetto e l'ID della porta di ingresso che possono esere confrontati in un regola match-action. Possiamo osservare che il pacchetto che arriva ad un packet switch è formato da un *frame* a livello di collegamento che a suo interno contiene un *datagramma* IP che a sua volta contiene un *segmento* a livello di trasporto.
+
+Quindi gli unici campi di cui non sappiamo nulla sono:
+
+- **MAC Address**: rappresenta l'indirizzo a livello di collegamento della sorgente e destinatario associati alle interfacce di invio e di ricezione del frame.
+- **Ethernet Type**: corrisponde al protocollo del livello sovrastante, per esempio IP al quale il carico del frame viene inviato tramite demultiplexing.
+- **VLAN**: questi campi corrispondono invece alle cosiddette reti virtuali locali.
+
+<img src="img/openflow.png" width="400">
+
+### Action
+
+Di seguito sono mostrate alcune delle più importanti azioni possibili:
+
+- **Inoltro**: Un pacchetto in entrata può essere inoltrato a una particolare porta in uscita, inviato in broadcast a tutte le porte tranne a quella da cui è entrato o inviato in multicast ad un insieme di porte.
+- **Scarto**: Un'occorrenza della tabella dei flussi senza azioni indica che il pacchetto dovrebbe essere scartato.
+- **Modifica dei Campi**: Tutti i campi trannte "Protocollo IP" possono essere riscritti.
+
+### Esempi
+
+<img src="img/examples.png" width="500" />
+
+Quindi, questo tipo di inoltro, *match + action* astrae dispositivi differenti, come:
+
+| Device   | Match                                  | Action                             |
+| -------- | -------------------------------------- | ---------------------------------- |
+| Router   | Prefisso IP di destinazione più lungo  | Inoltro attraverso un collegamento |
+| Firewall | Indirizzi IP e numeri di porta TCP/UDP | Consentire o negare l'accesso      |
+| Switch   | Indirizzo MAC di destinazione          | Inoltra o inonda                   |
+| NAT      | Indirizzo IP e porta                   | Riscrive l'indirizzo e la porta    |
+
+## I dispositivi Middlebox 
+
+Un dispositivo "Middlebox" è un qualsiasi box intermedio che svolge funzioni diverse da quelle normali e standard di un router IP sul percorso dei dati tra gost di origine e destinazione.
+
+Possiamo identificare tre tipi di servizi eseguiti dai middlebox:
+
+- *Traduzione NAT*: I box NAT implementano un indirizzamento di rete privato, la riscrittura degli indirizzi IP e dei numeri di porta dell'intestazione del datagramma.
+- *Servizi di sicurezza*: I firewall bloccano il traffico in base ai valori del campo di intestazione o reindirizzano i pacchetti per ulteriori elaborazioni. 
+- *Miglioramento delle prestazioni*:  Questi middlebox eseguono servizi come la compressione, il caching dei contenuti e il bilanciamento del carico delle richieste di servizio.
 
