@@ -1,0 +1,110 @@
+\section{Teoremi Dispensa 3}
+
+\subsection{Teorema a pag. 3}
+
+Un linguaggio $L \subseteq \Sigma^{\star}$ è decidibile se e soltanto se $L$ e $L^{c}$ sono accettabili.
+
+\paragraph*{Dimostrazione:}
+\begin{itemize}
+    \item[$(\Rightarrow$]{
+        Se $L$ è decidibile allora esiste una macchina di Turing $T$ deterministica tale che $\forall x\in\ \Sigma^{\star}$, $T(x) = q_{A} \Leftrightarrow\ x\in L \land T(x) = q_{R} \Leftrightarrow\ x\in L^{c}$.
+        Osserviamo dunque che $T$ accetta $L$.
+        
+        Da $T$, deriviamo ora $T^{'}$ aggiungendo le seguenti quintuple: 
+        $$
+        \langle q_{A}, x, x, q_{R}^{'}, stop \rangle \land \langle q_{R}, x, x, q_{A}^{'}, stop \rangle\ \forall x \in \Sigma \cup \square
+        $$
+        L'esecuzione di $T^{'}$ è simile a quella di $T$, solo che gli stati di accettazione e rigetto sono stati invertiti, in questo modo
+        se $T$ accetta $x$ allora $T^{'}$ rigetta $x$, mentre se $T$ rigetta $x$, $T^{'}$ accetta $x$, dunque $T{'}$ accetta $L^{c}$.
+    }
+    \item[$\Leftarrow)$]{
+        Se $L$ e $L^{c}$ sono accettabili allora esistono due macchine di Turing $T_{1}$ e $T_{2}$ tali che, $\forall x\in \Sigma^{\star}\, T_{1}(x) = q_{A} \Leftrightarrow x\in L \land T_{2}(x) = q_{A} \Leftrightarrow x\in L^{c}$.
+        Non esendo specificato l'esito della computazione nel caso in cui $x \notin L$ e $x \notin L^{c}$ definiamo la macchina 
+        $T$ che, simulando $T_{1}$ e $T_{2}$ decide $L$ nel seguento modo\footnote{Osserviamo che non possiamo simulare $T_{1}$ e $T_{2}$ "blackbox", in quanto non sappiamo se la loro computazione termina o meno.}:
+        \begin{enumerate}
+            \item Esegui una singola istruzione di $T_{1}$ sul nastro 1: se $T_{1}(x) = q_{A}$ allora $T(x) = q_{A}$, altrimenti esegui il passo (2).
+            \item Esegui una singola istruzione di $T_{2}$ sul nastro 2: se $T_{2}(x) = q_{A}$ allora $T(x) = q_{R}$, altrimenti esegui il passo (1).
+        \end{enumerate}   
+        Se $x \in L$, allora prima o poi, al passo $(1),\ T_{1}$ entrerà nello stato di accettazione, portando $T$ ad accettare.\\
+        Se $x \in L^{c}$, allora prima o poi, al passo $(1),\ T_{1}$ entrerà nello stato di accettazione, portando $T$ a rigettare.
+    }
+\end{itemize}
+
+\subsection{Teorema a pag. 4}
+Un linguaggio $L$ è decidibile se e soltanto se la funzione $\chi_{L}$ è calcolabile.
+
+\paragraph*{Dimostrazione:}
+\begin{itemize}
+    \item[$(\Rightarrow$]{
+        Se $L$ è decidibile allora esiste una macchina di Turing $T$ deterministica di tipo \textbf{riconoscitore} tale che $\forall x\in\ \Sigma^{\star}$, $T(x) = q_{A} \Leftrightarrow\ x\in L \land T(x) = q_{R} \Leftrightarrow\ x\in L^{c}$.
+        A partire da $T$ definiamo una macchina di Turing $T^{'}$ di tipo trasduttore a 2 natri, con input $x\in\Sigma^{\star}$ che opera nel seguente modo:
+        \begin{enumerate}
+            \item Sul primo nastro simula $T(x)$.
+            \item Se $T(x)$ termina nello stato $q_{A}$ allora $T{'}(x)$ scrive sul nastro di output il valore 1, altrimenti scrive il valore 0 e poi termina.
+        \end{enumerate}
+        Osserviamo che poiché $L$ è decidibile il passo (1) termina sempre per ogni input $x$. Se $x\in L$ allora $T(x) = q_{A}$ e $T^{'}(x)$ scrive 1 sul nastro di output.
+        Se $x\notin L$ allora $T(x) = q_{R}$ e $T^{'}(x)$ scrive 0 sul nastro di output. Questo dimostra che $\chi_{L}$ è calcolabile.
+    }
+    \item[$\Leftarrow)$]{
+        Se $\chi_{L}$ è calcolabile e per costruzione anche totale allora esiste una macchina di Turing $T$ di tipo \textbf{trasduttore}, che per ogni $x\in \Sigma^{\star}$, calcola $\chi_{L}(x)$.
+        A partire da $T$ definiamo $T^{'}$ di tipo riconoscitore a 2 natri, con input $x\in\Sigma^{\star}$ che opera nel seguente modo:
+        \begin{enumerate}
+            \item Sul primo nastro simula $T(x)$ scrivendo il risultato sul secondo nastro.
+            \item Se sul secondo nastro c'é scritto 1 allora $T^{'}(x) = q_{A}$, altrimenti nello stato $q_{R}$.
+        \end{enumerate}
+        Osserviamo che poiché $\chi_{L}$ è calcolabile il passo (1) termina sempre per ogni input $x$. Se $\chi_{L}(x) = 1$ allora (1) termina scrivendo 1 sul secondo nastro e $T^{'}(x) = q_{A}$.
+        Se $\chi_{L}(x) = 0$ allora (1) termina scrivendo 0 sul secondo nastro e $T^{'}(x) = q_{R}$. Questo dimostra che $L$ è decidibile.
+    }
+\end{itemize}
+
+\subsection{Teorema a pag. 5}
+
+Se la funzione $f: \Sigma^{\star}\rightarrow\Sigma^{\star}_{1}$ è totale e calcolabile allora il linguaggio $L_{f}\subseteq\Sigma^{\star} \times \Sigma^{\star}_{1}$ è decidibile.
+
+\paragraph*{Dimostrazione:}
+Poiché $f$ è calcolabile e totale allora esiste una macchina di Turing trasduttore che calcola $f(x) \forall x\in \Sigma^{\star}$. A partire da $T$
+definiamo una macchina di Turing $T^{'}$ riconoscitore a due nastri con input $\langle x, y \rangle$ dove $x\in \Sigma^{\star}$ e $y\in \Sigma^{\star}_{1}$, che opera nel seguente modo:
+\begin{enumerate}
+    \item Sul nastro 1 è scritto l'input $\langle x, y \rangle$.
+    \item Sul nastro 2 simula $T(x)$, scrivendovi il risultato $z$.
+    \item Se $z = y$ allora $T^{'}(x) = q_{A}$ altrimenti va in $q_{R}$. 
+\end{enumerate}
+Osserviamo che, poiché $f$ è totale e calcolabile il passo (2) termina per ogni input $x\in \Sigma{\star}$. Se $f(x) = z = y$ allora $T^{'}(x)$ termina in $q_{A}$.
+Se $f(x) = z \neq y$ allora $T^{'}(x)$ termina in $q_{R}$. Questo dimostra che $L_{f}$ è decidibile.
+
+\subsection{Teorema a pag. 5}
+
+Sia $f: \Sigma^{\star}\rightarrow\Sigma^{\star}_{1}$ una funzione. Se il linguaggio $L_{f}\subseteq\Sigma^{\star} \times \Sigma^{\star}_{1}$ è decidibile allora $f$ è calcolabile\footnote{Osserviamo che non possiamo invertire del tutto il teorema precendente, dalla decidibilità di $L_{f}$ possiamo dedurre solo la calcolabilità di $f$}.
+
+\paragraph*{Dimostrazione:}
+
+Poiché $L_{f}\subseteq\Sigma^{\star} \times \Sigma^{\star}_{1}$ è decidibile, esiste una macchina di Turing riconoscitore $T$, tale che $\forall x\in \Sigma^{\star}$ e $\forall y\in \Sigma^{\star}_{1}$,
+$T(x) = q_{A}$ se $y = f(x)$ e $T(x) = q_{R}$ se $y \neq f(x)$. A partire da $T$ definiamo una macchina di Turing trasduttore $T^{'}$ con input $x\in \Sigma^{\star}$ che opera nel seguente modo:
+\begin{enumerate}
+    \item Scrive $i = 0$ sul nastro 1.
+    \item {
+        Enumera tutte le stringhe $y\in \Sigma^{\star}_{1}$ di lunghezza pari al valore scritto sul primo nastro, simulando per ciascuna stringa $T(x, y)$.
+        \begin{enumerate}
+            \item Sia $y$ la prima stringa di lunghezza $i$ non ancora enumerata, allora scrive $y$ sul secondo nastro.
+            \item Sul terzo nastro, esegue la computazione $T(x, y)$.
+            \item Se $T(x, y) = q_{A}$ allora scrive $y$ sul nastro di output eventualmente incrementando $i$ se $y$ era l'ultima stringa, torna al passo (2). 
+        \end{enumerate}
+        }
+\end{enumerate}
+
+Poiché $L_{f}$ è decidibile il passo (b) termina per ogni input $(x, y)$. Se $x$ appartiene al dominio di $f$, allora $\exists y\in \Sigma^{\star}_{1}$ tale che $y = f(x)$, e quindi $(x, y)\in L_{f}$. Allora prima o poi la strigna $y$ verrà scritta sul secondo nastro
+e $T(x, y) = q_{A}$. Questo dimostra che $f$ è calcolabile.
+
+\subsection{Teorema a pag. 7}
+
+Per ogni programma scritto in accordo con il linguaggio di programmazione \textbf{PascalMinimo}, esiste un macchina di Turing $T$ di tipo trasduttore che scrive sul nastro di output lo stesso valore fornito in output dal programma.
+
+\paragraph*{Dimostrazione omessa}
+
+\subsection{Teorema a pag. 9}
+
+Per ogni macchina di Turing deterministica $T$ di tipo riconoscitore ad un nastro esiste un programma $P$ scritto in accordo alle regole
+del linguaggio \textbf{PascalMinimo} tale che, per ogni stringa $x$, se $T(x)$ termina nello stato fiale $q_{F}\in\{q_{A}, q_{R}\}$ allora $P$ con input 
+$x$ restituisce $q_{F}$ in output.
+
+\paragraph*{Dimostrazione omessa}

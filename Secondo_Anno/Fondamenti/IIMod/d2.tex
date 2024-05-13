@@ -1,0 +1,14 @@
+\section{Teoremi Dispensa 2}
+
+\subsection{Teorema a pag. 5}
+Per ogni macchina di Turing non deterministica $NT$ esiste una macchina di Turing detreministica $T$
+tale che, per ogni possibile input $x$ di $NT$ , l'esito della computazione $NT(x)$ coincide con l'esito della computazione
+di $T(x)$.
+
+\paragraph*{Dimostrazione:}
+Eseguiamo una simulazione della macchina non deterministica $NT$ mediante una macchina deterministica $T$. La simulazione consiste 
+in una visita in ampiezza\footnote{Perché non in profondità? Non possiamo fare una visità in profondità perché non sappiamo la lunghezza di ciascuna computazione, in quanto potrebbero
+anche non finire.} dell'albero delle computazioni di $NT$ basata sulla tecnica \textit{coda di rondine con ripetizioni}.
+Partiamo dallo stato globale $SG(T, x, 0)$ e simuliamo tutte le computazione di lunghezza 1. Se tutte le computazioni terminano in 
+$q_{R}$ allora $T$ rigetta, se almeno una computazione termina in $q_{A}$ allora $T$ accetta, altrimenti ricominciamo da capo 
+eseguendo tutte le computazioni di lunghezza 2 e così via.
