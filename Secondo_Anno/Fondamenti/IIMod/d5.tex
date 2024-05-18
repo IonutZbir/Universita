@@ -1,0 +1,94 @@
+\section{Teoremi Dispensa 5}
+
+\subsection{Teorema a pag. 2}
+
+L'insieme $T$ delle macchine di Turing definite sull'alfabeto $\{0, 1\}$ e dotate di un singolo nastro
+(più l'eventuale nastro di output) è numerabile
+
+\paragraph*{Dimostrazione:}
+Per dimostrare tale teorema, dobbiamo trovare una biezione tra l'insieme $T$ e l'insieme $\mathbb{N}$. Tale 
+biezione non è altro che una etichettatura degli elementi dell'insieme con etichette appartenenti ad $\mathbb{N}$, ossia,
+una numerazione degli elementi dell'insieme. Sia $T$ una macchina di Turing e $\beta_{T}$ la sua codifica.
+
+Dunque, rappresentiamo $T$ con la parola $\beta_{T}\in \Sigma^{\star}$, con $\Sigma=\{0, 1, \oplus, \otimes, -, f, s, d\}$ come segue:
+
+$$
+\beta_{T} = b(q_{0})\ -\ b(q_{1})\otimes b(q_{11})\ -\ b_{11}\ -\ b_{12}\ -\ b(q_{12})\ -\ m_{1}\oplus \dots \oplus b(q_{h1})\ -\ b_{h1}\ -\ b_{h2}\ -\ b(q_{h2})\ -\ m_{h}
+$$
+
+Ora, effettuando le seguenti sostituzione in $\beta_{T}$, otteniamo una stringa in $\mathbb{N}$ 
+
+\begin{itemize}
+    \item "s" con "5"
+    \item "f" con "6"
+    \item "d" con "7"
+    \item "-" con "4"
+    \item "$\otimes$" con "3"
+    \item "$\oplus$" con "2"
+\end{itemize}
+
+Inoltre, dato che la stringa può iniziare con un "0", allora premettiamo il carattere "8" alla stringa ottenuta.
+
+La parola in $\{0, 1, 2, 3, 4, 5, 6, 7, 8\}^{\star}$ così ottenuta, può, ovviamente, essere considerata come un numero 
+espresso in notazione decimale, ovvero il numero $v(T)\in \mathbb{N}$ associato univocamente a $T$.
+
+\subsection{Teorema a pag. 4 (Halting Problem)}
+
+Definiamo il seguente linguaggio $L_{H}$ in questo modo:
+$$L_{H} = \{(i, x): i\ \grave{e}\ la\ codifica\ di\ una\ TM\ \land\ T_{i}(x)\ termina\}$$
+Il linguaggio $L_{H}$ è accettabile.
+
+\paragraph*{Dimostrazione:} Dobbiamo dimostrare che esiste una macchina di Turing $T$ tale che, per ogni
+input $(i, x ) \in \mathbb{N} \times \mathbb{N}$, $T(i, x) = q_{A}$ se e soltanto se $(i, x) \in L_{H}$.\\ 
+Definiamo $U^{'}$ una macchina di Turing universale modificata con input $(i, x)$.
+Tale macchina opera nel seguente modo:
+\begin{enumerate}
+    \item Verifica se $i$ è la codifica di una macchina di Turing. Se non lo è allora $U^{'}(i, x) = q_{R}$.
+    \item Simula $U(i, x)$, se termina in $q_{A}$ o in $q_{R}$ allora $U^{'}(x) = q_{A}$.
+\end{enumerate}
+
+$U^{'}$ non sa decidere $L_{H}^{c}$, perciò lo accetta solo.
+
+\subsection{Teorema a pag. 4 (Halting Problem)}
+
+Il linguaggio $L_{H}$ non è decidibile
+
+\paragraph*{Dimostrazione:} Supponiamo che $L_{H}$ sia decidibile. Allora, deve esistere una macchina di Turing $T$ tale che, 
+$T(i, x) = q_{A} \Leftrightarrow (i, x)\in L_{H}$ e $T(i, x) = q_{R} \Leftrightarrow (i, x)\notin L_{H}$.
+
+\begin{enumerate}
+    \item [+]{
+        Da $T$ \textbf{deriviamo} $T^{'}$ che terminando su ogni input, accetta tutte e sole le coppie $(i, x) \in \mathbb{N} \times \mathbb{N} \setminus L_{H}$, ossia $L_{H}^{c}$.
+        $T^{'}(i, x) = q_{R} \Leftrightarrow (i, x)\in L_{H}$ e $T(i, x) = q_{A} \Leftrightarrow (i, x)\notin L_{H}$.
+        Quindi $T^{'}(i, x)$ decide $L_{H}^{c}$.
+    }
+    \item [+]{
+        Da $T^{'}$ \textbf{deriviamo} $T^{''}$ in questo modo:\\
+        $T^{''}(i, x) =\ non\ termina\ se\ T^{'}(i, x) = q_{R}$ e $T^{''}(i, x) = q_{A} se\ T^{'}(i, x) = q_{A}$.\\
+        Quindi $T^{''}(i, x) =\ non\ termina\ se\ (i, x) = \in L_{H}$ e $T^{''}(i, x) = q_{A}\ se\ (i, x) \notin L_{H}$.
+    }
+    \item [+]{
+        Da $T^{''}$ \textbf{deriviamo} $T^{*}$ in questo modo:\\
+        $T^{*}(i) = T^{''} = \ non\ termina\ se\ (i, i) \in L_{H}$ e $T^{*}(i) = T^{''}(i, i) = q_{A}\ se\ (i, i) \notin L_{H}$.\\
+    }
+\end{enumerate}
+
+Se $T$ esiste $\Rightarrow$ $T^{*}$ esiste, allora $\exists k\in \mathbb{N}$ tale che $T^{*} = T_{k}$. Se $T_{k}(k) = T^{*}(k)$ accettasse, allora $T^{'}(k, k)$ dovrebbe accettare
+ach'essa. Ma se $T^{'}(k, k)$ accetta, allora $(k, k)\notin L_{H}$, ossia, $T_{k}(k)$ non termina. Allora $T^{*}(k)$ non può accettare e, dunque, necessariamente non termina.
+Ma, se $T^{*}(k)$ non termina, allora $T^{'}(k, k)$ rigetta e, quindi, $(k, k)\in L_{H}$. Dunque, per definizione, $T_{k}(k)$ termina. Quindi, in entrambi le ipotesi, $T_{k}(k)$ termina
+o non termina, portando ad una contraddizione. Allora $T^{*}$ non può esistere, ma allora neanche $T^{''}$ può esistere, e neanche $T^{'}$ e di conseguenza $T$.
+Quindi se $T$ non esiste, $L_{H}$ non è decidibile.
+
+\subsection{Teorema a pag. 6}
+
+Se $L_{1} e L_{2}$ sono due linguaggi accettabili, allora $L_{1} \cup L_{2}$ è un linguaggio accettabile.\\
+Se $L_{1} e L_{2}$ sono due linguaggi decidibili, allora $L_{1} \cup L_{2}$ è un linguaggio decidibile.
+
+\paragraph*{Dimostrazione:}
+
+\subsection{Teorema a pag. 6}
+
+Se $L_{1} e L_{2}$ sono due linguaggi accettabili, allora $L_{1} \cap L_{2}$ è un linguaggio accettabile.\\
+Se $L_{1} e L_{2}$ sono due linguaggi decidibili, allora $L_{1} \cap L_{2}$ è un linguaggio decidibile.
+
+\paragraph*{Dimostrazione:}
