@@ -1,7 +1,303 @@
-\section{Teoremi Dispensa 5}
+\section{Teoremi Dispensa 6}
 
 \subsection{Teorema a pag. 3}
 
 Sia $T$ una macchina di Turing deterministica, definita su un alfabeto $\Sigma \setminus \square$ e 
 un insieme di stati $Q$, e sia $x\in \Sigma^{\star}$ tale che $T(x)$ termina, allora: 
-$$dspace(T, x) \leq dtime(T, x) \leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, )}$$
+$$dspace(T, x) \leq dtime(T, x) \leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)}$$
+
+\paragraph*{Dimostrazione:} 
+\begin{enumerate}
+    \item {
+        $dspace(T, x) \leq dtime(T, x)$\\
+        Banalmente, una computazione deterministica che termina in $k$ passi non può utilizzare più di $k$ celle del nastro.
+    }
+    \item {
+        $dtime(T, x) \leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)}$
+        \begin{enumerate}
+            \item {
+                $dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)}$: è il numero di stati globali possibili di $T$ nel caso in cui non più di $dspace(T, x)$ celle del nastro 
+                vengano utilizzate dalla computazione $T(x)$.
+            }
+            \item {
+                $(|\Sigma| + 1)^{dspace(T, x)}$: sono tutte le possibili parole di $dspace(T, x)$ simboli di $\Sigma \cup \{\square\}$, ossia tutte le possibili
+                configurazioni delle $dspace(T, x)$ celle utilizzate.
+            }
+        \end{enumerate}
+        Siano, dunque, $T$ una macchina deterministica e $x\in \Sigma^{\star}$ tali che $T(x)$ termina in $k$ passi utilizzando
+        $dspace(T, x)$ celle del nastro. Poiché $T(x)$ termina in $k$ passi, essa è una successione di stati globali 
+        $$SG_{0}(x), SG_{2}(x), \dots, SG_{k}(x)$$
+        tali che $SG_{0}(x)$ è lo stato globale iniziale e per ogni $0 \leq i \leq k - 1$ esiste una transizione
+        $SG_{i}(x) \rightarrow SG_{i + 1}(x)$, e  $SG_{k}(x)$ è lo stato globale finale.\\
+        Sia $k(T, x) = dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)}$. Se $T(x)$ durasse più di $k(T, x)$ passi (senza mai uscire
+        dalle $dspace(T, x)$ celle), allora sarebbe una successione di stati globali contenente almeno due volte uno stesso stato globale, $SG_{h}$.
+        
+        \begin{figure}[h]
+            \centering
+            \begin{tikzpicture}[node distance=2cm, every node/.style={draw, circle}, >={Stealth[round]}]
+                % Nodes
+                \node (A) {$SG_{1}$};
+                \node (B) [right of=A] {$SG_{2}$};
+                \node (C) [right of=B] {$SG_{h}$};
+                \node (D) [right of=C] {$SG_{h + 1}$};
+                \node (E) [right of=D] {$SG_{h + 2}$};
+                \node (F) [below of=E] {$SG_{k(T, x)}$};
+                
+                % Edges
+                \draw[->] (A) -- (B);
+                \draw[->] (B) -- (C);
+                \draw[->] (C) -- (D);
+                \draw[->] (D) -- (E);
+                \draw[->] (E) -- (F);
+                \draw[->] (F) -- (C);
+            \end{tikzpicture}
+        \end{figure}
+        Ma $T$ è deterministica, allora, a partire da $SG_{h}$ è possibile eseguire un'unica quintupla (verso $SG_{h + 1}$) ed
+        essa viene eseguita tutte le volte in cui $T(x)$ si trova in $SG_{h}$. Quindi, entrambe le volte, avviene una transizione
+        verso lo stesso stao globale $SG_{h + 1}$, in questo modo $T(x)$ va in loop e non termina che è contro l'ipotesi che termina.
+    }
+\end{enumerate}
+
+\newpage
+\subsection{Teorema a pag. 4}
+
+Sia $f: \mathbb{N} \rightarrow \mathbb{N}$ una funzione totale e calcolabile.
+\begin{itemize}
+    \item []{
+        Se $L \subseteq \Sigma^{\star}$ è accettato da una macchina di Turing non deterministica $NT$ tale che,
+        per ogni $x\in L$, $ntime(NT, x) \leq f(|x|)$ allora $L$ è decidibile.
+    }
+    \item []{
+        Se $L \subseteq \Sigma^{\star}$ è accettato da una macchina di Turing non deterministica $NT$ tale che,
+        per ogni $x\in L$, $nspace(NT, x) \leq f(|x|)$ allora $L$ è decidibile.
+    }
+\end{itemize}
+
+\paragraph*{Dimostrazione:} Poiché $f$ è totale e calcolabile, esiste una macchina di Turing $T_{f}$ trasduttore tale che, per 
+ogni $n \in \mathbb{N}$, $T_{f}(n)$ termina con il valore $f(n)$ scritto sul nastro di output. Assumiamo che l'input e l'output 
+siano codificati in unario. Sia $L \subseteq \Sigma^{\star}$ un linguaggio accettato da una macchina di Turing $NT$ tale che 
+$\forall x \in L,\ ntime(NT, x) \leq f(|x|)$. Deriviamo ora da $NT$ e $T_{f}$ una nuova macchina non deterministica $NT^{'}$ a tre nastri.
+\begin{enumerate}
+    \item [$N_{1}$:] viene scritto in unario l'input $x \in \Sigma^{\star}$.
+    \item [$N_{2}$:] viene scritta la lunghezza di $x$ in unario.
+    \item [$N_{3}$:] viene utitlizzato come clock, ovvero viene scritto $f(|x|)$.
+\end{enumerate}
+La computazione $NT^{'}$ consiste di 3 fasi:
+\begin{enumerate}
+    \item [FASE 1:]{
+        $NT^{'}(x)$ scrive $|x|$ su $N_{2}$ in unario. Una volta letto $\square$ su $N_{1}$, le testine di $N_{1}$ e $N_{2}$
+        vengono riposizionate sul carattere più a sinistra.
+    }
+    \item [FASE 2:]{
+        Simula $T_{f}(|x|)$, usando $N_{2}$ come nastro di input e $N_{3}$ come nastro di output. Essa termina scrivendo il valore di 
+        $f(|x|)$ su $N_{3}$ e riavvolge la testina.
+    }
+    \item [FASE 3:]{
+        Simula i primi $f(|x|)$ passi della computazione, utilizzando $N_{1}$ come input e nastro di lavoro e $N_{3}$ come clock,
+        ovvero come contatore del numero di istruzioni eseguite. Fino a quando viene letto 1 su $N_{3}$ viene eseguita un'istruzione di
+        $NT(x)$ e la testina di $N_{3}$ viene spostata a destra. Se $NT(x)$ raggiunge $q_{A}$ o $q_{R}$, $NT^{'}(x)$ termina nel 
+        medesimo stato. Se viene letto $\square$ su $N_{3}$, $NT^{'}(x)$ termina in $q_{R}$.
+    }
+\end{enumerate} 
+
+Poiché $f$ è calcolabile e totale e poiché la simulazione della computazione $NT(x)$ nella terza fase viene forzatamente terminata,
+se non ha terminato entro $f(|x|)$ passi, tutte le computazioni di $NT^{'}$ terminano.
+
+\begin{itemize}
+    \item {
+        Se $x\in L$ allora poiché $NT$ accetta $x$ in $f(|x|)$ passi, nella terza fase termina in $q_{A}$ prima che venga
+        letto $\square$.
+    }
+    \item {
+        Se $x\notin L$ allora o $NT(x)$ termina in $q_{R}$ durante la terza fase e di conseguenza anche $NT^{'}(x)$ termina in $q_{R}$,
+        oppure viene letto $\square$, ovvero $NT(x)$ non ha accettato $x$ in $f(|x|)$ passi e dunque $NT^{'}(x)$ rigetta.
+    }
+\end{itemize}
+Questo dimostra che $NT^{'}$ decide $L$ e dunque che $L$ è decidibile.
+
+\subsection{Teorema a pag. 10}
+
+Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
+$$DTIME[f(n)] \subseteq NTIME[f(n)] \subseteq\ \land\ DSPACE[f(n)] \subseteq NSPACE[f(n)]$$ 
+
+\paragraph*{Dimostrazione:} Una macchina di Turing deterministica è una particolare macchina di Turing non deterministica 
+avente grado di non determinismo pari a 1, inoltre ogni parola decisa in $k$ passi e anche accettata in $k$ passi 
+(ogni parola decisa in $k$ celle e anche accettata in $k$ celle).
+
+\subsection{Teorema a pag. 10}
+
+Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
+
+$$DTIME[f(n)] \subseteq DSPACE[f(n)] \subseteq\ \land\ NTIME[f(n)] \subseteq NSPACE[f(n)]$$ 
+
+\paragraph*{Dimostrazione:} Segue dal teorema:
+$$dspace(T, x) \leq dtime(T, x)\dots$$
+Sia $L \subseteq \Sigma^{\star}$ tale che $L \in DTIME[f(n)]$. Allora esiste $T$ che decide $L$ e tale che 
+$\forall x\in \Sigma^{\star},\ dtime(T, x) \in O(f(|x|))$. Poiché $dspace(T, x) \leq dtime(T, x)$ e $dspace(T, x) \leq dtime(T, x) \in O(f(|x|))$,
+allora $dspace(T, x) \in O(f(|x|))$ e dunque $L \in DSPACE(f(|x|))$. Analogamente per $NTIME[f(n)] \subseteq NSPACE[f(n)]$.
+
+\subsection{Teorema a pag. 11}
+
+Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
+
+$$DSPACE[f(n)] \subseteq DTIME[2^{O(f(n))}] \subseteq\ \land\ NSPACE[f(n)] \subseteq NTIME[2^{O(f(n))}]$$
+
+\paragraph*{Dimostrazione:} Segue dal teorema:
+$$\dots \leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)}$$
+Sia $L \subseteq \Sigma^{\star}$ tale che $L \in DTIME[f(n)]$. Allora, esiste una machina di Turing $T$ deterministica $T$
+che decide $L$ e tale che, per ogni $x \in Sigma^{\star}$, $dspace(T, x) \in O(f(|x|))$. Poiché:
+
+Supponiamo che $\Sigma = \{0, 1\}$
+
+\[
+    \begin{aligned}[t]
+    dtime(T, x) &\leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)} \\
+                 &= dspace(T, x)|Q|3^{dspace(T, x)}\\
+                 &= 2^{\log(dspace(T,x))}\ |Q|\ 2^{\log(3)dspace(T, x)}\\
+                 &= |Q|2^{\log(dspace(T,x))\ +\ \log(3)dspace(T, x)}\\
+                 &\leq |Q|2^{(1 + \log(3))dspace(T, x)}
+    \end{aligned}
+\]
+
+Allora $dtime(T, x)\in O(2^{O(f(|x|))})$ e dunque $L\in DTIME[2^{O(f(|x|))}]$
+
+\subsection{Teorema a pag. 11}
+
+Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
+$$DTIME[f(n)] = coDTIME[f(n)] \land\ DSPACE[f(n)] = coDSPACE[f(n)]$$
+
+\paragraph*{Dimostrazione:} $\forall L \in DTIME[f(n)]$, esiste $T$ che decide $L$ e $dtime(T, x) \in O(f(|x|))$. 
+Da $T$ deriviamo $T^{c}$ con input $x \in \Sigma^{\star}$ e $Q_{f} = \{q_{A}^{c}, q_{R}^{c}\}$ che decide $L^{c}$ nel seguente modo:
+
+\begin{enumerate}
+    \item [FASE 1:] Simula $T(x)$
+    \item [FASE 2:]{
+        \begin{itemize}
+            \item Se $T(x) = q_{A}$, allora $T^{c}(x) = q_{R}$
+            \item Se $T(x) = q_{R}$, allora $T^{c}(x) = q_{A}$
+        \end{itemize}
+    }
+\end{enumerate}
+Dunque $L^{c} \in DTIME[f(n)]$.\\
+Analogamente possiamo dimostrare che un qualsiasi linguaggio $L \in coDTIME[f(n)]$. Di conseguenza che $DTIME[f(n)] = coDTIME[f(n)]$.
+Dimostrazione analoga per $DSPACE[f(n)] = coDSPACE[f(n)]$.
+
+\subsection{Teorema a pag. 14}
+
+Sia $f: \mathbb{N} \rightarrow \mathbb{N}$ una funzione time-constructible (space-constructible.).
+\begin{itemize}
+    \item []{
+        Allora, per ogni $L \in NTIME[f(n)]$, si ha che $L$ è decidibile in tempo non deterministico in $O(f(n))$.
+    }
+    \item []{
+        Allora, per ogni $L \in NTIME[f(n)]$, si ha che $L$ è decidibile in spazio non deterministico in $O(f(n))$.
+    }
+\end{itemize}
+
+\paragraph*{Dimostrazione:} Sia $f: \mathbb{N} \rightarrow \mathbb{N}$ una funzione time-constructible. Allora esiste
+una macchina di Turing di tipo trasduttore $T_{f}$ che, avendo scritto sul nastro di input/lavoro $n \in \mathbb{N}$ in 
+unario, in $O(f(n))$ passi scrive sul nastro di output il valore di $f(n)$ in unario. Sia $L \in NTIME[f(n)]$. Allora 
+esiste una $NT$ che accetta $L$ e tale che, per ogni $x \in L$, $ntime(NT, x) \in O(f(|x|))$. Definiamo ora da $T_{f}$
+e $NT$, la macchina $NT^{'}$ con input $x \in L$ che opera nel seguente modo:
+
+\begin{itemize}
+    \item [FASE 1:] Scrive su $N_{2}$, $|x|$ in unario. 
+    \item [FASE 2:] Simula $T_{f}(x)$ e scrive il risulato in unari su $N_{3}$.
+    \item [FASE 3:] {
+        Finché legge 1 su $N_{3}$ esegue una istruzione di $NT(x)$ su $N_{1}$. 
+        \begin{itemize}
+            \item Se termina in $q_{A}$, allora $NT^{'}(x) = q_{A}$.
+            \item Altrimenti sposta la testina a destra su $N_{3}$
+        \end{itemize}
+    }
+    \item [FASE 4:] Se legge $\square$ su $N_{3}$ allora rigetta.
+\end{itemize}
+
+\begin{itemize}
+    \item La fase 1 termina in $O(|x|)$ passi.
+    \item la fase 2 termina in $O(f(|x|))$ passi, in quanto $f$ è time-constructible.
+    \item La fase 3 termina in $O(f(|x|))$ passi, in quanto $\forall x \in \Sigma^{\star}$, $ntime(NT^{'}, x) \in O(f(|x|))$.
+\end{itemize}
+
+Dunque, $NT^{'}(x)$ decide $L,\ \forall x \in \Sigma^{\star}$, e $ntime(NT^{'}, x) \in O(f(|x|))$. 
+
+\subsection{Teorema a pag. 14}
+
+Per ogni funzione $f: \mathbb{N} \rightarrow \mathbb{N}$ time-constructible, $$NTIME[f(n)] \subseteq DTIME[2^{O(f(n)}]$$
+
+\paragraph*{Dimostrazione:} 
+
+Sia $L \in \Sigma^{\star}$ tale che $L \in NTIME[f(n)]$, allora esistono una macchina di Turing $NT$ che accetta $L$ e una 
+costante $h$ tali che $\forall x \in L,\ ntime(NT, x) \leq hf(|x|)$. Poiché $f$ è time-constructible, esiste una macchina 
+di Turing deterministica $T_{f}$ con inpun la rappresentazione in unario di $n \in \mathbb{N}$, che calcola il valore di 
+$f(n)$ in unario in tempo $O(f(n))$. Indichiamo con $k$ il grado di non determinismo di $NT$ e definiamo $T$ deterministica
+che simuli $NT$ con input $x \in \Sigma^{\star}$ che opera nel seguente modo:
+
+\begin{itemize}
+    \item [FASE 1:] Scrive su $N_{2}$, $|x|$ in unario.
+    \item [FASE 2:] {
+        Simula $T_{f}(|x|)$ e scrive su $N_{3}$ l'output $hf(|x|)$ in unario.
+    }
+    \item [FASE 3:] {
+        Per ogni computazione deterministica $\alpha(x)$ in $NT(x)$:
+        \begin{itemize}
+            \item Finché legge 1 su $N_{3}$ esegue un'istruzione lungo $\alpha(x)$.
+            \item Se $\alpha(x) = q_{A}$ allora $T(x) = q_{A}$.
+            \item Altrimenti sposta la testina a destra su $N_{3}$.
+            \item Se legge $\square$ si sposta sul primo 1 a sinistra e passa alla prossima computazione deterministica $\alpha(x)$ se esiste.
+        \end{itemize}
+    }
+    \item [FASE 4:] Rigetta
+\end{itemize}
+
+\begin{itemize}
+    \item La fase 1 termina in $O(f(|x|))$ passi.
+    \item La fase 2 termina in $O(hf(|x|)) = O(f(|x|))$ passi.
+    \item La fase 3 termina in $O(f(|x|)k^{hf(x)})$ poiché esegue ogni computazione deterministica di $NT(x)$
+\end{itemize}
+
+Dunque, $$dtime(T, x) \in O(f(|x|)k^{hf(x)}) \subseteq{O(2^{O(f(|x|))})}$$
+
+\subsection{Teorema a pag. 20}
+
+Siano $C$ e $C^{'}$ due classi di complessità tali che $C^{'} \subseteq C$. Se $C^{'}$ è chiusa rispetto ad una $\pi$-riduzione
+allora, per ogni linguaggio $L$ che sia $C$-completo rispetto a tale $\pi$-riduzione, $L \in C^{'}$ se e solo se $C = C^{'}$.
+
+\paragraph*{Dimostrazione}
+
+\begin{itemize}
+    \item [$\Leftarrow$)] Se $C = C^{'}$ allora $L \in C^{'}$.
+    \item [($\Rightarrow$]{
+        Sia $L \in C^{'}$. Poiché $L$ è $C$-completo rispetto alla $\pi$-riducibilità, allora per ogni $L_{0} \in C$, 
+        $L_{0} \leq_{\pi} L$. Poiché $C^{'}$ è chiusa rispetto alla $\pi$-riduzione, ovvero per ogni altro linguaggio 
+        $L^{'}$, $L^{'} \leq_{\pi} L$, allora $L^{'} \in C^{'}$, dunque per ogni linguaggio $L_{0} \in C$, $L_{0} \leq_{\pi} L$,
+        allora $L_{0} \in C^{'}$. Quindi $C = C^{'}$.
+    }
+\end{itemize}
+
+\newpage
+\subsection{Teorema a pag. 21}
+
+La classe \textbf{P} è chiusa rispetto alla riducibilità polinomiale.
+
+\paragraph*{Dimostrazione}
+
+Sia $L \in \textbf{P}$, allora esistono una macchina di Turing $T$ deterministica e $k \in \mathbb{N}$ tale che $T$ decide $L$ e 
+per ogni $x \in \Sigma^{\star}$, $dtime(T, x) \in O(|x|^k)$.
+
+Sia $L^{'}:\ L^{'} \leq_{p} L$, allora esiste una funzione $f: \Sigma^{\star}_{1} \rightarrow \Sigma^{\star}_{2}$ in $\textbf{FP}$
+che riduce $L^{'}$ a $L$, con $T_{f}$ trasduttore tale che per ogni $x \in \Sigma^{\star}_{1}$, $T_{f}(x) \in L \Leftrightarrow x \in L^{'}
+\land dtime(T_{f}, x) \in O(|x|^c)$.
+
+Da $T$ e $T_{f}$ definiamo $T^{'}$ con input $x$ che opera nel seguente modo:
+
+\begin{itemize}
+    \item [FASE 1:] Simula $T_{f}(x)$ e scrive l'output $y$ su $N_{2}$.
+    \item [FASE 2:] {
+        Simula $T(y)$:
+        \begin{itemize}
+            \item Se termina in $q_{A}$ allora $T^{'}$ accetta.
+            \item Se termina in $q_{R}$ allora $T^{'}$ rigetta.
+        \end{itemize}
+    }
+\end{itemize}
