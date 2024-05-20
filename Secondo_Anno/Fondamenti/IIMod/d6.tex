@@ -114,7 +114,6 @@ se non ha terminato entro $f(|x|)$ passi, tutte le computazioni di $NT^{'}$ term
     }
 \end{itemize}
 Questo dimostra che $NT^{'}$ decide $L$ e dunque che $L$ è decidibile.
-
 \subsection{Teorema a pag. 10}
 
 Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
@@ -124,6 +123,7 @@ $$DTIME[f(n)] \subseteq NTIME[f(n)] \subseteq\ \land\ DSPACE[f(n)] \subseteq NSP
 avente grado di non determinismo pari a 1, inoltre ogni parola decisa in $k$ passi e anche accettata in $k$ passi 
 (ogni parola decisa in $k$ celle e anche accettata in $k$ celle).
 
+\newpage
 \subsection{Teorema a pag. 10}
 
 Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
@@ -181,7 +181,7 @@ Da $T$ deriviamo $T^{c}$ con input $x \in \Sigma^{\star}$ e $Q_{f} = \{q_{A}^{c}
 Dunque $L^{c} \in DTIME[f(n)]$.\\
 Analogamente possiamo dimostrare che un qualsiasi linguaggio $L \in coDTIME[f(n)]$. Di conseguenza che $DTIME[f(n)] = coDTIME[f(n)]$.
 Dimostrazione analoga per $DSPACE[f(n)] = coDSPACE[f(n)]$.
-
+\newpage
 \subsection{Teorema a pag. 14}
 
 Sia $f: \mathbb{N} \rightarrow \mathbb{N}$ una funzione time-constructible (space-constructible.).
@@ -263,7 +263,7 @@ Dunque, $$dtime(T, x) \in O(f(|x|)k^{hf(x)}) \subseteq{O(2^{O(f(|x|))})}$$
 Siano $C$ e $C^{'}$ due classi di complessità tali che $C^{'} \subseteq C$. Se $C^{'}$ è chiusa rispetto ad una $\pi$-riduzione
 allora, per ogni linguaggio $L$ che sia $C$-completo rispetto a tale $\pi$-riduzione, $L \in C^{'}$ se e solo se $C = C^{'}$.
 
-\paragraph*{Dimostrazione}
+\paragraph*{Dimostrazione:}
 
 \begin{itemize}
     \item [$\Leftarrow$)] Se $C = C^{'}$ allora $L \in C^{'}$.
@@ -275,12 +275,11 @@ allora, per ogni linguaggio $L$ che sia $C$-completo rispetto a tale $\pi$-riduz
     }
 \end{itemize}
 
-\newpage
 \subsection{Teorema a pag. 21}
 
 La classe \textbf{P} è chiusa rispetto alla riducibilità polinomiale.
 
-\paragraph*{Dimostrazione}
+\paragraph*{Dimostrazione:}
 
 Sia $L \in \textbf{P}$, allora esistono una macchina di Turing $T$ deterministica e $k \in \mathbb{N}$ tale che $T$ decide $L$ e 
 per ogni $x \in \Sigma^{\star}$, $dtime(T, x) \in O(|x|^k)$.
@@ -301,3 +300,139 @@ Da $T$ e $T_{f}$ definiamo $T^{'}$ con input $x$ che opera nel seguente modo:
         \end{itemize}
     }
 \end{itemize}
+
+Dato che $f$ è una riduzione da $L^{'}$ a $L$, quindi $f(x) \in L \Leftrightarrow x \in L^{'}$, quindi $T^{'}$ termina per 
+ogni input $x \in \Sigma^{\star}$ e accetta $\Leftrightarrow$ $T(f(x))$ accetta, ossia $\Leftrightarrow\ f(x) \in L$.
+
+Resta da mostrare che $T^{'}(x)$ opera in tempo polinomiale in $|x|$. La simulazione di $T_{f}(x)$ richiede 
+$dtime(T_{f}, x) \leq |x|^c$ e la simulazione di $T(f(x))$ richiede $dtime(T, f(x)) \leq |f(x)|^k$.
+
+\[
+    \begin{aligned}[t]
+        dtime(T^{'}, x) &\leq |x|^c + f(|x|)^k\footnote{$f(|x|)^k = |y|^k$ che per il teorema: $dspace(T, x) \leq dtime(T, x)$, 
+        $|y|^k \leq (|x|^c)^k = |x|^{ck}$} \\
+                &\leq |x|^c + |x|^{ck}\\
+                &\Rightarrow dtime(T^{'}, x) \in O(|x|^{ck})
+    \end{aligned}
+\]
+
+Poiché $c$ e $k$ sono costanti, allora risulta che \textbf{P} è chiusa rispetto la riducibilità polinomiale dato che $L^{'} \in \textbf{P}$.
+
+\subsection{Teorema a pag. 21}
+
+Le classi \textbf{NP, PSPACE, EXPTIME, NEXPTIME}, sono chiuse rispetto alla riducibilità polinomiale.
+
+\paragraph*{Dimostrazione:} 
+
+\begin{itemize}
+    \item [\textbf{NP}]
+    \item [\textbf{PSPACE}]
+    \item [\textbf{EXPTIME}]
+    \item [\textbf{NEXPTIME}]
+\end{itemize}
+
+\subsection{Corollario a pag. 21}
+
+Se \textbf{P $\neq$ NP} allora, per ogni linguaggio \textbf{NP}-completo $L$, $L \notin \textbf{P}$.
+
+\paragraph*{Dimostrazione:} 
+
+Supponiamo che $L$ sia un linguaggio \textbf{NP}-completo e che $L \in \textbf{P}$. Poiché $L$ è \textbf{NP}-completo, per ogni
+linguaggio $L^{'} \in \textbf{NP},\ L^{'} \leq L$, ma se $L \in \textbf{P}$, poiché \textbf{P} è chiusa rispetto alla 
+riduzione $\leq$, questo implica che, per ogni $L^{'} \in \textbf{NP},\ L^{'} \in \textbf{P}$. Ossia \textbf{P = NP}, 
+contraddicendo l'ipotesi.
+
+\subsection{Teorema a pag. 23}
+
+Se \textbf{NP $\neq$ coNP}, allora \textbf{P $\neq$ NP}.
+
+\paragraph*{Dimostrazione ($A\rightarrow B \Leftrightarrow \lnot B \rightarrow \lnot A$): }
+
+Se \textbf{P = NP}, allora \textbf{NP = coP} poiché \textbf{P = coP}. Ma se \textbf{P = NP} $\land$ \textbf{P = coP}, allora 
+\textbf{coP = coNP}. Dunque: $$\textbf{\underline{NP} = P = coP = \underline{coNP}}$$ 
+
+\subsection{Teorema a pag. 23}
+
+La classe \textbf{coNP} è chiusa rispetto alla riducibilità polinomiale.
+
+\paragraph*{Dimostrazione: }
+
+Poiché \textbf{NP} è chiusa rispetto alla riducibilità polinomiale
+\begin{itemize}
+    \item [] Per ogni $L_{2} \in \textbf{NP}$ e per ogni $L_{1}$, se $L_{1} \leq L_{2}$, allora $L_{1} \in \textbf{NP}$.
+    \item [$\Rightarrow$] Per ogni $L_{2}^{c} \in \textbf{coNP}$ e per ogni $L_{1}^{c}$, se $L_{1}^{c} \leq L_{2}^{c}$, allora $L_{1}^{c} \in \textbf{coNP}$
+\end{itemize}
+
+\subsection{Teorema a pag. 23}
+
+Un linguaggio L è \textbf{NP}-completo se e soltanto se $L^{c}$ è \textbf{coNP}-completo. 
+
+\paragraph*{Dimostrazione: }
+
+\begin{itemize}
+    \item [($\Rightarrow$]{
+        Sia $L$ un linguaggio \textbf{NP}-completo, allora per definizione di completezza
+        \begin{enumerate}
+            \item $L \in \textbf{NP}$ allora $L^{c} \in \textbf{coNP}$.
+            \item $\forall L_{0} \in \textbf{NP},\ L_{0} \leq L$.
+        \end{enumerate}
+        Sia $L_{1}$ un qualsiasi linguaggio in \textbf{coNP}, allora $L^{c}_{1} \in \textbf{NP}$. 
+        Poiché $L$ è \textbf{NP}-completo, $L_{1}^{c} \leq L$.
+        \[
+            \begin{aligned}[t]
+                &\Rightarrow Esiste\ f \in \textbf{FP}: \forall x \in \Sigma^{\star} [x \in L^{c}_{1} \Leftrightarrow f(x) \in L]\\
+                &\Rightarrow Esiste\ f \in \textbf{FP}: \forall x \in \Sigma^{\star} [x \notin L^{c}_{1} \Leftrightarrow f(x) \notin L]\\
+                &\Rightarrow Esiste\ f \in \textbf{FP}: \forall x \in \Sigma^{\star} [x \in L_{1} \Leftrightarrow f(x) \in L^{c}]\\
+            \end{aligned}
+        \]
+        In conclusione, $\forall L_{1} \in \textbf{coNP}:\ L_{1} \leq L^{c}$, e quindi $L^{c}$ è \textbf{coNPC}.
+    }
+    \item [$\Leftarrow$)]{
+        Sia $L^{c}$ un linguaggio \textbf{coNP}-completo, allora per definizione di completezza
+        \begin{enumerate}
+            \item $L^{c} \in \textbf{coNP}$ allora $L \in \textbf{NP}$.
+            \item $\forall L_{0}^{c} \in \textbf{coNP},\ L_{0}^{c} \leq L^{c}$.
+        \end{enumerate}
+        Sia $L_{1}$ un qualsiasi linguaggio in \textbf{NP}, allora $L^{c}_{1} \in \textbf{coNP}$.
+        Poiché $L^{c}$ è \textbf{coNP}-completo, $L_{1}^{c} \leq L^{c}$.
+        \[
+            \begin{aligned}[t]
+                &\Rightarrow Esiste\ f \in \textbf{FP}: \forall x \in \Sigma^{\star} [x \in L^{c}_{1} \Leftrightarrow f(x) \in L^{c}]\\
+                &\Rightarrow Esiste\ f \in \textbf{FP}: \forall x \in \Sigma^{\star} [x \notin L^{c}_{1} \Leftrightarrow f(x) \notin L^{c}]\\
+                &\Rightarrow Esiste\ f \in \textbf{FP}: \forall x \in \Sigma^{\star} [x \in L_{1} \Leftrightarrow f(x) \in L]\\
+            \end{aligned}
+        \]
+        In conclusione, $\forall L_{1} \in \textbf{NP}:\ L_{1} \leq L$, e quindi $L$ è \textbf{NPC}.
+    }
+\end{itemize}
+
+\newpage
+\subsection{Teorema a pag. 24}
+
+Se esiste un linguaggio $L$ \textbf{NP}-completo tale che $L \in \textbf{coNP}$, allora \textbf{NP = coNP}.
+
+\paragraph*{Dimostrazione: }
+
+$L$ è \textbf{NP}-completo, allora per definizione di completezza
+\begin{enumerate}
+    \item $L \in \textbf{NP}$.
+    \item $\forall L_{1} \in \textbf{NP},\ L_{1} \leq L$.
+\end{enumerate}
+
+\begin{itemize}
+    \item [$\subseteq$]{
+        Se $L \in \textbf{coNP}$ allora $\forall L_{1} \in \textbf{NP},\ L_{1} \leq L$, ma \textbf{coNP} è chiusa ripsetto 
+        alla riducibilità polinomiale ovvero [$L_{2} \in \textbf{coNP},\ L_{1} \leq L_{2},\ \Rightarrow\ L_{1} \in \textbf{coNP}$],
+        allora, per ogni $L_{1} \in \textbf{NP}$ si ha che $L_{1} \leq L$, e $L \in \textbf{coNP}$. Dunque, per la chisura di \textbf{coNP},
+        $L_{1} \in \textbf{coNP}$, quindi \textbf{NP $\subseteq$ coNP}. 
+    }
+    \item [$\supseteq$]{
+        Poiché $L \in \textbf{coNP}$, allora $L^{c} \in \textbf{NP}$, ma poiché $L$ è \textbf{NP}-completo, allora $L^{c}$ è
+        \textbf{coNP}-completo, quindi $\forall L^{'} \in \textbf{coNP},\ L^{'} \leq L^{c}$. Ma \textbf{NP} è chiusa rispetto alla 
+        riducibilità polinomiale, ovvero [$L_{2} \in \textbf{NP},\ L_{1} \leq L_{2},\ \Rightarrow\ L_{1} \in \textbf{NP}$],
+        allora, per ogni $L^{'} \in \textbf{coNP},\ L^{'} \leq L^{c}$ e $L^{c} \in \textbf{NP}$. Dunque, per la chiusura di \textbf{NP}, 
+        $L^{'} \in \textbf{NP}$, quindi \textbf{coNP $\subseteq$ NP}.   
+    }
+\end{itemize}
+
+In conclusione, se $L$ è \textbf{NP}-completo $\land$ $L \in \textbf{coNP}$, allora \textbf{NP = coNP}.

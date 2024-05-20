@@ -3,7 +3,7 @@
 \contentsline {section}{\numberline {2}Teoremi Dispensa 3}{3}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Teorema a pag. 3}{3}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Teorema a pag. 4}{3}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Teorema a pag. 5}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.3}Teorema a pag. 5}{4}{subsection.2.3}%
 \contentsline {subsection}{\numberline {2.4}Teorema a pag. 5}{4}{subsection.2.4}%
 \contentsline {subsection}{\numberline {2.5}Teorema a pag. 7}{4}{subsection.2.5}%
 \contentsline {subsection}{\numberline {2.6}Teorema a pag. 9}{4}{subsection.2.6}%
@@ -17,10 +17,16 @@
 \contentsline {subsection}{\numberline {4.1}Teorema a pag. 3}{7}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Teorema a pag. 4}{8}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}Teorema a pag. 10}{8}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Teorema a pag. 10}{8}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.4}Teorema a pag. 10}{9}{subsection.4.4}%
 \contentsline {subsection}{\numberline {4.5}Teorema a pag. 11}{9}{subsection.4.5}%
 \contentsline {subsection}{\numberline {4.6}Teorema a pag. 11}{9}{subsection.4.6}%
-\contentsline {subsection}{\numberline {4.7}Teorema a pag. 14}{9}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.7}Teorema a pag. 14}{10}{subsection.4.7}%
 \contentsline {subsection}{\numberline {4.8}Teorema a pag. 14}{10}{subsection.4.8}%
-\contentsline {subsection}{\numberline {4.9}Teorema a pag. 20}{10}{subsection.4.9}%
+\contentsline {subsection}{\numberline {4.9}Teorema a pag. 20}{11}{subsection.4.9}%
 \contentsline {subsection}{\numberline {4.10}Teorema a pag. 21}{11}{subsection.4.10}%
+\contentsline {subsection}{\numberline {4.11}Teorema a pag. 21}{11}{subsection.4.11}%
+\contentsline {subsection}{\numberline {4.12}Corollario a pag. 21}{11}{subsection.4.12}%
+\contentsline {subsection}{\numberline {4.13}Teorema a pag. 23}{12}{subsection.4.13}%
+\contentsline {subsection}{\numberline {4.14}Teorema a pag. 23}{12}{subsection.4.14}%
+\contentsline {subsection}{\numberline {4.15}Teorema a pag. 23}{12}{subsection.4.15}%
+\contentsline {subsection}{\numberline {4.16}Teorema a pag. 24}{13}{subsection.4.16}%
