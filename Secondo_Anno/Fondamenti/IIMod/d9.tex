@@ -65,7 +65,7 @@ per ogni $x \in \Sigma^{\star},\ x \in L \Leftrightarrow \exists y_{x} \in \{0, 
                     \State \Return $y$
                 \EndProcedure
 
-                \Procedure{NT-FASE-1}{
+                \Procedure{NT-FASE-2}{
                     $x \in \Sigma^{\star}$
                 }
                     \State $y_{x} \gets NT-FASE-1(x)$ \Comment{$O(|x|^k)$}
@@ -100,3 +100,32 @@ $\Gamma_{1}$ è \textbf{NPC}.
 
 \paragraph*{Dimostrazione: }
 
+\begin{itemize}
+    \item []{
+        Sia $\Gamma_{2}$ un problema \textbf{NPC} tale che $\Gamma_{2} \leq \Gamma_{1}$, allora $\exists\ f_{21}:\ I_{\Gamma_{2}} \rightarrow I_{\Gamma_{1}}$
+        tale che $f_{21} \in \textbf{FP}$ e per ogni $x \in I_{\Gamma_{2}},\ [x \in \Gamma_{1} \Leftrightarrow f_{21}(x) \in \Gamma_{1}]$, 
+        ovvero $$\exists\ T_{21}, k:\ \forall x \in I_{\Gamma_{2}},\ [x \in \Gamma_{1} \Leftrightarrow T_{21}(x) \in \Gamma_{1} \land\ dtime(T_{21}, x) \leq |x|^k]$$
+    }
+    \item []{
+        Poiché $\Gamma_{2}$ è \textbf{NPC}, per ogni problema $\Gamma_{3} \in \textbf{NP}$ si ha che $\Gamma_{3} \leq \Gamma_{2}$, e dunque esiste una funzione $f_{32}:\ \Gamma_{3} \Rightarrow \Gamma_{2}$
+        tale che $f_{32} \in \textbf{FP}$ e per ogni $z \in I_{\Gamma_{3}},\ [z \in \Gamma_{3} \Leftrightarrow f_{32}(z) \in \Gamma_{2}]$, ovvero 
+        $$\exists T_{32}, h: \forall z \in I_{\Gamma_{3}},\ [z \in \Gamma_{2} \Leftrightarrow T_{32}(z) \in \Gamma_{2} \land\ dtime(T_{32}, z) \leq |x|^h]$$
+    }
+\end{itemize}
+Da $T_{21}$ e $T_{32}$ definiamo $T_{31}$ con input $z \in I_{\Gamma_{3}}$ che opera nel seguente modo:
+
+\begin{itemize}
+    \item [FASE 1: ] Simula $T_{32}(z) = x$
+    \item [FASE 2: ] Simula $T_{21}(x) = y$
+    \item [FASE 3: ] Scrivi sul nastro di output $y$
+\end{itemize}
+
+Sia $z \in I_{\Gamma_{3}}$, allora $z \in \Gamma_{3} \Leftrightarrow f_{32}(z) \in \Gamma_{2}$ e inoltre, $f_{32}(z) \in \Gamma_{2} \Leftrightarrow f_{21}(f_{32}(z)) \in \Gamma{1}$.
+Se indichiamo con $f_{31}$ la composizione delle funzionie $f_{32}$ e $f_{21}$, questo dimostra che $f_{31}$ è una riduzione da $\Gamma_{3}$ a $\Gamma_{1}$.
+
+Resta da dimostrare che la macchina $T_{32}$ opera in tempo polinomiale. 
+\[
+\forall z \in I_{\Gamma_{3}}:\ [dtime(T_{31}, z) = dtime(T_{32}, z) + dtime(T_{21}, x) \leq |z|^h + |x|^k \leq |z|^{hk}]    
+\]
+
+Questo dimostra che $\Gamma_{1}$ è \textbf{NPC}.
