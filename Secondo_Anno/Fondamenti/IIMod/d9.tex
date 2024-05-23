@@ -1,0 +1,102 @@
+\section{Teoremi Dispensa 9}
+
+\subsection{Teorema a pag. 8}
+
+Un linguaggio $L \subseteq \Sigma^{\star}$ è in \textbf{NP} \underline{se è soltanto se}\footnote{Questo è da dimostrare}
+esistono una macchina di Turing deterministica $T$ che opera in tempo polinomiale e due costanti $k, h \in \mathbb{N}$ tali che, 
+per ogni $x \in \Sigma^{\star},\ x \in L \Leftrightarrow \exists y_{x} \in \{0, 1\}^{\star}:\ |y_{x}| \leq |x|^k
+\land T(x, y_{x}) = q_{A} \land dtime(T, x, y_{x}) \leq |x|^h$
+
+\paragraph*{Dimostrazione: }
+
+\begin{itemize}
+    \item [($\Rightarrow$]{
+        Sia $L \subseteq \Sigma^{\star}$ un linguaggio in \textbf{NP}, allora esistono una macchina di Turing non 
+        deterministica $NT$ e un intero $h \in \mathbb{N}$ tale che $NT$ accetta $L$ e, per ogni, $x \in L,\ ntime(NT, x) \leq |x|^h$.
+        
+        Questo significa che $\forall x \in L$ esiste una sequenza di quintuple che eseguite a partire dallo stato globale inziale $SG_{0}$ 
+        porta ad uno stato globale di accettazione. 
+
+        Allora, $p_{i} = \langle q_{i1},\ s_{i1},\ s_{i2},\ q_{i2},\ m_{i} \rangle$ è la $i-esima$ quintupla 
+        della sequenza $y(x)$, definita come segue:
+        $$y(x) =\ q_{11},\ s_{11},\ s_{12},\ q_{12},\ m_{1}\ -\ q_{21},\ s_{21},\ s_{22},\ q_{22},\ m_{2}\ -\ \dots\ q_{(n^{k})1},\ s_{(n^{k})1},\ s_{(n^{k})2},\ q_{(n^{k})2},\ m_{(n^{k})}$$
+        è la sequenza di quintuple che rappresentano una computazione deterministica accettante.\footnote{Adesso il Genio non ci da più una quintupla per volta, ma una sequenza di quintuple che però, devono essere verificate.}
+
+        Definiamo ora una macchina deterministica $\overline{T}$ che ha il ruolo di verificare la sequenza di quintuple $y_{x}$ scelta dal genio. Dunque $\overline{T}$ è 
+        detto \textbf{verificatore} ed opera nel seguente modo:
+        \begin{enumerate}
+            \item $\overline{T}$ verifica che $y$ sia nella forma descritta sopra, se non è così, rigetta.
+            \item $\overline{T}$ verifica che, per ogni $1 \leq i \leq n^k,\ \langle q_{i1},\ s_{i1},\ s_{i2},\ q_{i2},\ m_{i} \rangle \in P$, se non è così, allora rigetta.
+            \item $\overline{T}$ verifica che $q_{11} = q_{0}$ e $q_{(n^k)2} = q_{A}$, se così non è, rigetta.
+            \item $\overline{T}$ verifica che, per ogni $2 \leq i \leq n^k,\ q_{i1} = q_{(i - 1)2}$, se così non è, rigetta.
+            \item $\overline{T}$ simula la computazione di $NT(x)$ descritta da $y$. Verifica se ogni quintupla può eseguita, se sì la esegue, altrimenti rigetta.
+            \item $\overline{T}$ accetta.
+        \end{enumerate}
+
+        Dunque, se $x \in L$, allora $y(x)$ è la codifica di $NT(x)$ accettante che è costituita da al più $|x|^k$ passi. 
+        Dunque, se $x \in L$, allora $|y(x) \in O(|x|^k)|$ e quindi $\overline{T}$ opera in tempo polinomiale in $|x|$.
+
+        Se $x \in L,\ y_{x}$ prende il nome di \textbf{certificato} per $x$. Dunque $x \in L \Leftrightarrow\ \exists y(x) \in [\Sigma \cup Q \cup \{-, s, f, d\}^{\star}]$ tale che $\overline{T}(x, y_{x})$ accetta.
+    }
+    \item [$\Leftarrow$)]{
+        Sia $L \subseteq \Sigma^{\star}$ un linguaggio per il quale esistono una macchina di Turing deterministica $T$ che opera in 
+        tempo polinomiale e una costante $k \in \mathbb{N}$ tali che, $\forall x \in \Sigma^{\star},\ x \in L \Leftrightarrow \exists y_{x} \in \{0, 1\}^{\star}$, tale che $|y_{x}| \leq |x|^k \land T(x, y_{x})$ accetta.
+
+        Dobbiamo dimostrare che $\exists NT$ e $a \in \mathbb{N}$ tale che, $\forall x \in L,\ NT(x)$ accetta e $ntime(NT, x) \in O(|x|^a)$. $NT$ opera come segue:
+        \begin{itemize}
+            \item [FASE 1: ] $NT$ sceglie non determisticamente una parola binaria $y$ di lunghezza $|y| \leq |x|^k$.
+            \item [FASE 2: ] $NT$ invoca $T(x, y)$ e, se $T(x, y)$ accetta entro $O(|x|^h)$ passi allora accetta.
+        \end{itemize}
+
+        \textbf{NOTA:} $|x|^k$ è time-constructible, ovvero essite una macchina $T_{f}$ trasduttore che calcola $|x|^k$ e $dtime(T_{f}, x) \leq |x|^k$.
+    
+        \begin{algorithm}[ht]
+            \begin{algorithmic}[1]
+                \Procedure{NT-FASE-1}{
+                    $x \in \Sigma^{\star}$
+                }
+                    \State $B \gets T_{f}(|x|)$
+                    \State $i \gets 1$
+                    \While{$i \leq B$} \textbf{begin}
+                        \State \underline{scegli} $y[i]$ nell'insieme $\{0, 1\}$
+                        \State $i \gets i + 1$
+                    \EndWhile \textbf{end}
+                    \State $y \gets y[1] \oplus y[2] \oplus \dots \oplus y[B]$
+                    \State \Return $y$
+                \EndProcedure
+
+                \Procedure{NT-FASE-1}{
+                    $x \in \Sigma^{\star}$
+                }
+                    \State $y_{x} \gets NT-FASE-1(x)$ \Comment{$O(|x|^k)$}
+                    \State $q \gets T(x, y_{x})$ \Comment{$O(|x|^h)$}
+                    \State \Return $q$
+                \EndProcedure
+            \end{algorithmic}
+        \end{algorithm}
+        
+        \begin{itemize}
+            \item {
+                Se $x \in L$ allora $\exists y_{x} \in \{0, 1\}^{\star}:\ |y_{x}| \leq |x|^k \land T(x, y_{x}) = q_{A}$, allora 
+                esiste  una sequenza di scelte che genera $y_{x}$, allora nella $FASE\ 2$, $T(x, y_{x})$ accetta entro $|x|^h$ passi, 
+                allora $NT(x)$ corrisponde alla sequenza di scelte che ha generato $y_{x}$ e accetta. Questo dimostra che se $x \in L$, allora 
+                $NT(x)$ accetta.
+            }
+            \item {
+                Se $x \notin L$ allora non esiste alcuna $y_{x} \in \{0, 1\}$, non esiste alcuna $y(x)$ tale che $|y(x)| \leq |x|^k \land T(x, y_{x}) = q_{A}$.
+                Dunque, qualunque sia la sequenza di scelte per generare  $y$, $T(x, y)$ non accetta. Quindi se $x \notin L$, allora $NT(x)$ non accetta. 
+            }
+        \end{itemize}
+    }
+\end{itemize}
+
+Questo dimostra che $L \in \textbf{NP}$
+
+\newpage
+\subsection{Teorema a pag. 14}
+
+Sia $\Gamma_{1} \in \textbf{NP} \land \exists\ \Gamma_{2} \in \textbf{NPC} \land \Gamma_{2} \leq \Gamma_{1}$, allora 
+$\Gamma_{1}$ è \textbf{NPC}.
+
+\paragraph*{Dimostrazione: }
+
