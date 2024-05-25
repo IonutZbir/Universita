@@ -1,0 +1,97 @@
+\section{3SAT è NP-Completo}
+
+\paragraph*{Dimostrazione: }
+
+Partiamo con formalizzare la tripla $(I_{SAT}, S_{SAT}, \pi_{SAT})$ del problema $SAT$:
+\begin{itemize}
+    \item [] {
+        $
+            I_{SAT} = \{f: \{vero, falso\}^n \rightarrow \{vero, falso\}\ \text{tale che f è in forma congiuntiva normale (CNF)}\}    
+        $
+    }
+    \item [] {
+        $
+            S_{SAT}(f) = \{(b_{1}, b_{2}, \dots, b_{n}) \in \{vero, falso\}^n\}    
+        $
+    }
+    \item []{
+        \begin{align*}
+            \pi_{SAT}(f, S_{SAT}(f)) &= \exists (b_{1}, b_{2}, \dots, b_{n}) \in S_{SAT}(f): f(b_{1}, b_{2}, \dots, b_{n}) = \text{vero}, \\
+            &\quad \text{ossia, sostituendo in } f \text{ ogni occorrenza della variabile } x_{i} \text{ con il valore } b_{i} \\
+            &\quad \text{(ed ogni occorrenza di } \lnot x_{i} \text{ con } \lnot b_{i}) \text{ per ogni } i = 1, \dots, n, \\
+            &\quad \text{la funzione } f \text{ assume il valore vero}.
+        \end{align*}  
+    }
+\end{itemize}
+
+Adesso, formalizziamo la tripla $(I_{3SAT}, S_{3SAT}, \pi_{3SAT})$ del problema $3SAT$:
+\begin{itemize}
+    \item [] {
+        $
+            I_{3SAT} = \{f: \{vero, falso\}^n \rightarrow \{vero, falso\}\ \text{tale che f è in forma 3-congiuntiva normale (3CNF)}\}    
+        $
+    }
+    \item [] {
+        $
+            S_{3SAT}(f) = \{(b_{1}, b_{2}, \dots, b_{n}) \in \{vero, falso\}^n\}    
+        $
+    }
+    \item []{
+        \begin{align*}
+            \pi_{3SAT}(f, S_{3SAT}(f)) &= \exists (b_{1}, b_{2}, \dots, b_{n}) \in S_{3SAT}(f): f(b_{1}, b_{2}, \dots, b_{n}) = \text{vero}, \\
+            &\quad \text{ossia, sostituendo in } f \text{ ogni occorrenza della variabile } x_{i} \text{ con il valore } b_{i} \\
+            &\quad \text{(ed ogni occorrenza di } \lnot x_{i} \text{ con } \lnot b_{i}) \text{ per ogni } i = 1, \dots, n, \\
+            &\quad \text{la funzione } f \text{ assume il valore vero}.
+        \end{align*}  
+    }
+\end{itemize}
+
+
+Sia $f(x) \in I_{3SAT} = C_{1} \land C_{2} \land \dots \land C_{m},\ \forall i = 1, \dots, m,\ |C_{i}| = 3$.
+
+Sia $g(y) \in I_{SAT} = D_{1} \land D_{2} \land \dots \land D_{v}$.
+\newline
+
+Per dimostrare che $3SAT$ è \textbf{NPC}, dobbiamo fare la riduzione $SAT \leq 3SAT$. Ovvero $g \in SAT \Leftrightarrow f \in 3SAT$.
+
+$\forall i = 1, \dots, m$, vediamo costruire $C_{i}$ a partire da $D_{i}$:
+
+Chiamiamo \textit{letterale}, una varibaile $l \in \{x_{i}, \lnot x_{i}\}$
+
+\begin{enumerate}
+    \item {
+        $D_{i}$ contiene un solo letterale $l$. 
+        \begin{align*}
+            C_{i} = (l \lor z_{i1} \lor z_{i2}) \land (l \lor \lnot z_{i1} \lor z_{i2})
+                  \land (l \lor z_{i1} \lor \lnot z_{i2}) \land (l \lor \lnot z_{i1} \lor \lnot z_{i2})
+        \end{align*}
+    }
+    \item {
+        $D_{i}$ contiene 2 letterali $l_{i1}\ \lor l_{i2}$. 
+        \begin{align*}
+            C_{i} = (l_{i1} \lor l_{i2} \lor z_{i1}) \land (\lnot z_{i1} \lor l_{i1} \lor l_{i2})
+        \end{align*}
+    }
+    \item {
+        $D_{i}$ contiene 3 letterali $l_{i1} \lor l_{i2} \lor l_{i3}$, allora $C_{i} = D_{i}$. 
+    }
+    \item {
+        $D_{i}$ contiene 4 letterali $\underbrace{l_{i1} \lor l_{i2}} \lor \underbrace{l_{i3} \lor l_{i4}}$. In questo caso si raggruppano i primi 2
+        e gli ultimi 2. 
+        \begin{align*}
+            C_{i} = (l_{i1} \lor l_{i2} \lor z_{i1}) \land (\lnot z_{i1} \lor l_{i3} \lor l_{i4})
+        \end{align*}
+    }
+    \item {
+        $D_{i}$ contiene $k \ge 4$ letterali $\underbrace{l_{i1} \lor l_{i2}} \lor \dots \lor \underbrace{l_{i(k-1)} \lor l_{ik}}$. In questo caso si raggruppano i primi 2
+        e gli ultimi 2. 
+        \begin{align*}
+            C_{i} = (l_{i1} \lor l_{i2} \lor z_{i1}) \land (\lnot z_{i1} \lor l_{i3} \lor z_{i2})
+            \land (\lnot z_{i2} \lor l_{i4} \lor z_{i3}) \land \dots \land (\lnot z_{i(k-3)} \lor l_{i(k-1)} \lor l_{ik})
+        \end{align*}
+    }
+\end{enumerate}
+
+Possiamo costruire $f$ a partire da $g$ in tempo $O(|f|^2)$ che è polinomiale. Sapendo già che 3SAT è \textbf{NP} e 
+avendo trovato una riduzione da SAT a 3SAT, possiamo concludere che 3SAT è \textbf{NPC}.
+

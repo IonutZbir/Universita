@@ -1,0 +1,41 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{graphs, arrows.meta, positioning}
+
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=black,  %choose some color if you want links to stand out
+}
+\geometry{
+    a4paper, % Paper size
+    left=2cm, % Left margin
+    right=2cm, % Right margin
+    top=2cm, % Top margin
+    bottom=2cm, % Bottom margin
+}
+
+\title{Dimostrazioni di \textbf{NP}-Completezza}
+\author{Zbirciog Ionut Georgian}
+\date{\today}
+
+\renewcommand{\contentsname}{Indice}
+
+\begin{document}
+\maketitle
+
+\begin{flushleft}
+
+\tableofcontents
+
+\include{3Sat}
+
+\end{flushleft}
+\end{document}
