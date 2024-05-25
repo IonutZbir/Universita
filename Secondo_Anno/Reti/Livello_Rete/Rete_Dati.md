@@ -395,4 +395,3 @@ Possiamo identificare tre tipi di servizi eseguiti dai middlebox:
 - *Traduzione NAT*: I box NAT implementano un indirizzamento di rete privato, la riscrittura degli indirizzi IP e dei numeri di porta dell'intestazione del datagramma.
 - *Servizi di sicurezza*: I firewall bloccano il traffico in base ai valori del campo di intestazione o reindirizzano i pacchetti per ulteriori elaborazioni. 
 - *Miglioramento delle prestazioni*:  Questi middlebox eseguono servizi come la compressione, il caching dei contenuti e il bilanciamento del carico delle richieste di servizio.
-
