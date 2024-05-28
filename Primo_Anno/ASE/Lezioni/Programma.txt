@@ -1,0 +1,344 @@
+• INTRODUZIONE SULLE ARCHITETTURE (Cap 1 – Architettura dei calcolatori)
+
+o Dominio digitale e analogico
+
+o Linguaggi, livelli e macchine virtuali
+
+o Evoluzione delle architetture di computer
+
+o Approccio strutturale
+
+o Pietre miliari nell’architettura dei computer
+
+o Tipologie di computer
+
+o Unità metriche
+
+ 
+
+• PROCESSORI E MEMORIA PRINCIPALE (Cap 2 – Architettura dei calcolatori)
+
+o PROCESSORI
+
+- Organizzazione della CPU
+
+- Esecuzione dell’istruzione
+
+- RISC contro CISC
+
+- Principi di progettazione dei calcolatori
+
+- Parallelismo a livello di istruzione
+
+- Parallelismo a livello di processore
+
+ 
+
+o MEMORIA PRINCIPALE
+
+- Bit
+
+- Sistemi di numerazione
+
+- Indirizzi di memoria
+
+- Ordinamento dei byte
+
+- Codici di correzione di errore
+
+- Memoria cache
+
+- Memoria principale
+
+ 
+
+o MEMORIA SECONDARIA 
+
+- Gerarchie di memorie
+
+- Dischi magnetici
+
+- Floppy disk
+
+- Dischi IDE
+
+- Dischi SCSI
+
+- RAID
+
+- Dischi a stato solido
+
+- CD-ROM
+
+- CD-Registrabili
+
+- CD-Riscrivibili
+
+- DVD
+
+ 
+
+o INPUT/OUTPUT
+
+- Il bus
+
+- Direct Memory Access (DMA)
+
+- Tastiere
+
+- Monitor LCD
+
+- RAM della scheda video (VRAM)
+
+- Dispositivi di puntamento
+
+- Stampanti
+
+- Apparati di Telecomunicazioni
+
+- Codifica dei caratteri
+
+ 
+
+• LIVELLO LOGICO DIGITALE (Cap 3 – Architettura dei calcolatori)
+
+o Algebra di Boole
+
+o Trasformazioni nel dominio di Boole
+
+o Circuiti logici digitali elementari
+
+o Circuiti Integrati
+
+o CIRCUITI COMBINATORI
+
+- Multiplexer
+
+- Decoder
+
+- Comparatori
+
+- Programmable Logic Arrays (PLA)
+
+- Shifter
+
+- Adder
+
+- Arithmetic Logic Units (ALU)
+
+o Clock
+
+o MEMORIA
+
+- Flip-flop
+
+- Registri
+
+- Organizzazione della Memoria
+
+- Buffer
+
+- Chip di memoria
+
+- Random Access Memory
+
+- Memorie Non-volatili (ROM, PROM, EPROM, EEPROM)
+
+o Chip di CPU
+
+o BUS
+
+- Ampiezza del bus
+
+- clock del bus
+
+- Bus sincroni/asincroni
+
+- Arbitraggio del bus
+
+- Interrupt handling
+
+o ESEMPI DI CPU
+
+- Intel Pentium 4
+
+- Intel Core i7
+
+- UltraSPARC III
+
+- Intel 8051
+
+o ESEMPI DI BUS
+
+- Bus ISA
+
+- Bus PCI
+
+- PCI Express
+
+- USB
+
+o INTERFACCE
+
+- Interfacce di I/O
+
+- Interfacce PIO
+
+- Decodifica dell’indirizzo
+
+ 
+
+• IL LIVELLO DI MICROARCHITETTURA (Cap 4 – Architettura dei calcolatori)
+
+o Un esempio di microarchitettura
+
+- Il modello di esecuzione
+
+- Data path (o percorso dati)
+
+- Formato delle microinstruzioni
+
+- Microarchitettura Mic-1
+
+o Esempio di ISA: IJVM
+
+- Lo stack
+
+- Il modello della memoria 
+
+- Insieme delle istruzioni
+
+ 
+
+• IL LIVELLO DI MACROARCHITETTURA (Cap 5 – Architettura dei calcolatori)
+
+o Overview del livello ISA
+
+o Tipi di dati
+
+o Formati di istruzioni
+
+o Modalità di indirizzamento
+
+o Tipi di istruzioni
+
+o Controllo del flusso
+
+o Architetture Intel IA-32 e IA64
+
+ 
+
+• IL LIVELLO DEL LINGUAGGIO ASSEMBLATIVO (Cap 7 – Architettura dei calcolatori)
+
+o Introduzione al linguaggio assemblativo
+
+o Le macroistruzioni
+
+o Il processo di assemblaggio
+
+o Linker e loader 
+
+ 
+
+• INTRODUZIONE AI SISTEMI OPERATIVI (Cap 1 – I moderni sistemi operativi)
+
+o Che cos’è un sistema operativo? 
+
+o Storia dei sistemi operativi
+
+o Panoramica dei SO
+
+o Concetti di base dei SO
+
+o Le chiamate di sistema
+
+o Struttura di un sistema operativo
+
+o Introduzione al linguaggio C
+
+ 
+
+• PROCESSI E THREAD (Cap 2 – I moderni sistemi operativi)
+
+o PROCESSI
+
+o THREAD
+
+o COMUNICAZIONI TRA PROCESSI
+
+o SCHEDULING
+
+ 
+
+• GESTIONE DELLA MEMORIA (Cap 3 – I moderni sistemi operativi)
+
+o NESSUNA ASTRAZIONE DI MEMORIA.
+
+o LO SPAZIO DI INDIRIZAMENTO
+
+o MEMORIA VIRTUALE
+
+o ALGORITMI DI SOSTITUZIONE DELLE PAGINE
+
+o PROBLEMATICHE DI PROGETTAZIONE DEI SISTEMI DI PAGING
+
+o ASPETTI REALIZZATIVI
+
+o SEGMENTAZIONE
+
+ 
+
+• FILE SYSTEM (Cap 4 – I moderni sistemi operativi)
+
+o FILE 
+
+o DIRECTORY
+
+o REALIZZAZIONE DEL FILE SYSTEM
+
+o REALIZZAZIONE DEL FILE SYSTEM
+
+ 
+
+• INPUT/OUTPUT (Cap 5 – I moderni sistemi operativi)
+
+o PRINCIPI HARDWARE
+
+o PRINCIPI DEL SOFTWARE
+
+o LIVELLI SOFTWARE
+
+o DISCHI
+
+o CLOCK
+
+ 
+
+• ARCHITETTURE PER IL CALCOLO PARALLELO (Cap 8 – I moderni sistemi operativi e Cap 8 – I moderni sistemi operativi)
+
+o INTRODUZIONE
+
+o PARALLELISMO NEL CHIP
+
+o COPROCESSORI
+
+o MULTIPROCESSORI
+
+o MULTICOMPUTER
+
+o VIRTUALIZZAZIONE
+
+ 
+
+• ARCHITETTURE PER IL CALCOLO PARALLELO (Introduzione alla programmazione su ARM)
+
+o SISTEMI DI NUMERAZIONE ED ALGEBRA DI BOOLE
+
+o SISTEMI DIGITALI E CODIFICA
+
+o ARCHITETTURA ARM
+
+o PROGRAMMAZIONE IN OPERATIVI
+
+ 
+

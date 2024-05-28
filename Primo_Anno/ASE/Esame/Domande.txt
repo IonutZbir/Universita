@@ -1,0 +1,159 @@
+DOMANDE PER AUTOVALUTAZIONE
+01-10-2022 18:04
+ARCHITETTURE DI CALCOLATORI
+
+ 
+
+1) Il teorema del campionamento assicura che l'approssimazione discreta di un segnale analogico a banda limitata, è senza perdita di informazione utile se... 
+
+2) La macchina di von Neumann è composta da?
+
+3) Quanti byte ci sono in 1 KB di memoria?
+
+4) Cosa sono il Program Counter e l'Instruction Register?
+
+5) Da quanti passaggi si compone il ciclo fetch-decode-execute ?
+
+6) Quali sono i principi di progettazione per i computer moderni?  ------------------------------------------------------------------------------------------------------
+
+7) Un processore SIMD è costituito da? 
+
+8) Per calcolare la distanza di Hamming tra due parole, quale operazione si deve utilizzare? 
+
+9) In un hard disk le prestazioni dipendono da? 
+
+10) In un CDROM un settore è costituito da quanti frame? Cosa contengono? 
+
+11) Quali sono la principale differenza tra DVD e CD? 
+
+12) Per quali valori di A e B l'uguaglianza A+B = A B è verificata? 
+
+13) Quando si può utilizzare un multiplexer per realizzare una qualsiasi funzione logica? 
+
+14) Un decoder è un circuito combinatorio che può essere utilizzato per? 
+
+15) In un circuito digitale è possibile collegare due uscite insieme? 
+
+16) Elencare le caratteristiche delle ROM 
+
+17) Per incrementare la larghezza di banda di un bus occorre? 
+
+18) In un Pentium 4 i principali segnali di risposta del bus sono? 
+
+19) Descrivere lo schema adottato dalla CPU UltraSPARC III per la gestione della cache 
+
+20) Descrivere l'integrato 8051 
+
+21) Descrivere il memory-mapped I/O 
+
+ 
+
+ 
+
+SISTEMI OPERATIVI
+
+ 
+
+22) Quali funzioni ha un Sistema Operativo? 
+
+23) In un Sistema Operativo le principali astrazioni sono? 
+
+24) Un processo è un concetto chiave presente in ogni Sistema Operativo, si può definire come? 
+
+25) I File in UNIX sono protetti con tre bit, a che servono? 
+
+26) In UNIX ogni processo ha uno spazio di memoria assegnato diviso in tre segmenti, quali? 
+
+27) Che cos'è un Sistema monolitico? 
+
+28) In quale circostanza sono creati nuovi processi? E in quale altra termina un processo? 
+
+29) Quali sono gli stati di un processo? 
+
+30) Quali informazioni non possono essere condivise tra processi? 
+
+31) Quando accade una corsa critica? 
+
+32) In un ambiente concorrente per evitare le corse critiche si possono definire delle condizioni, quali? 
+
+33) In quale circostanza è conveniente avviare lo scheduling? 
+
+34) Gli algoritmi di scheduling posso essere divisi in due categorie, quali? 
+
+35) Quali sono gli algoritmi di scheduling nei sistemi batch? 
+
+36) Supponendo di disporre dei seguenti tempi di esecuzione T0, T1, T2 e T3 nell'algoritmo shortest process next con tecnica di aging, quale sarà la stima per T4? 
+
+37) Per consentire a più applicazioni di essere in memoria allo stesso tempo senza interferire devono essere risolti due problemi, quali? 
+
+38) Quali sono i metodi per tenere traccia dell'utilizzo della memoria? 
+
+39) Qual è la struttura di una riga della tabella delle pagine? 
+
+40) Nell'algoritmo Not Recently Used (NRU) la classe 0 è.. 
+
+41) Quando il sistema operativo non è coinvolto con la paginazione? 
+
+42) I programmatori sanno che tecnica di gestione della memoria (paginazione o segmentazione) è utilizzata? 
+
+43) Perché è stata inventata la paginazione? 
+
+44) Perché è stata inventata la segmentazione? 
+
+45) Quali sono le strutture di file più comuni? 
+
+46) Qual è la corretta sequenza dell'intestazione all'interno di un file eseguibile binario nelle prime versioni di UNIX? 
+
+47) Qual è la chiamata di sistema UNIX per leggere gli attributi di un file? 
+
+48) Qual è il separatore per i file utilizzato in MULTICS? 
+
+49) In un sistema di gestione del file system, qual è la voce speciale che permette di riferirsi alla directory corrente? 
+
+50) In UNIX, qual è la chiamata che permette di creare una directory vuota? 
+
+51) In un programma C, i parametri passati al programma principale, main(), sono passati attraverso? 
+
+52) Nel layout del file system, il master boot record è? 
+
+53) Nel layout del file system, il blocco di boot è fatto di.. 
+
+54) Che cos'è l'i-node in un sistema UNIX? 
+
+55) I cambiamenti nella tecnologia spingono l'evoluzione dei file system: le CPU diventano più veloci; i dischi, le memorie e le cache sono sempre più grandi e economiche. Il collo di bottiglia diventa così il tempo di ricerca su disco (per quelli meccanici). Quali file system sono stati progettati per ridurre questo problema? 
+
+56) Quali sono le principali categorie di dispositivi di I/O? 
+
+57) Quali sono gli svantaggi del port-mapped I/O? 
+
+58) Quali sono gli svantaggi del memory-mapped I/O? 
+
+59) Quali sono le 4 proprietà di un interrupt preciso? 
+
+60) Quali sono i principali obiettivi del software di I/O? 
+
+61) Quali sono le tecniche di gestione degli I/O? 
+
+62) Quali sono i livelli software per la gestione dell'I/O? 
+
+63) Quali sono i fattori che compromettono il tempo necessario a leggere o scrivere un blocco del disco? 
+
+64) Quali sono le modalità di funzionamento di un clock programmabile? 
+
+65) In un computer con un clock di 10 GHz che distanza possono percorrere i segnali elettrici? 
+
+66) Per incrementare drasticamente le performance di un calcolatore che architetture occorre progettare? 
+
+67) In un'architettura UMA con rete di commutazione a più stadi di tipo omega con n CPU, n memorie and log2n stadi, con n/2 switch per stadio, complessivamente di quanti switch abbiamo bisogno? 
+
+68) Quali sono le caratteristiche chiave di una macchina con accesso non uniforme alla memoria? 
+
+69) Quali sono gli approcci per il Sistema Operativo adottati dai multiprocessori? 
+
+70) Qual è un potenziali problema in un algoritmo di scheduling a condivisione del tempo su un multiprocessore? 
+
+71) Che cosa si intende per diametro in un multicomputer? 
+
+72) Qual è il vantaggio di utilizzare un'architettura di multicomputer ad ipercubo? 
+
+73) Quali sono i vantaggi della virtualizzazione? 

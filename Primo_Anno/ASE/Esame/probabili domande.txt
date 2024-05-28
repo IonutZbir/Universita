@@ -1,0 +1,291 @@
+Il problema dello stallo della pipeline si verifica quando una CPU tenta di accedere ad un riferimento in memoria che non è nella cache, quindi deve attendere il caricamento prima di riprendere l’esecuzione. Quali tecniche di multithreading possono essere utilizzate:
+a grana grossa
+a grana fine
+simultaneo
+
+Per compiere una operazione di rotate left con estensione sul registro R0 quali istruzioni si possono utilizzare?
+ADCS R0, R0, R0
+
+Supponendo di utilizzare l'algoritmo Round-Robin per lo scheduling in un sistema interattivo, se l'ordine di esecuzione è P1->P2->P3->P4->P5->P6->P7, il quantum è di 110 microsecondi e il cambio di contesto avviene in 5 microsecondi, supponendo che sia terminato P2, dopo quanto tempo sarà eseguito P7 ? Qual è il rapporto tra cambio di contesto e tempo di esecuzione? Come cambiano i tempi analizzati nel caso se il quantum è di 15 microsecondi?
+465, 4.55%, 85, 33.33%
+
+Nell'ambito della gestione del file system con allocazione con liste collegate quali affermazioni sono false?
+La dimensione del blocco dati è una potenza di due
+L'accesso casuale è veloce
+
+Nella gestione dei dispositivi di I/O quali non sono gli obiettivi del software di I/O
+Portabilità
+Dipendenza dal dispositivo
+
+Nell'ambito della virtualizzazione quali affermazioni non sono vere
+L'IBM370 non era virtualizzabile con hypervisor tipo 1
+Quando le istruzioni non privilegiate sono ignorate se eseguite in modo utente il sistema può essere virtualizzato con hypervisor tipo 1
+
+Supponendo di utilizzare l'algoritmo LRU con 6 frame di memoria (0..5), se le pagine referenziate sono nell'ordine 4, 1, 0, 3, 2, 5. Quale sarà il valore della matrice del frame 2?
+110110
+
+Nell'ambito dei mutex se l'istruzione di Test & Set Lock dell'ARM è TST ed il codice assembly per realizzare il lock del mutex il seguente:
+mutex_lock: TST R0, MUTEX
+CMP R0, #0
+BEQ fine
+<istruzione mancante>
+B mutex_lock
+fine: BX chiamante
+Quali istruzioni si possono utilizzare?
+BL thread_yield
+CALL thread_yield
+BX thread_yield
+(? ARM)
+
+Descrivere l’algoritmo ottimo di sostituzione delle pagine indicando la sequenza partendo dall'alto verso il basso
+1 accade un page-fault
+2 per ogni pagina caricata si calcola il numero di istruzioni che sarà eseguito prima che quella pagina sia referenziata
+3 si etichetta ogni pagina caricata con il numero di istruzioni che sarà eseguito
+4 si scorrono tutte le pagine ricercando quella con etichetta massima
+5 si sostiuisce la pagina che ha l'etichetta più alta
+
+Quale condizioni non sono necessarie per evitare le corse critiche?
+Nessun processo può eccedere il suo quantum di tempo
+Se un processo è più veloce degli altri può mantenere assegnate le risorse
+
+Nell'ambito della gestione dei processi quali affermazioni non sono vere?
+La soluzione di Peterson non richiede busy waiting
+La soluzione di Peterson non risente del problema dell’inversione delle priorità
+
+Nell'ambito degli algoritmi di sostituzione delle pagine quali affermazioni non sono vere?
+FIFO non può lavorare con politiche di sostituzione delle pagine locali
+Tutte le approssimazioni dell’LRU possono lavorare solo con politiche di sostituzione dellepagine globali.
+WSClock può anche lavorare on politiche di sostituzione delle pagine locali
+
+Nella gestione dei dispositivi di I/O quali non sono svantaggi del port-mapped I/O
+I driver di controllo dei dispositivi possono essere scritti utilizzando solo il linguaggio C
+I registri di controllo del device sono visti come variabili in memoria
+
+Quali tra le seguenti affermazioni NON sono vere se si considerano le architetture UMA basate su bus, crossbar switch e rete omega
+la rete omega è non bloccante
+il crossbar switch è bloccante
+le interconnessioni richieste in una rete omega sono superiori rispetto a quelle di un crossbar switch
+
+Supponendo che il registro R0 contenga il valore 0x000000E8 con quale istruzioni si può inserire in R1 il valore 0x00E800E8?
+PKHBT R1, R0, R0, LSL #16
+ADD R1, R0, R0, LSL #16
+LDR R1,=0x00E800E8
+(? ARM)
+
+quali affermazioni NON sono vere nell'architettura Mic-1?
+La ALU non è in grado di eseguire operazioni di sottrazione tra gli operandi
+il decoder ha lo scopo di abilitare la scrittura nei registri di memoria
+
+Quali sono le limitazioni delle chiamate a procedura remota?
+Non è possibile utilizzare le variabili globali
+Non si possono utilizzare riferimenti di memoria come parametri
+Non si può utilizzare il polimorfismo sui dati
+
+Bohm-Jacopini Quali affermazioni NON sono vere
+La presenza di istruzioni di uscita incondizionata (es. BREAK) costituiscono il fondamento per la destrutturazione del codice
+Un algoritmo non strutturato è sempre possibile tradurlo in qualsiasi linguaggio di programmazione (?vera?)
+(? ARM)
+
+Il Teorema di Bohm-Jacopini cosa descrive?
+la possibilità di scrivere algoritmi strutturati ricorrendo a tre concetti base (selezione, iterazione e sequenza)
+la dimostrazione che qualsiasi procedumento risolutivo intrigato possa essere espresso in forma strutturata
+tre concetti base (selezione, iterazione e sequenza) indipendenti dalla strutturazione
+la possibilità di evitare la programmazione a spaghetti
+la possibilità di scrivere algoritmi riutilizzabili ricorrendo a tre concetti base (selezione, iterazione e sequenza)
+
+
+Nell'ambito dei dispositivi RAID quali affermazioni non sono vere?
+RAID0 ha maggiore affidabilità di un sistema SLED con medesimo MTBF
+Nel RAID4 le prestazioni sono alte se si aggiornano piccole quantità di dati
+
+Nell'ambito dei circuiti elettronici quali affermazioni sono false?
+Posso collegare insieme le uscite di più porte logiche
+*
+
+Nell'ambito della codifica dei caratteri quali affermazioni non sono vere?
+UNICODE può codificare la nascita di nuovi ideogrammi
+UTF-8 utilizza una codifica fissa
+
+Nell'ambito dei chip di memoria quali affermazioni sono false?
+La memoria flash può essere cancellata a byte
+Le EEPROM per essere cancellata deve essere inserita in una camera speciale per l'esposizione ultravioletta
+Le EPROM non possono essere riprogrammate
+
+Nell'ambito del bus PCI Express quali affermazioni sono false?
+I segnali di controllo del bus coordinano le attività del bus
+ECC non è presente nei singoli pacchetti
+
+Quali tra le seguenti componenti non appartengono al Il livello di architettura dell’insieme delle istruzioni (ISA)?
+Il datapath
+
+Supponendo di dover valutare la fattibilità di un sistema soft real-time con eventi periodici: P0=10ms, P0=0.3ms, P2=50ms, P3=0.5s, P4=50ns, rispettivi tempi di elaborazione C0=2ms, C1=100ns, C2=10ms, C3=2ms, C4=13ns Qual'è il valore che permette di stabilire se è sostenibile?
+0,997
+
+Nella traduzione di un programma L1 esso è convertito in programma L0 equivalente. Quali delle seguenti affermazioni non sono vere?
+Il nuovo programma si compone anche di istruzioni in L0
+Il programma scritto in L1 viene utilizzato per l'esecuzione su M0
+è necessario disporre di un interprete per eseguire il programma su M0
+
+Nell'ambito della gestione della memoria con liste concatenate, considerando una lista parzialmente piena di questo tipo (per ogni tripla, il primo elemento è un flag per capire se si tratta di un buco (H) o un processo (P), il secondo è l'indirizzo di partenza e il terzo è la lunghezza dell'elemento): P,0.8 H,8.3 P,16.4 H,20.1 P,21.3 H,21.4 H,28.4 D1: Dove viene posizionato il nuovo processo P che occupa 3 blocchi, se si usa il next fir e la posizione corrente è nell'ultimo elemento? D2: Dove verrebbe posizionato se invece ne occupasse solo 1, secondo l'algoritmo best fit?
+D1: posizione 28, D2: posizione 20
+
+Nell'ambito della gestione dell'INPUT/OUTPUT, i timer soft sono controllati quando...
+accade una page miss della TLB
+accade un interrupt di I/O
+accade un page fault
+
+Quali tra le seguenti caratteristiche non è un obiettivo dei sistemi di scheduling?
+Troughput IO o Nessuna
+*
+
+In quali delle seguenti circostanze il sistema operativo è coinvolto con la paginazione?
+Durante la creazione di un processo
+Durante l'esecuzione di un processo
+Durante un page-float
+Durante la chiusura di un processo
+
+Supponendo di utilizzare l'algoritmo di sostituzione Aging con 6 frame e un contatore a 4 bit, se i valori di R corrispondenti ai 6 frame [pag.0 pag.1...pag.5] dopo 5 clock sono quelli indicati, quale sarà il valore del frame 4? 110010, 000010, 110001, 011100, 000010
+1001
+
+utilizzando l'algoritmo si sostituzione delle pagine LRU, se si hanno 5 frame di pagina e la sequenza delle attivazioni è la seguente: 0 4 2 0 3 1 2 4 Quale sarà il valore del frame 2 se accade un page fault?
+11010
+
+Un computer ha 512 MB di memoria ed il sitema operativo occupa 64 MB, se i processi occupano mediamente 64 MB e l'attesa media dell'I/O è dell'80%, quanto sarà la percentuale di utilizzo della CPU?
+79%
+(? ARM)
+
+Se nei registri R ed R2 si ha il seguente contenuto R1=0x0000AAAA R2=0xEEEE0000 cosa troviamo in R4 se vengono eseguite le istruzioni? PKHBT R3, R1, R2 PKHBT R4, R3, R1
+(? ARM)
+
+indicare cosa NON si può fare utilizzando le RPC?
+Non si possono utilizzare i puntatori come parametri
+Non è possibile utilizzare le variabili globali
+Non è possibile dedurre il tipo di parametri
+
+quali sono i problemi introdotti dal MultiProcessore Simmetrico (SMP)
+la sincronizzazione delle CPU dovuta alla condivisone del SO
+il deadlock (stallo) che potrebbe essere non risolubile
+La gestione dipende dall'esperienza del programmatore nel contesto del sistema
+(ogni CPU può diventare master è vera ma non sappiamo se è un problema cheidere al prof)
+
+Quali tra le seguenti istruzioni utilizzano un indirizzamento con offset a registro scalato senza pre-indicizzazione?
+(? ARM)
+
+quali sono le caratteristiche della virtualizzazione?
+Cè un forte isolamento tra le macchine virtuali: un malfunzionamento su una macchina virtuale non inficia il comportamento della altre
+La riduzione della macchine fisiche riduce lo spazio, il consumo di energia, la produzione di calore quindi l'energia per il raffreddamento.
+I programmatori possono effettuare il test delle applicazioni su differenti SO senza disporre di hardware fisici e SO.
+
+In un sistema di numerazione di 4 valori quante funzioni a due operandi sono possibili?
+65536(? ARM)
+
+In un sistema di numerazione di 3 valori quante funzioni a due operandi sono possibili?
+256(? ARM)
+
+In un sistema di numerazione di 5 valori quante funzioni unarie sono possibili?
+32(? ARM)
+
+Descirvere l'evoluzione delle architetture multilivello dall'alto (più antica) verso il basso (più recente)
+Invenzione della macchina analitica
+Invenzione della microprogrammazione
+Invenzione del sistema operativo
+Migrazione delle funzionalità verso il microcodice
+Eliminazione della microprogrammazione
+*
+
+Quali circuiti permettono di scrivere qualsiasi funzione logica?
+PLA
+Multiplexer
+Porte universali
+
+Quali circuiti non permettono di scrivere qualsiasi funzione logica?
+Demultiplexer
+Decoder
+
+Quale tra le seguenti istruzioni calcolano R0=R0 * (1+2^R1)?
+(? ARM)
+
+In un computer con una CPU con 16 linee di Address Bus e un Data Bus a 8 bit si deve allocare una ROM da 256Byte a partire dall'indirizzo 0x0000, una RAM da 16KByte a scendere dall'indirizzo 0xFFFF e un dispositivo di I/O che utilizza 256 byte subito dopo la ROM (in modalità memory-mapped I/O). Quale sarà la posizione dei tre componenti in memoria?
+ROM, IO, RAM
+(? ARM)
+
+In un computer con una CPU con 16 linee di Address Bus e un Data Bus a 8 bit si deve allocare una ROM da 256 Byte a partire dall'indirizzo 0x0000, una EPROM da 256 Byte a scendere dall'indirizzo 0xFFFF e un dispositivo di I/O che utilizza 256 byte subito dopo la ROM (in modalità memory-mapped I/O). Quale sarà la posizione dei tre componenti in memoria?
+ROM, IO, RAM
+(? ARM)
+
+In un computer con una CPU con 16 linee di Address Bus e un Data Bus a 8 bit si deve allocare una ROM da 2KByte a partire dall'indirizzo 0x0000, una RAM da 16KByte a scendere dall'indirizzo 0xFFFF e un dispositivo di I/O che utilizza 512 byte subito dopo la ROM (in modalità memory-mapped I/O). Quale sarà la posizione dei tre componenti in memoria?
+ROM, IO, RAM
+(? ARM)
+
+In un computer con una CPU con 16 linee di Address Bus e un Data Bus a 8 bit si deve allocare una ROM da 16KByte a partire dall'indirizzo 0x0000, una RAM da 16KByte a scendere dall'indirizzo 0xFFFF e un dispositivo di I/O che utilizza 1024 byte subito dopo la ROM (in modalità memory-mapped I/O). Quale sarà la posizione dei tre componenti in memoria?
+ROM, IO, RAM
+(? ARM)
+
+In un computer con una CPU con 16 linee di Address Bus e un Data Bus a 8 bit si deve allocare una ROM da 16KByte a partire dall'indirizzo 0x0000, una RAM da 8KByte a scendere dall'indirizzo 0xFFFF e un dispositivo di I/O che utilizza 1024 byte subito dopo la ROM (in modalità memory-mapped I/O). Quale sarà la posizione dei tre componenti in memoria?
+ROM, IO, RAM
+(? ARM)
+
+Quali delle seguenti costanti non possono essere utilizzate in un indirizzamento immediato?
+(? ARM)
+
+In quale modo è possibile caricare nel registro R0 il valore 0xFFFFFFFF?
+(? ARM)
+
+In quale modo è possibile caricare nel registro R0 il valore 0x0000FAAF?
+(? ARM)
+
+In quale modo è possibile caricare nel registro R0 il valore 0xFFFFFF00?
+(? ARM)
+
+quali tra le seguenti istruzioni calcolano R0=R0 * 257?
+(? ARM)
+
+quali tra le seguenti istruzioni calcolano R0=R0 * 129?
+(? ARM)
+
+Architettura multilivello attuale
+Linguaggi di programmazione
+Assembly
+Sistema Operativo
+ISA
+Micro architettura
+Livello logico digitale
+
+Le macro:
+sono attivate a compile-time
+sono sostituite nel corpo del programma
+possono avere parametri
+
+qual'è il modo più veloce per eseguire 19 * n con n intero positivo?
+(? ARM)
+
+Azioni software di gestione dell'interrupt all'interno della Interrupt Service Routine (ISR):
+1.Salva sullo stack i registri della CPU per poterli ripristinare
+2.Individua il numero esatto del device
+3.Legge tutti tutte le informazioni che caratterizzano l'informazione
+4.Esegue ciò che è previsto per gestire l'interruzione
+5.Gestisce eventuali errori di I/O
+6.Ripristina tutti i registri salvati sullo stack
+7.Esegue l'interruzione IRET
+*
+
+Il parallelismo nel chip aiuta a migliorare le performance della CPU: con un pieplining e le architetture superscalari si può arrivare ad un fattore di miglioramento
+da 5 a 10
+
+Cosa si intende per ortogonalità in una ISA?
+Tutte le modalità di indirizzamento sono utilizzabili con tutti i codici operativi
+Le istruzioni hanno forma regolare e contendono al loro interno tutte le possibili contengono al loro interno tutte le possibili combinazioni di codici operativi
+*
+
+Quali sono i principi di progettazione RISC?
+Le istruzioni devono essere eseguite direttamente dall'hardware
+Massimizzare la frequenza di emissione delle istruzioni
+
+Nel caso di I/O programmato la CPU eseguie il polling della stampante per controllare se è pronta ad accettare un altro carattere, quale istruzione manca al seguente codice C++?
+copia_da_spazio_utente(buffer, bufferKernel, conta);
+for (i=0; i<conta; i++){
+while(*stato_stampante!=READY);
+<Istruzione Mancante>
+}
+torna_spazio_utente();
+*registro_dati_stampante = bufferKernel[i]
