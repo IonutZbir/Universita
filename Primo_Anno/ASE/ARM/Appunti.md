@@ -16,7 +16,7 @@ Oltre alle caratteristiche generiche di un architettura RISC, ovvero l'elaborazi
 Il processo ARM utilizza un'architettura a 32 bit, dimensione che coincide con quella dei registri, delle istruzioni e dei dati su cui operano tali istruzioni.
 
 Lo spazio di indirizzamento è di 32 bit, e la memoria è indirizzabile al singolo byte, a 16 (halfword) o 32 bit (word).
-Il processore ARM può indirizzare fino a $2^{32}$ locazioni di memoria sia nel formato *little-endian (default)* sia *big- endian*. Per abilitare la lettura big-endian, bisogna asserire il pin BIGEND. 
+Il processore ARM può indirizzare fino a $2^{32}$ locazioni di memoria sia nel formato *little-endian (default)* sia *big- endian*. Per abilitare la lettura big-endian, bisogna asserire il pin BIGEND.
 
 Il processore ARM non possiede un istruzione per eseguire la divisione.
 
@@ -43,3 +43,29 @@ In ARM sono presenti 37 registri a 32 bit, di cui 20 sono duplicati e possono es
 - **Current Program Status Register (CPSR)**
 - **20 registri non accesibili nel modo utente/sistema**:
     - 5 registri da $R8\_FIQ$ a $R12\_FIQ$
+    - 10 registri attivi solo nella modalità di risposta ad una eccezione
+    - 5 registri attivo uno per volta nella modlità di risposta ad una eccezione che permette di salvare il contenuto del registro di stato corrent CPSR ne registro SPSR.
+
+## CPSR
+
+- *Flag N (Negativo)*: Dipende dall'ultima operazione che ha modificato il registro CPSR. Se il risultato  è minore di 0, $N = 1$, altrimenti $N = 0$.
+- *Flag Z (Zero)*: Z = 1 se il risultato dell'ultima operazione che ha impostato il registro di stato è zero. 
+- *Flag di riporto o Carry*: C = 1 se durante un'addizione c'é un riporto. C = 0 durante una sottrazione se è richiesta una cifra in prestito.
+- *Flag di oVerflow*: V = 1 se l'istruzione che ha impostato il registro di stato ha causato una condizione di overflow.
+
+I più imortanti: (NZCV)
+
+## Logical Shift Left (LSL)
+
+## Logical Shift Right (LSR)
+
+## Arithmetic Shift Right (ASR)
+
+## Rotate Right (ROR)
+
+## Rotate Right con estensione (RRX)
+
+## Rotate Left con estensione (RLX)
+
+## Le modalità di indirizzamento
+
