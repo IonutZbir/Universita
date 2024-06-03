@@ -117,7 +117,7 @@ Questo dimostra che $NT^{'}$ decide $L$ e dunque che $L$ è decidibile.
 \subsection{Teorema a pag. 10}
 
 Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
-$$DTIME[f(n)] \subseteq NTIME[f(n)] \subseteq\ \land\ DSPACE[f(n)] \subseteq NSPACE[f(n)]$$ 
+$$DTIME[f(n)] \subseteq NTIME[f(n)]\ \land\ DSPACE[f(n)] \subseteq NSPACE[f(n)]$$ 
 
 \paragraph*{Dimostrazione:} Una macchina di Turing deterministica è una particolare macchina di Turing non deterministica 
 avente grado di non determinismo pari a 1, inoltre ogni parola decisa in $k$ passi e anche accettata in $k$ passi 
@@ -128,7 +128,7 @@ avente grado di non determinismo pari a 1, inoltre ogni parola decisa in $k$ pas
 
 Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
 
-$$DTIME[f(n)] \subseteq DSPACE[f(n)] \subseteq\ \land\ NTIME[f(n)] \subseteq NSPACE[f(n)]$$ 
+$$DTIME[f(n)] \subseteq DSPACE[f(n)]\ \land\ NTIME[f(n)] \subseteq NSPACE[f(n)]$$ 
 
 \paragraph*{Dimostrazione:} Segue dal teorema:
 $$dspace(T, x) \leq dtime(T, x)\dots$$
@@ -140,12 +140,12 @@ allora $dspace(T, x) \in O(f(|x|))$ e dunque $L \in DSPACE(f(|x|))$. Analogament
 
 Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
 
-$$DSPACE[f(n)] \subseteq DTIME[2^{O(f(n))}] \subseteq\ \land\ NSPACE[f(n)] \subseteq NTIME[2^{O(f(n))}]$$
+$$DSPACE[f(n)] \subseteq DTIME[2^{O(f(n))}]\ \land\ NSPACE[f(n)] \subseteq NTIME[2^{O(f(n))}]$$
 
 \paragraph*{Dimostrazione:} Segue dal teorema:
-$$\dots \leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)}$$
-Sia $L \subseteq \Sigma^{\star}$ tale che $L \in DTIME[f(n)]$. Allora, esiste una machina di Turing $T$ deterministica $T$
-che decide $L$ e tale che, per ogni $x \in Sigma^{\star}$, $dspace(T, x) \in O(f(|x|))$. Poiché:
+$$\dots dtime(T, x) \leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)}$$
+Sia $L \subseteq \Sigma^{\star}$ tale che $L \in DSPACE[f(n)]$. Allora, esiste una machina di Turing $T$ deterministica $T$
+che decide $L$ e tale che, per ogni $x \in \Sigma^{\star}$, $dspace(T, x) \in O(f(|x|))$. Poiché:
 
 Supponiamo che $\Sigma = \{0, 1\}$
 
@@ -164,7 +164,7 @@ Allora $dtime(T, x)\in O(2^{O(f(|x|))})$ e dunque $L\in DTIME[2^{O(f(|x|))}]$
 \subsection{Teorema a pag. 11}
 
 Per ogni funzione totale calcolabile $f: \mathbb{N} \rightarrow \mathbb{N}$ 
-$$DTIME[f(n)] = coDTIME[f(n)] \land\ DSPACE[f(n)] = coDSPACE[f(n)]$$
+$$DTIME[f(n)] = coDTIME[f(n)]\ \land\ DSPACE[f(n)] = coDSPACE[f(n)]$$
 
 \paragraph*{Dimostrazione:} $\forall L \in DTIME[f(n)]$, esiste $T$ che decide $L$ e $dtime(T, x) \in O(f(|x|))$. 
 Da $T$ deriviamo $T^{c}$ con input $x \in \Sigma^{\star}$ e $Q_{f} = \{q_{A}^{c}, q_{R}^{c}\}$ che decide $L^{c}$ nel seguente modo:
@@ -190,7 +190,7 @@ Sia $f: \mathbb{N} \rightarrow \mathbb{N}$ una funzione time-constructible (spac
         Allora, per ogni $L \in NTIME[f(n)]$, si ha che $L$ è decidibile in tempo non deterministico in $O(f(n))$.
     }
     \item []{
-        Allora, per ogni $L \in NTIME[f(n)]$, si ha che $L$ è decidibile in spazio non deterministico in $O(f(n))$.
+        Allora, per ogni $L \in NSPACE[f(n)]$, si ha che $L$ è decidibile in spazio non deterministico in $O(f(n))$.
     }
 \end{itemize}
 

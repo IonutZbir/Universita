@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.20)  23 MAY 2024 21:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.29)  3 JUN 2024 16:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/ionut/Github/Universita/Secondo_Anno/Fondamenti/IIMod/Teoremi
-(/home/ionut/Github/Universita/Secondo_Anno/Fondamenti/IIMod/Teoremi.tex
+**/home/ionut/Github/Universita/Secondo_Anno/Fondamenti/IIMod/Teoremi/src/Teoremi
+(/home/ionut/Github/Universita/Secondo_Anno/Fondamenti/IIMod/Teoremi/src/Teoremi.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
 (/usr/share/texmf-dist/tex/latex/base/article.cls
@@ -515,7 +515,7 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 18.
 File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count325
 \l__pdf_internal_box=\box67
-) (build/Teoremi.aux (build/d2.aux) (build/d3.aux) (build/d5.aux) (build/d6.aux) (build/d7.aux) (build/d9.aux))
+) (../build/Teoremi.aux (../build/d2.aux) (../build/d3.aux) (../build/d5.aux) (../build/d6.aux) (../build/d7.aux) (../build/d9.aux))
 \openout1 = `Teoremi.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 33.
@@ -572,7 +572,7 @@ LaTeX Font Info:    ... okay on input line 33.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package hyperref Info: Link coloring ON on input line 33.
-(build/Teoremi.out) (build/Teoremi.out)
+(../build/Teoremi.out) (../build/Teoremi.out)
 \@outlinefile=\write4
 \openout4 = `Teoremi.out'.
 
@@ -608,7 +608,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 LaTeX Font Info:    Trying to load font information for U+msb on input line 35.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) (build/Teoremi.toc)
+) (../build/Teoremi.toc)
 \tf@toc=\write5
 \openout5 = `Teoremi.toc'.
 
@@ -653,7 +653,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 
-]) [15] (build/Teoremi.aux (build/d2.aux) (build/d3.aux) (build/d5.aux) (build/d6.aux) (build/d7.aux) (build/d9.aux))
+]) [15] (../build/Teoremi.aux (../build/d2.aux) (../build/d3.aux) (../build/d5.aux) (../build/d6.aux) (../build/d7.aux) (../build/d9.aux))
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
@@ -662,21 +662,21 @@ Package rerunfilecheck Info: File `Teoremi.out' has not changed.
 (rerunfilecheck)             Checksum: E222069272520EB6846235F4D02E3AFC;5402.
  ) 
 Here is how much of TeX's memory you used:
- 22900 strings out of 476076
- 430976 string characters out of 5793775
+ 22908 strings out of 476076
+ 431271 string characters out of 5793775
  1950187 words of memory out of 5000000
- 44465 multiletter control sequences out of 15000+600000
- 567533 words of font info for 72 fonts, out of 8000000 for 9000
+ 44471 multiletter control sequences out of 15000+600000
+ 568154 words of font info for 74 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 102i,14n,107p,493b,1038s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 102i,14n,107p,505b,1038s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{Hfootnote.4} has been referenced but does not exist, replaced by a fixed one
 
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on build/Teoremi.pdf (15 pages, 294207 bytes).
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on ../build/Teoremi.pdf (15 pages, 310383 bytes).
 PDF statistics:
- 500 PDF objects out of 1000 (max. 8388607)
- 434 compressed objects within 5 object streams
+ 510 PDF objects out of 1000 (max. 8388607)
+ 440 compressed objects within 5 object streams
  120 named destinations out of 1000 (max. 500000)
  293 words of extra memory for PDF output out of 10000 (max. 10000000)
 

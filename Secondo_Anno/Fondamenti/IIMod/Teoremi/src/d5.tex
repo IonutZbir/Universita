@@ -51,33 +51,81 @@ $U^{'}$ non sa decidere $L_{H}^{c}$, perciò lo accetta solo.
 
 \subsection{Teorema a pag. 4 (Halting Problem)}
 
-Il linguaggio $L_{H}$ non è decidibile
+Il linguaggio $L_{H}$ non è decidibile.
 
-\paragraph*{Dimostrazione:} Supponiamo che $L_{H}$ sia decidibile. Allora, deve esistere una macchina di Turing $T$ tale che, 
-$T(i, x) = q_{A} \Leftrightarrow (i, x)\in L_{H}$ e $T(i, x) = q_{R} \Leftrightarrow (i, x)\notin L_{H}$.
+
+\paragraph*{Dimostrazione:} Supponiamo che $L_{H}$ sia decidibile. Ovvero $L_{H}$ è decidibile $\Leftrightarrow$ $L_{H}$ e $L_{H}^c$
+sono accettabili. Prima abbiamo dimostratro che $L_{H}$ è accettabile, dunque ci rimane solo $L_{H}^c$.
+
+\[
+    L_{H}^c = \{(i, x): i\ non\ \grave{e}\ la\ codifica\ di\ una\ TM\ \lor\ T_{i}(x)\ non\ termina\}
+\]
+
+Allora, se $L_{H}$ è decidibile deve esistere una macchina di Turing $T$ tale che
+\[
+    T(i, x) = 
+    \begin{cases} 
+        & q_{A} \Leftrightarrow (i, x)\in L_{H}\\
+        & q_{R} \Leftrightarrow (i, x)\notin L_{H}\\
+    \end{cases}
+\]
 
 \begin{enumerate}
-    \item [+]{
+    \item []{
         Da $T$ \textbf{deriviamo} $T^{'}$ che terminando su ogni input, accetta tutte e sole le coppie $(i, x) \in \mathbb{N} \times \mathbb{N} \setminus L_{H}$, ossia $L_{H}^{c}$.
-        $T^{'}(i, x) = q_{R} \Leftrightarrow (i, x)\in L_{H}$ e $T(i, x) = q_{A} \Leftrightarrow (i, x)\notin L_{H}$.
-        Quindi $T^{'}(i, x)$ decide $L_{H}^{c}$.
+        \[
+            T^{'}(i, x) = 
+            \begin{cases} 
+                & q_{A} \Leftrightarrow (i, x)\notin L_{H}\\
+                & q_{R} \Leftrightarrow (i, x)\in L_{H}\\
+            \end{cases}
+        \]
+        
     }
-    \item [+]{
+    \item []{
         Da $T^{'}$ \textbf{deriviamo} $T^{''}$ in questo modo:\\
-        $T^{''}(i, x) =\ non\ termina\ se\ T^{'}(i, x) = q_{R}$ e $T^{''}(i, x) = q_{A} se\ T^{'}(i, x) = q_{A}$.\\
-        Quindi $T^{''}(i, x) =\ non\ termina\ se\ (i, x) = \in L_{H}$ e $T^{''}(i, x) = q_{A}\ se\ (i, x) \notin L_{H}$.
+        \[
+            T^{''}(i, x) = 
+            \begin{cases} 
+                & q_{A} \Leftrightarrow T^{'}(i, x) = q_{A}\\
+                & \text{ non termina se } T^{'}(i, x) = q_{R}\\
+            \end{cases}
+        \]
+        Ovvero
+        \[
+            T^{''}(i, x) = 
+            \begin{cases} 
+                & q_{A} \Leftrightarrow (i, x) \notin L_{H}\\
+                & \text{ non termina se } (i, x) \in L_{H}\\
+            \end{cases}
+        \]
     }
-    \item [+]{
-        Da $T^{''}$ \textbf{deriviamo} $T^{*}$ in questo modo:\\
-        $T^{*}(i) = T^{''} = \ non\ termina\ se\ (i, i) \in L_{H}$ e $T^{*}(i) = T^{''}(i, i) = q_{A}\ se\ (i, i) \notin L_{H}$.\\
+    \item []{
+        Da $T^{''}$ \textbf{deriviamo} $T^{*}$ in questo modo:
+        \[
+            T^{*}(i) = T^{''}(i, i) =
+            \begin{cases} 
+                & q_{A} \Leftrightarrow (i, i) \notin L_{H}\\
+                & \text{ non termina se } (i, i) \in L_{H}\\
+            \end{cases}
+        \]
     }
 \end{enumerate}
 
-Se $T$ esiste $\Rightarrow$ $T^{*}$ esiste, allora $\exists k\in \mathbb{N}$ tale che $T^{*} = T_{k}$. Se $T_{k}(k) = T^{*}(k)$ accettasse, allora $T^{'}(k, k)$ dovrebbe accettare
-ach'essa. Ma se $T^{'}(k, k)$ accetta, allora $(k, k)\notin L_{H}$, ossia, $T_{k}(k)$ non termina. Allora $T^{*}(k)$ non può accettare e, dunque, necessariamente non termina.
-Ma, se $T^{*}(k)$ non termina, allora $T^{'}(k, k)$ rigetta e, quindi, $(k, k)\in L_{H}$. Dunque, per definizione, $T_{k}(k)$ termina. Quindi, in entrambi le ipotesi, $T_{k}(k)$ termina
-o non termina, portando ad una contraddizione. Allora $T^{*}$ non può esistere, ma allora neanche $T^{''}$ può esistere, e neanche $T^{'}$ e di conseguenza $T$.
-Quindi se $T$ non esiste, $L_{H}$ non è decidibile.
+
+    \begin{align*}
+        & L_{H} = \{(i, x): i\ \grave{e}\ la\ codifica\ di\ una\ TM\ \land\ T_{i}(x)\ termina\}\\
+        & L_{H}^c = \{(i, x): i\ non\ \grave{e}\ la\ codifica\ di\ una\ TM\ \lor\ T_{i}(x)\ non\ termina\}
+    \end{align*}
+
+
+Se $T$ esiste $\Rightarrow$ $T^{*}$ esiste $\Rightarrow\ \exists k\in \mathbb{N}$ tale che $T^{*} = T_{k}$ ($k$ è la codifica numerica di $T^{*}$).
+
+Se $\mathbf{T_{k}(k) = T^{*}(k)}$ accettasse, allora $T^{'}(k, k)$ dovrebbe accettare
+anch'essa. Ma se $T^{'}(k, k)$ accetta, allora $(k, k)\notin L_{H}$, ossia, per definizione di $L_{H},\ T_{k}(k)$ non termina poiché $(k, k) \notin L_{H}$.
+Allora $T^{*}(k)$ non può accettare e, dunque, necessariamente non termina. Ma, se $T^{*}(k)$ non termina, allora $T^{'}(k, k)$ rigetta e, quindi, $(k, k)\in L_{H}$.
+Dunque, per definizione di $L_{H}$, $T_{k}(k)$ termina. Quindi, in entrambi le ipotesi, $T_{k}(k)$ termina o non termina, portando ad una contraddizione. 
+Allora $T^{*}$ non può esistere $\Rightarrow\ T^{''}$ non può esistere, $\Rightarrow\ T^{'}$ non può esistere e di conseguenza $T$. Quindi se $T$ non esiste, $L_{H}$ non è decidibile.
 
 \subsection{Teorema a pag. 6}
 
