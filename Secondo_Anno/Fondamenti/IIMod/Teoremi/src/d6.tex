@@ -133,8 +133,8 @@ $$DTIME[f(n)] \subseteq DSPACE[f(n)]\ \land\ NTIME[f(n)] \subseteq NSPACE[f(n)]$
 \paragraph*{Dimostrazione:} Segue dal teorema:
 $$dspace(T, x) \leq dtime(T, x)\dots$$
 Sia $L \subseteq \Sigma^{\star}$ tale che $L \in DTIME[f(n)]$. Allora esiste $T$ che decide $L$ e tale che 
-$\forall x\in \Sigma^{\star},\ dtime(T, x) \in O(f(|x|))$. Poiché $dspace(T, x) \leq dtime(T, x)$ e $dspace(T, x) \leq dtime(T, x) \in O(f(|x|))$,
-allora $dspace(T, x) \in O(f(|x|))$ e dunque $L \in DSPACE(f(|x|))$. Analogamente per $NTIME[f(n)] \subseteq NSPACE[f(n)]$.
+$\forall x\in \Sigma^{\star}$, $dtime(T, x) \in O(f(|x|))$. Poiché $dspace(T, x) \leq dtime(T, x) \in O(f(|x|))$,
+allora $dspace(T, x) \in O(f(|x|))$, dunque $L \in DSPACE(f(|x|))$.\\ Analogamente per $NTIME[f(n)] \subseteq NSPACE[f(n)]$.
 
 \subsection{Teorema a pag. 11}
 
@@ -152,9 +152,9 @@ Supponiamo che $\Sigma = \{0, 1\}$
 \[
     \begin{aligned}[t]
     dtime(T, x) &\leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)} \\
-                 &= dspace(T, x)|Q|3^{dspace(T, x)}\\
-                 &= 2^{\log(dspace(T,x))}\ |Q|\ 2^{\log(3)dspace(T, x)}\\
-                 &= |Q|2^{\log(dspace(T,x))\ +\ \log(3)dspace(T, x)}\\
+                 &\leq dspace(T, x)|Q|3^{dspace(T, x)}\\
+                 &\leq 2^{\log(dspace(T,x))}\ |Q|\ 2^{\log(3)dspace(T, x)}\\
+                 &\leq |Q|2^{\log(dspace(T,x))\ +\ \log(3)dspace(T, x)}\\
                  &\leq |Q|2^{(1 + \log(3))dspace(T, x)}
     \end{aligned}
 \]
