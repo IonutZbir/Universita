@@ -19,7 +19,7 @@ per ogni $x \in \Sigma^{\star},\ x \in L \Leftrightarrow \exists y_{x} \in \{0, 
 
         Allora, $p_{i} = \langle q_{i1},\ s_{i1},\ s_{i2},\ q_{i2},\ m_{i} \rangle$ è la $i-esima$ quintupla 
         della sequenza $y(x)$, definita come segue:
-        $$y(x) =\ q_{11},\ s_{11},\ s_{12},\ q_{12},\ m_{1}\ -\ q_{21},\ s_{21},\ s_{22},\ q_{22},\ m_{2}\ -\ \dots\ q_{(n^{k})1},\ s_{(n^{k})1},\ s_{(n^{k})2},\ q_{(n^{k})2},\ m_{(n^{k})}$$
+        $$y(x) =\ q_{11},\ s_{11},\ s_{12},\ q_{12},\ m_{1}\ -\ q_{21},\ s_{21},\ s_{22},\ q_{22},\ m_{2}\ -\ \dots\ -\ q_{(n^{k})1},\ s_{(n^{k})1},\ s_{(n^{k})2},\ q_{(n^{k})2},\ m_{(n^{k})}$$
         è la sequenza di quintuple che rappresentano una computazione deterministica accettante.\footnote{Adesso il Genio non ci da più una quintupla per volta, ma una sequenza di quintuple che però, devono essere verificate.}
 
         Definiamo ora una macchina deterministica $\overline{T}$ che ha il ruolo di verificare la sequenza di quintuple $y_{x}$ scelta dal genio. Dunque $\overline{T}$ è 
@@ -29,7 +29,7 @@ per ogni $x \in \Sigma^{\star},\ x \in L \Leftrightarrow \exists y_{x} \in \{0, 
             \item $\overline{T}$ verifica che, per ogni $1 \leq i \leq n^k,\ \langle q_{i1},\ s_{i1},\ s_{i2},\ q_{i2},\ m_{i} \rangle \in P$, se non è così, allora rigetta.
             \item $\overline{T}$ verifica che $q_{11} = q_{0}$ e $q_{(n^k)2} = q_{A}$, se così non è, rigetta.
             \item $\overline{T}$ verifica che, per ogni $2 \leq i \leq n^k,\ q_{i1} = q_{(i - 1)2}$, se così non è, rigetta.
-            \item $\overline{T}$ simula la computazione di $NT(x)$ descritta da $y$. Verifica se ogni quintupla può eseguita, se sì la esegue, altrimenti rigetta.
+            \item $\overline{T}$ simula la computazione di $NT(x)$ descritta da $y$. Verifica se ogni quintupla può essere eseguita, se sì la esegue, altrimenti rigetta.
             \item $\overline{T}$ accetta.
         \end{enumerate}
 
@@ -109,7 +109,7 @@ $\Gamma_{1}$ è \textbf{NPC}.
     \item []{
         Poiché $\Gamma_{2}$ è \textbf{NPC}, per ogni problema $\Gamma_{3} \in \textbf{NP}$ si ha che $\Gamma_{3} \leq \Gamma_{2}$, e dunque esiste una funzione $f_{32}:\ \Gamma_{3} \Rightarrow \Gamma_{2}$
         tale che $f_{32} \in \textbf{FP}$ e per ogni $z \in I_{\Gamma_{3}},\ [z \in \Gamma_{3} \Leftrightarrow f_{32}(z) \in \Gamma_{2}]$, ovvero 
-        $$\exists T_{32}, h: \forall z \in I_{\Gamma_{3}},\ [z \in \Gamma_{2} \Leftrightarrow T_{32}(z) \in \Gamma_{2} \land\ dtime(T_{32}, z) \leq |x|^h]$$
+        $$\exists\ T_{32}, h: \forall z \in I_{\Gamma_{3}},\ [z \in \Gamma_{2} \Leftrightarrow T_{32}(z) \in \Gamma_{2} \land\ dtime(T_{32}, z) \leq |x|^h]$$
     }
 \end{itemize}
 Da $T_{21}$ e $T_{32}$ definiamo $T_{31}$ con input $z \in I_{\Gamma_{3}}$ che opera nel seguente modo:
