@@ -1,0 +1,162 @@
+\section{Altre Dimostrazioni}
+
+\subsection{\textbf{PSPACE} $\subseteq$ \textbf{EXPTIME}}
+
+Dopo aver definito le classi $\textbf{PSPACE}\ e\ \textbf{EXPTIME}$ dimostrare che $\textbf{PSPACE} \subseteq \textbf{EXPTIME}$.
+
+\paragraph*{Definizione:} 
+\[
+    \textbf{PSPACE} = \bigcup_{k\in \mathbb{N}} DSPACE[n^k]
+\]
+ 
+\[
+    \textbf{EXPTIME} = \bigcup_{k\in \mathbb{N}} DTIME[2^{f(n, k)}]
+\]
+
+\paragraph*{Dimostrazione:} È una diretta conseguenza del seguente teorema: $\forall\ f$, totale e calcolabile
+
+$$DSPACE[f(n)] \subseteq DTIME[2^{O(f(n))}]$$ 
+
+A sua volta questo teorema è una diretta conseguenza del teorema
+
+$$\dots \leq dtime(T, x) \leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)}$$
+
+Sia $L \subseteq \{0, 1\}^*$ tale che $L \in DSPACE[f(n)]$, allora $\exists T, k$ che decide $L$ e $dspace(T, x) \leq |x|^k$.
+\[
+    \begin{aligned}[t]
+    dtime(T, x) &\leq dspace(T, x)|Q|(|\Sigma| + 1)^{dspace(T, x)} \\
+                 &\leq dspace(T, x)|Q|3^{dspace(T, x)}\\
+                 &\leq 2^{\log(dspace(T,x))}\ |Q|\ 2^{\log(3)dspace(T, x)}\\
+                 &\leq |Q|2^{\log(dspace(T,x))\ +\ \log(3)dspace(T, x)}\\
+                 &\leq |Q|2^{(1 + \log(3))dspace(T, x)}
+    \end{aligned}
+\]
+
+In conclusione $dtime(T, x) \in O(2^{O(f(|x|))}) \Rightarrow L \in DTIME[2^{O(f(|x|))}]$
+
+In questo modo abbiamo dimostrato che $\textbf{PSPACE} \subseteq \textbf{EXPTIME}$.
+
+\subsection{\textbf{P} $\subseteq$ \textbf{PSPACE}}
+
+Dopo aver definito le classi $\textbf{P}\ e\ \textbf{PSPACE}$ dimostrare che $\textbf{P} \subseteq \textbf{PSPACE}$.
+
+\paragraph*{Definizione:} 
+
+\[
+   \textbf{P} = \bigcup_{k\in \mathbb{N}} DTIME[n^k]
+\]
+
+\[
+    \textbf{PSPACE} = \bigcup_{k\in \mathbb{N}} DSPACE[n^k]
+\]
+
+\paragraph*{Dimostrazione:} È una diretta conseguenza del seguente teorema: $\forall\ f$, totale e calcolabile
+
+$$DTIME[f(n)] \subseteq DSPACE[f(n)]$$ 
+
+Che a sua volta è una diretta conseguenza del seguente teorema:
+$$dspace(T, x) \leq dtime(T, x)\leq \dots$$
+
+Sia $L \in \{0, 1\}^*,\ L \in DTIME[f(n)]:\ \exists T, k: \forall x \in \{0, 1\}^*\ T$ decide $L$ e $dtime(T, x) \leq f(n)$.
+
+Poiché $dspace(T, x) \leq dtime(T, x) \land dtime(T, x) \in O(f(n)) \Rightarrow dspace(T,x) \in O(f(n))$.
+
+Dunque $L \in DSPACE[f(n)]$.
+
+\newpage
+
+\subsection{\textbf{NP} $\subseteq$ \textbf{EXPTIME}}
+
+Dopo aver definito le classi $\textbf{NP}\ e\ \textbf{EXPTIME}$ dimostrare che $\textbf{NP} \subseteq \textbf{EXPTIME}$.
+
+\paragraph*{Definizione:} 
+
+\[
+   \textbf{NP} = \bigcup_{k\in \mathbb{N}} NTIME[n^k]
+\]
+
+\[
+    \textbf{EXPTIME} = \bigcup_{k\in \mathbb{N}} DTIME[2^{f(n, k)}]
+\]
+
+\paragraph*{Dimostrazione:} È una diretta conseguenza del seguente teorema: $\forall\ f$, time-constructible
+
+$$NTIME[f(n)] \subseteq DTIME[2^{O(f(n))}]$$
+
+\textbf{Oss.} È una diretta conseguenza in quanto $n^k$ è una funzione time-constructible.
+
+Sia $L \in \{0, 1\}^*$ tale che $L \in NTIME[f(n)]$, allora esistono una macchina di Turing $NT$ che accetta $L$ e una 
+costante $h$ tali che $\forall x \in L,\ ntime(NT, x) \leq hf(|x|)$. Poiché $f$ è time-constructible, esiste una macchina 
+di Turing deterministica $T_{f}$ con inpun la rappresentazione in unario di $n \in \mathbb{N}$, che calcola il valore di 
+$f(n)$ in unario in tempo $O(f(n))$. Indichiamo con $k$ il grado di non determinismo di $NT$ e definiamo $T$ deterministica
+che simuli $NT$ con input $x \in \Sigma^{\star}$ che opera nel seguente modo:
+
+\begin{itemize}
+    \item [FASE 1:] Scrive su $N_{2}$, $|x|$ in unario.
+    \item [FASE 2:] {
+        Simula $T_{f}(|x|)$ e scrive su $N_{3}$ l'output $hf(|x|)$ in unario.
+    }
+    \item [FASE 3:] {
+        Per ogni computazione deterministica $\alpha(x)$ in $NT(x)$:
+        \begin{itemize}
+            \item Finché legge 1 su $N_{3}$ esegue un'istruzione lungo $\alpha(x)$.
+            \item Se $\alpha(x) = q_{A}$ allora $T(x) = q_{A}$.
+            \item Altrimenti sposta la testina a destra su $N_{3}$.
+            \item Se legge $\square$ si sposta sul primo 1 a sinistra e passa alla prossima computazione deterministica $\alpha(x)$ se esiste.
+        \end{itemize}
+    }
+    \item [FASE 4:] Rigetta
+\end{itemize}
+
+\begin{itemize}
+    \item La fase 1 termina in $O(|x|)$ passi.
+    \item La fase 2 termina in $O(hf(|x|)) = O(f(|x|))$ passi.
+    \item La fase 3 termina in $O(f(|x|)k^{hf(x)})$ poiché esegue ogni computazione deterministica di $NT(x)$
+\end{itemize}
+
+Dunque, $$dtime(T, x) \in O(f(|x|)k^{hf(x)}) \subseteq{O(2^{O(f(|x|))})} \Rightarrow L \in DTIME[O(2^{O(f(n))})]$$
+
+In conclusione $\textbf{NP} \subseteq \textbf{EXPTIME}$
+
+\subsection{\textbf{P} = \textbf{coP} $\land$ \textbf{PSPACE} = \textbf{coPSPACE}}
+
+Dopo aver definito le classi $\textbf{P, PSPACE, coP, coPSPACE}$ dimostrare che 
+
+\textbf{P} = \textbf{coP} $\land$ \textbf{PSPACE} = \textbf{coPSPACE}.
+
+\paragraph*{Definizione:} 
+
+\[
+   \textbf{P} = \bigcup_{k\in \mathbb{N}} DTIME[n^k]
+\]
+
+\[
+   \textbf{coP} = \bigcup_{k\in \mathbb{N}} coDTIME[n^k]
+\]
+
+\[
+    \textbf{PSPACE} = \bigcup_{k\in \mathbb{N}} DSPACE[n^k]
+\]
+
+\[
+    \textbf{coPSPACE} = \bigcup_{k\in \mathbb{N}} coDSPACE[n^k]
+\]
+
+\paragraph*{Dimostrazione:} È una diretta conseguenza del seguente teorema: $\forall\ f$, totale e calcolabile
+$$DTIME[f(n)] = coDTIME[f(n)]\ \land\ DSPACE[f(n)] = coDSPACE[f(n)]$$
+
+$\forall L \in DTIME[f(n)]$, esiste $T$ che decide $L$ e $dtime(T, x) \in O(f(|x|))$. 
+Da $T$ deriviamo $T^{c}$ con input $x \in \Sigma^{\star}$ e $Q_{f} = \{q_{A}^{c}, q_{R}^{c}\}$ che decide $L^{c}$ nel seguente modo:
+
+\begin{enumerate}
+    \item [FASE 1:] Simula $T(x)$
+    \item [FASE 2:]{
+        \begin{itemize}
+            \item Se $T(x) = q_{A}$, allora $T^{c}(x) = q_{R}$
+            \item Se $T(x) = q_{R}$, allora $T^{c}(x) = q_{A}$
+        \end{itemize}
+    }
+\end{enumerate}
+Dunque $L^{c} \in DTIME[f(n)]$.\\
+Analogamente possiamo dimostrare che un qualsiasi linguaggio $L \in coDTIME[f(n)]$. Di conseguenza che $DTIME[f(n)] = coDTIME[f(n)]$.
+Dimostrazione analoga per $DSPACE[f(n)] = coDSPACE[f(n)]$.
