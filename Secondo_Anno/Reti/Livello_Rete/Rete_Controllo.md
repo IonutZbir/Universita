@@ -7,7 +7,7 @@ Nel piano di controllo, il router ha il ruolo di determinare il percoso seguito 
 Ci sono due approcci per eseguire l'istradamento:
 
 - *Controllo per router*: Ogni router ha una componente di instradamento che comunica con le componenti di instradamento degli altri router per calcolare la propria tabella di inoltro (protocolli OSFP e BGP).
-- *Controllo logicamente centralizzatoé (SDN)*: Controller logicamente centralizzato calcola e distribuisce le tabelle di inoltro che devono essere utilizzate da ogni router.
+- *Controllo logicamente centralizzato (SDN)*: Controller logicamente centralizzato calcola e distribuisce le tabelle di inoltro che devono essere utilizzate da ogni router.
 
 ## Algoritmi di instradamento
 
@@ -66,8 +66,13 @@ Possiamo organizzare i router in **sistemi autonomi (AS, Autonomous System)**, g
 
 Un ISP può costituire un unico AS oppure essere partizionato in più AS.
 
-- **Intra-AS protocolo:** Algoritmo di instradamento in esecuzione in un AS. I router di un AS eseguono lo stesso algoritmo di instradamento e gli uni hanno informazioni sugli altri. Sul bordo dell'AS si trovao i router di **gateway**. Il protocollo più usato è OSFP.
-- **Inter-AS protcolo:** Algoritmo di instradamento tra AS. I router gateway effettuano l'instradamento inter-AS oltre a quello intra-AS. Uno dei più importanti protocolli di rete è BGP.
+- **Intra-AS protocol:** Algoritmo di instradamento in esecuzione in un AS. I router di un AS eseguono lo stesso algoritmo di instradamento e gli uni hanno informazioni sugli altri. Sul bordo dell'AS si trovao i router di **gateway**. Il protocollo più usato è OSFP.
+- **Inter-AS protocol:** Algoritmo di instradamento tra AS. I router gateway effettuano l'instradamento inter-AS oltre a quello intra-AS. Uno dei più importanti protocolli di rete è BGP.
+
+Ciò che comporta la suddivisione di Internet in vari AS e che risolve il problema della scalabilità è che negli algoritmi link-state e distance-vector l’invio delle informazioni sullo stato della rete o sulle distanze è limitato all’AS in questione!
+
+Ciò comporta tabelle più piccole e maggiore velocità di convergenza.
+Come detto ogni sistema autonomo può usare il proprio algoritmo di instradamento, e affinché non sia isolato dagli altri AS è necessaria la presenza del router gateway. I gateway partecipano sia all’instradamento inter-AS che a quello intra-AS.
 
 ### OSFP (Open Shortest Path First)
 
@@ -162,3 +167,50 @@ dei flussi che determina quali tabelle debbano essere aggiornate.
 Il protocollo **ICMP (Internet Control Message Protocol)** viene usato da host e router per scambiarsi informazioni a livello di rete: il suo uso più tipico è la notifica degli errori.
 
 ICMP è spesso considerato parte di IP, ma dal punto di vista dell’architettura si trova esattamente sopra IP, dato che i suoi messaggi vengono trasportati nei datagrammi IP: ossia, i messaggi ICMP vengono trasportati come payload di IP, esattamente come i segmenti TCP o UDP. Allo stesso modo, se un host riceve un datagramma IP, che specifica ICMP come protocollo di livello superiore, allora effettua il demultiplexing dei contenuti del datagramma a ICMP, esattamente come farebbe per contenuti TCP o UDP.
+
+## Gestione della rete
+
+- **Sistema autonomo (rete)**: migliaia di componenti hardware e software che interagiscono tra loro.
+
+- **Gestione della rete**: comprende il funzionamento, l'integrazione e il coordinamento di hardware, software e personale tecnico per monitorare, verificare, configurare, analizzare, valutare e controllare le risorse della rete affiché soddisfino le funzionalità in tempo reale e i requisiti di qualità del servizio a un costo accettabile.
+In poche parole si occupa di gestire e coordinare tutte le componenti hardware e software della rete.
+
+Componenti nella gestione di rete:
+
+- Server di gestione: Raccolta, gestione, elaborazione e analisi delle informazioni. Si occupa dell'invio di informazioni e comandi.
+- Dispositivo di rete gestito: Dipositivi hardware e software configurabili.
+- Protocollo di gestione: Utilizzato dal server di gestione per interrogare i dispositivi sul loro stato e agire su di essi.
+- Dati: Sono gli stati dei dispostivi, come i dati di configurazione (indirizzi IP) e dati operativi e statistiche.
+
+Metodi di approcci del operatore alla rete:
+
+- CLI (Command Line Interface): L'operatore scrive comandi sulla linea di comando o s script da remoto in `ssh`.
+- Protocollo SNMP/MIB: L'operatore interroga/imposta i dati contenuti negli oggetti MIB utilizzando il Simple Network Management Protocol.
+- NETCONF/YANG: È simile a SNMP ma con enfasi maggiore sul definire la configurazione di rete piuttosto che definire la configurazione dei singoli dispositivi. NETCONF è il protocollo e YANG è il linguaggio.
+
+### SNMP
+
+SNMP è un protocollo a livello di applicazione e utilizza UDP. Ha due modalità di funzionamento:
+
+1. **Richiesta/Risposta**: Il server di gestione, detto **client SNMP**, manda una richiesta all'agente SNMP che poi invia la risposta.
+2. **Modalità trap**: L'agente manda un messaggio al server di gestione per notificarlo di un evento imprevisto.
+
+<img src="img/SNMP.png" width="300">
+
+Nel formato di questi messaggi (PDU) deve essere presente un ID che associ la richiesta alla risposta. SNMP accede ai dati dal dispostivo, dati modellati nella MIB che può essere visto come un database gerarchico (root, nodi, etc...).
+Quindi la struttura del MIB rircorda molto la struttura di un file system gerarchico, dunque possiamo identificare un oggetto tramite un *percorso definito dai vari componenti separati da un separatore. I componenti in questo caso sono numeri ed il separatore un punto.*
+
+- **OID**: rappresenta un cammino nella base dati MIB, che permette di identificare l'oggetto MIB specifico che potrò leggere o scrivere.
+
+### NETCONF
+
+Per NETCONF il discorso è simile a SNMP, si tratta semplicemente di un'alternativa più moderna. L'obiettivo è quello di gestire ma anche di configurare i dispositivi della rete. In NETCONF troviamo le notifiche che hanno lo stesso ruolo dei messaggi trap in SNMP.
+
+- **Differenza tra NETCONF E SNMP**: NETCONF supporta la manipolazione simultanea nella configurazioni di molteplici dipositivi. (Domnda d'esame).
+
+Due estremi nel protocollo NETCONF comunicano tramite una chiamata di procedura remota `rpc` fatta stabilendo una sessione con un protocollo di trasferimento dati affidabile e sicuro, inviando messaggi `xml` atti a codificare sia la richiesta che la risposta.
+
+#### YANG
+
+YANG è il linguaggio di modellazione dei dati utilizzato per specificare la struttura, la sintassi e la semantica dei dati di gestione della rete NETCONF. Dal codice YANG viene generato un file `xml` che descrive il dipositivo.
+ 
