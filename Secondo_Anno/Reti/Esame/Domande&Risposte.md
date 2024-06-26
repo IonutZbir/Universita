@@ -58,3 +58,33 @@ In TCP il controllo della congestione è implementato in questo modo:
 5. Cosa si intende per piano di dati?
 
 ## Risposta
+
+## Domanda
+
+6. Come viene implementato in TCP il controllo della congestione assistito dalla rete? (ECN)
+
+## Risposta
+
+## Domanda
+
+7. Cosa si intende per inoltro basato sull'indirizzo di destinazione?
+
+## Risposta
+
+## Domanda
+
+8. Cosa si intende per inoltro generalizzato?
+
+## Risposta
+
+## Domanda
+
+9. Qual'è l'architettura del router?
+
+## Risposta
+
+## Domanda
+
+10. Quali sono i compiti principali che svolge il router?
+
+## Risposta

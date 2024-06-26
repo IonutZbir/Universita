@@ -118,7 +118,7 @@ Il router inolte, può conoscere più di un percorso verso l'AS di destinazione,
 - Valore dell'attributo di **prefernza locale**.
 - AS-PATH più breve.
 - Router NEXT-HOP più vicino.
-- Indentificatori BGP
+- Indentificatori BGP1
 
 ## SDN (Software-Defined Networking)
 
