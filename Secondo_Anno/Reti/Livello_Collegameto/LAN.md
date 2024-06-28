@@ -57,5 +57,16 @@ Ci sono tre tipologie di rete LAN Ethernet:
 
 > [!NOTE]  
 >
-> 
+> Multiplexing e demultiplexing: Si ha il mux e il demux ad un certo livello quando si vuole seguire più protocolli al livello superiore. 
+> A livello di rete si ha il mux/demux poiche si possono seguire piu protocolli di trasporto. UDP o TCP
+> A livello di trasporto si ha il mux/demus a maggior ragione, per il numero grande di protocolli a livello di applicazione. HTTP/S, DNS, SSH, SMTP etc...
 
+### Frame Ethernet
+
+<img src="img/ethernet.png" width=400>
+
+- Preambolo: 8 byte totali di cui 7 (10101010) per risvegliare la scheda di rete e sincronizzarla e l ultimo byte (10101011) che serve ad informare il ricevente dell'inizio effettivo del frame.
+- Indirizzo sorgente e destinazione. Campi da 6 byte che includono il MAC address della sorgente e della destinazione.
+- Tipo: Sono 2 byte dedicati ad indicare un protocollo di livello superiore, pricipalmente IP ma ci sono anche altri. Serve per il demux da parte del ricevente.
+- Payload: Contiene il datagramma IP.
+- CRC: Controllo a ridondanza ciclica, serve alla NIC di rilavare errori.
