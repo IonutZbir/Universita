@@ -70,7 +70,7 @@ Osserviamo adesso le operazioni svolte da CSMA/CD dal punto di vista della sched
 
 Ma quanto deve essere questo **tempo di backoff**? Questo tempo viene calcolato dall'algoritmo **binary exponential backoff**. In pratica se viene rilevata l' $n - esima$ collisione, viene scelto un $k$ causale nell'intervallo 
 $$\{0,\ 1,\ 2, \dots,\ 2^{n} - 1\}$$
-L'intervallo di tempo che deve aspettare è pari al tempo di trasmissione di $512 * k$ bit, ed $n$ è al più 10.
+L'intervallo di tempo che deve aspettare è pari al tempo di trasmissione di 512 bit * $k\ s$, ed $n$ è al più 10.
 
 
 ### Efficienza
@@ -95,3 +95,23 @@ L'efficienza tende a 1 se:
 
 # Protocolli a rotazione
 
+L'idea alla base di questi protocolli è quella di estrarre il meglio dai protocolli a suddivisione del canale e ad accesso casuale.
+Ci sono due protocolli:
+
+## 1. Protocollo Polling
+
+In questa tipologia di protocollo, esiste un nodo principale, detto controllore che ha il compito di consentire periodimacamente a ciascun client di inviare per un tot tempo un numero di tot frame. In questo modo un client non trasmetterà finché non gli verrà dato il permesso dal controllore.
+
+Il controllore inoltre può aspettare che ciascun client abbia esaurito il proprio turno, oppure in un approccio a rilevamento della portante puo decidere di lasciar trasmenttere un altro client non appena l'altro ha finito.
+
+**Svantaggi**
+
+- Si crea **ritardo di polling**, poiché controllare il traffico spreca banda
+- **Throughput minore di R**, in quanto il c'é ritardo di polling
+- **Sistema centralizzato**, essendo centrallizato c'é un unico punto di rottura, e in caso di guasto si rompe tutto.
+
+È usato dal bluetooth.
+
+## 1. Protocollo Token passing
+
+In questo protocollo non esiste un nodo centrale ma un frame di controllo detto **token** che circola fra i nodi seguendo un ordine fissato. Chi possiede il token ha il diritto di trasmettere in quel istante di tempo sul canale. È altamente efficiente ma anch'esso non è privo di problemi in quanto ci puo essere la perdita del **token** o la rottura di un nodo.
