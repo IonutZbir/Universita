@@ -69,4 +69,48 @@ Ci sono tre tipologie di rete LAN Ethernet:
 - Indirizzo sorgente e destinazione. Campi da 6 byte che includono il MAC address della sorgente e della destinazione.
 - Tipo: Sono 2 byte dedicati ad indicare un protocollo di livello superiore, pricipalmente IP ma ci sono anche altri. Serve per il demux da parte del ricevente.
 - Payload: Contiene il datagramma IP.
-- CRC: Controllo a ridondanza ciclica, serve alla NIC di rilavare errori.
+- CRC: Controllo a ridondanza ciclica, serve alla NIC di rilevare errori.
+
+### Caratteristiche principali
+
+- È un protocollo **senza connessione**, cioè privo di handshake. Non si crea una connessione tra le due NIC.
+- È un protocollo **non affidabile**, le NIC non si scambiano ACK e NAK.
+- Utilizza come protocollo MAC il **CSMA/CD con binary backoff**.
+
+> [!NOTE]  
+>
+> Nel corso degli anni ci sono state e ci sono ancora varie versioni di Ethernet. Ciò che li accomuna sono il protocollo MAC e il formato del frame mentre cio che li differenzia sono le velocità e i mezzi di trasmissione.
+
+## Switch
+
+Lo switch è un **commutatore di pacchetti a livello**. Ha il compito di inoltrare i frame in arrivo al giusto destinatario. Applica un policy di store e forward filtrando i frame Ethernet in base all'indirizzo MAC.
+
+Gli switch sono dei dispositivi trasparenti, ovvero gli host sono inconsapevoli della loro presenza in quanto non possiedono un indirizzo MAC, e anche se lo possedessero, quel indirizzo non verrà mai usato come indirizzo di destinazione. 
+
+Sono dispostivi plug and play basati sull'autoapprendimento, ovvero non è necessario configurarli.
+
+Lo switch elimina le collisioni tra nodi, tranne per le collisioni tra nodo e switch. Dunque nodi diversi possono dialogare senza collisioni dal punto di vista CSMA/CD ma nel caso in cui due nodi voglio comunicare con lo stesso nodo, allora lo switch deve mettere in coda i frame, per non creare collisioni.
+
+<img src="img/switch.png" width=400>
+
+- A - A' e B - B' possono comunicare in contemporanea.
+- A - A' e C - C' non possono comunicare in contemporanea.
+
+Questo avviene solo quando il canale di trasmissione è half-duplex, dunque c'è bisogno del protocollo CSMA/CD.
+Quando il canale di trasmissione è full-duplex non avvengono mai collisioni e dunque il protocollo CSMA/CD non serve. 
+
+Le operazioni di filtraggio e inoltro di uno switch sono eseguite mediante una tabella di commutazione
+(switch table). Tale tabella di commutazione è composta da voci (entries) per alcuni o per tutti i dipositivi della LAN, e ogni voce è composta da:
+
+1. L'indirizzo MAC del nodo;
+2. L’interfaccia dello switch che conduce al nodo;
+3. Il momento in cui la voce per quel nodo è stata inserita nella tabella.
+
+Come fa lo switch a conoscere su quale interfaccia inviare il frame se non presente nella tabella? Come funziona l'autoapprendimento dello switch?
+
+Se lo switch non ha la corrispondeza MAC - interfaccia, applica il **flood**, cioè inoltra su tutte le interfacce eccetto quelle che già conosce, in pratica si tratta di un messaggio in broadcast.
+Se lo switch ha la corrispondeza MAC - interfaccia, allora invia il frame su quel collegamento **selettivamente**, ovvelo lo manda su quel collegamento soltanto se mittente e destinatario non coincidono. Se coincidono bisogna aggiornare la tabbella e si scarta il frame.
+
+
+
+
