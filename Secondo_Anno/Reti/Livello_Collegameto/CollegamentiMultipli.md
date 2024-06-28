@@ -1,3 +1,5 @@
+# Protocolli a suddivisione del canale
+
 # Protocolli ad accesso causale
 
 ## Slotted ALOHA
@@ -16,7 +18,7 @@ Sia $p$ una probabilità, ovvero un numero tra 0 e 1. Allora le operazioni dei n
 2. **Se non si verifica una collisione**, l'operazione ha avuto successo, quindi non occorre effettuare una ritrasmissione e il nodo può predisporre l'invio di un nuovo frame.
 3. **Se si verifica una collisione**, il nodo la rileva prima della terminazione dello slot e ritrasmette con probalità $p$ il suo frame durante gli slot successivi, fino a quando l'operazione non ha successo.
 
-Per capire meglio il concetto di **ritrasmissione con probabilità $p$** possiamo immaginare che il nodo lanci una moneta truccata: l'evento testa corrisponde alla ritrasmissione, che si verifica con probabilià $p$, quello croce corrisponde a "salta questo slot e lancia di nuovo la monete in quello successivo". Questo accade con probabilità $(1 - p)$. I nodi coinvolti nella collisione lanciano le proprie monete indipendentemente gli uni dagli altri.
+Per capire meglio il concetto di **ritrasmissione con probabilità $p$** possiamo immaginare che il nodo lanci una moneta truccata: l'evento testa corrisponde alla ritrasmissione, che si verifica con probabilià $p$, quello croce corrisponde a "salta questo slot e lancia di nuovo la moneta in quello successivo". Questo accade con probabilità $(1 - p)$. I nodi coinvolti nella collisione lanciano le proprie monete indipendentemente gli uni dagli altri.
 
 ### Vantaggi
 
@@ -49,6 +51,47 @@ Se in ALOHA e slotted ALOHA i nodi prendono la decione di trasmettere indipenden
 2. *Se qualcun altro comincia a parlare insieme a voi, smettere di parlare*, nel mondo delle reti questo prende il nome di **rilevamento della collisione (collisione detection)**. Se un nodo osserva che un altro nodo sta trasmettendo un frame che interferisce col suo, arresta la propria trasmissione (CSMA/CD).
 
 > [!NOTE]  
->
+> 
 > In ALOHA e slotted ALOHA questo non era possibile fare, in quanto sono protocolli utilizzati per le connessione wireless, nelle quali non banale osservare che un canale è occupato. CSMA e CSMA/CD sono utilizzati nei collegamenti Ethernet.
+
+Dunque, se si parte dall'idea che se un nodo trasmette gli altri non possono trasmettere perché si verificano comunque delle collisioni? La risposta a questa domanda è il **ritardo di propagazione**.
+
+Supponiamo che un nodo stia iniziando a trasmettere all'istante di tempo $t_{0}$, ma il suo segnale impiega del tempo per arrivare: gli altri nodi potrebbero quindi in certe occasioni rilevare il canale inattivo quando in realtà non lo è.
+
+## CSMA/CD
+
+Osserviamo adesso le operazioni svolte da CSMA/CD dal punto di vista della scheda di rete.
+
+1. La NIC riceve un datagramma dal livello di rete e lo incapsula quindi in un frame.
+2. Se il canale risulta libero lo trasmette, altrimenti si mette in attesa finché il canale non si libera e inzia la trasmissione.
+3. Verifica la presenza di eventuali segnali provenienti da altre schede di rete.
+4. Se la scheda di rete non rivela altri segnali e trasmette l'intero frame allora ha svolto il suo lavoro. Altrimenti se rileva segnali da altre schede di rete (JAM) interrompe la sua trasmissione.
+5. Entra in uno stato di wait per un tempo casuale (**tempo di backoff**), per poi ritornare al passo 2.
+
+Ma quanto deve essere questo **tempo di backoff**? Questo tempo viene calcolato dall'algoritmo **binary exponential backoff**. In pratica se viene rilevata l' $n - esima$ collisione, viene scelto un $k$ causale nell'intervallo 
+$$\{0,\ 1,\ 2, \dots,\ 2^{n} - 1\}$$
+L'intervallo di tempo che deve aspettare è pari al tempo di trasmissione di $512 * k$ bit, ed $n$ è al più 10.
+
+
+### Efficienza
+
+**L'efficienza di CSMA/CD** è la frazione di tempo media durante la quale i frame sono trasferiti sul canale senza collisioni in presenza di un alto numero di nodi attivi, con un'elevata quantità di frame da inviare.
+
+$$
+Efficienza = \frac{1}{1 + \frac{5d_{prop}}{d_{trasm}}}
+$$
+
+dove:
+
+- $d_{prop}$ è il massimo ritardo di propagazione tra due schede di rete.
+- $d_{trasm}$ è il tempo necessario per trasmettere un frame di dimensione massima.
+
+L'efficienza tende a 1 se:
+
+- $d_{prop}$ tende a 0;
+- $d_{trasm}$ tende a infinito;
+
+È un protocollo migliore di ALOHA e slotted ALOHA ma non è applicabile al wireless in quanto non è facile capire se un canale è libero o meno.
+
+# Protocolli a rotazione
 
