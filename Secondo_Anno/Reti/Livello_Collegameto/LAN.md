@@ -94,7 +94,7 @@ Lo switch elimina le collisioni tra nodi, tranne per le collisioni tra nodo e sw
 <img src="img/switch.png" width=400>
 
 - A - A' e B - B' possono comunicare in contemporanea.
-- A - A' e C - C' non possono comunicare in contemporanea.
+- A - A' e C - A' non possono comunicare in contemporanea.
 
 Questo avviene solo quando il canale di trasmissione è half-duplex, dunque c'è bisogno del protocollo CSMA/CD.
 Quando il canale di trasmissione è full-duplex non avvengono mai collisioni e dunque il protocollo CSMA/CD non serve. 
@@ -111,6 +111,20 @@ Come fa lo switch a conoscere su quale interfaccia inviare il frame se non prese
 Se lo switch non ha la corrispondeza MAC - interfaccia, applica il **flood**, cioè inoltra su tutte le interfacce eccetto quelle che già conosce, in pratica si tratta di un messaggio in broadcast.
 Se lo switch ha la corrispondeza MAC - interfaccia, allora invia il frame su quel collegamento **selettivamente**, ovvelo lo manda su quel collegamento soltanto se mittente e destinatario non coincidono. Se coincidono bisogna aggiornare la tabbella e si scarta il frame.
 
+**Funzionamento Switch**
 
+```
+1. Registra il collegamento in ingresso e l'indirizzo MAC dell'host mittente
+2. Indicizzi la tabella degli switch utilizzando l'indirizzo MAC di destinazione
+3. IF viene trovata una voce per la destinazione {
+    IF la destinazione è sul segmento dal quale è arrivato il frame{
+        scarta il frame
+    }ELSE{
+        inoltra il frame sull'interfaccia indicata nella voce
+    }
+} ELSE{
+    flood
+}
+```
 
 
