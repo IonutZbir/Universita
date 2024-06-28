@@ -127,4 +127,28 @@ Se lo switch ha la corrispondeza MAC - interfaccia, allora invia il frame su que
 }
 ```
 
+### Differenze tra router e switch
+
+- Router: dispositivo a livello di rete. Calcola le tabelle di routing mediante algoritmi di instradamento e gli indirizzi IP. Gli algoritmi di instradamento possono trovare percorsi ottimali (senza cicli) nonostranze cicli nella topologia della rete.
+- Switch: dispositivi a livello di collegamento. Calola le tabello di inoltro mediante l'autoapprendimento usando il flooding e gli indirizzi MAC. Gli switch devono essere collegati ad albero (Spanning Tree Protocol), per evitare che il traffico broadcast resti in circolazione per sempre.
+
+## VLAN
+
+VLAN (Virtual Area Network) è costituita da uno o più switch che supporti questa tecnologia. Vediamo ora a cosa sono utilizzate queste VLAN.
+
+Una LAN normale sulla carta può funzionare ma in realtà presenta vari inconvenienti, per esempio:
+
+- **Mancanza di isolamento del traffico**: In una LAN il traffico broadcast deve attraversare tutta la rete, anche quando magari non c'è bisogno, rendendo la rete LAN poco efficiente. Le prestazioni della LAN aumenterebbero se si potesse limitare il campo di tale traffico broadcast.
+- **Uso inefficiente degli switch**: Invece di utilizzare tanti switch per ogni sottorete, si potrebbe utilizzare un unico switch con un maggiore numero di porte e configurare il switch in modo opportuno.
+- **Gestione degli utenti**: Immaginiamo che un utente di CS si sposti nell'ufficio EE (connesso fisicamente allo switch EE) ma voglia rimanere connesso logicamente allo switch CS. L'unico modo è di usare un filo più grande. 
+
+<img src="img/VLAN.png" width=300>
+
+Tutte queste problematiche si possono risolvere con l'utilizzo di una o più VLAN, usando l'infrastruttura della LAN già presente.
+
+- **Port Based VLAN**: Assegno le porte di uno switch in modo dinamico alle VLAN. È come avere più switch. Per far comunicare le VLAN tra di loro faccio affidamento al **routing**, ovvero i produttori di switch che permettono le VLAN implementano un router nello switch, quindi cominano switch e router. Se le VLAN sono implementate su più switch, per poter far comunicare le VLAN serve collegare gli switch tramite una porta di **trunk**. Dunque su ogni switch viene scelta una porta che viene abilitata come porta di trunk che crea un collegamento tra gli switch.
+
+Ogni VLAN è identificata da un VLAN ID, usato per identificare le porte degli switch assegnate alle varie VLAN. 
+
+
 
