@@ -94,7 +94,7 @@ In quanto CSMA, effettua il rilevamento della portante e non trasmette se trova 
 > 2. **Problema di natura tecnologica/economica**: Posso sì rilevare il segnale, ma avrà un’intensità molto inferiore rispetto a quello che sto emettendo.
 > In generale è difficile dal punto di vista hardware ed economico progettare un dispositivo che trasmettendo con una certa potenza riesce contemporaneamente a rilevare un segnale di potenza molto inferiore.
 
-**Come funziona nel dettaglio il protocollo MAC CSMA/CA?
+**Come funziona nel dettaglio il protocollo MAC CSMA/CA?**
 
 Supponiamo che una stazione wireless deve inviare un frame allora:
 
