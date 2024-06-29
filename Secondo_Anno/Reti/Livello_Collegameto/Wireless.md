@@ -132,22 +132,17 @@ Il quarto indirizzo viene utilizzato nella modalità ad hoc.
 
 Supponiamo che il router debba inviare un datagramma ad H1, allora:
 
-When the AP receives the 802.11 frame, it converts the frame to an Ethernet frame.
-The source address field for this frame is H1’s MAC address, and the destination
-address field is R1’s MAC address. Thus, address 3 allows the AP to determine
-the appropriate destination MAC address when constructing the Ethernet frame.
-
 1. Il router, che conosce l'indirizzo Il di H1, tramite ARC determina il suo indirizzo MAC. L'interfaccia R1 del router crea il frame **Ethernet** incapsulando il datagramma. L'indirizzo sorgente di questo frame è il MAC address di R1, e quello di destinazione è il MAC address di H1.
 2. Quando il frame **Ethernet** arriva all'AP, l'AP lo converte in un frame **802.11** prima di immetterlo nel canale wireless, riempiendo i campi degli indirizzi in questo modo:
     - Indirizzo 1: MAC address di H1
     - Indirizzo 2: MAC address di AP
     - Indirizzo 3: MAC address di R1
 In questo modo, H1 potrà determinare l'indirizzo MAC del router.
-3. H1 riceve il frame, estrae il datagramma e lo invia al livello di rete. Ora H1 crea un frame **802.11**, riempiendo i campi degli indirizzi in questo modo:
+1. H1 riceve il frame, estrae il datagramma e lo invia al livello di rete. Ora H1 crea un frame **802.11**, riempiendo i campi degli indirizzi in questo modo:
     - Indirizzo 1: MAC address di AP
     - Indirizzo 2: MAC address di H1
     - Indirizzo 3: MAC address di R1
-4. Quando il frame **802.11** arriva all'AP, lo converte in un frame **Ethernet**. L'indirizzo della sorgente di questo frame è il MAC address di H1 e come indirizzo di destinazione il MAC address di R1. Quindi grazie all'indirizzo 3, l'AP riesce a determinare a chi deve inviare il frame **Ethernet**.
+2. Quando il frame **802.11** arriva all'AP, lo converte in un frame **Ethernet**. L'indirizzo della sorgente di questo frame è il MAC address di H1 e come indirizzo di destinazione il MAC address di R1. Quindi grazie all'indirizzo 3, l'AP riesce a determinare a chi deve inviare il frame **Ethernet**.
 
 ## Mobilità all'interno della stessa sottorete
 
