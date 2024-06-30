@@ -44,7 +44,22 @@ Supponiamo che un host si sia spostato in **Roaming** in una visited network. Po
 
 Allora, il dispositivo nella visited network si associa al Mobility Manager Entity (MME) della rete visitata, questo poi registra la posizione del dispositivo mobile nell'HSS della home network. In questo modo l'MME della rete visitata sa del dispositivo mobile mente l'HSS sa la posizione attuale del dispositivo.
 
-Supponiamo adesso che l'host debba ricevere un frame, come avviene l'instradamento?
+Supponiamo adesso che l'host debba ricevere un pacchetto, come avviene l'instradamento?
 
-1. **Instraamento Indiretto**
-2. **Instradamento Diretto**
+### 1. Instradamento Indiretto
+
+<img src="img/roaming.png" width=300>
+
+Inizialmente il pacchetto è inoltrato all'indirizzo IP permanente del dispositivo mobile destinatario giungendo così alla usa **home network**. Dunque arriva al P-GW, da cui è stato creato un tunnel verso l'S-GW del nucleo della **visited newtwork**. Tale tunnel è stato creato dall'MME della home network grazie alle informazioni presenti nell'HHS, informazioni passate dall'MME della visited network. Dall'S-GW è presente un altro tunnel verso la stazione base in cui si trova il dispositivo mobile. Il pacchetto quindi passa per il tunnel e arriva al dispositivo mobile.
+
+Questo metodo è detto trinagolare, in quanto si passa prima per la home network e poi giunge alla vera destinazione.
+
+- **Pro**: Il dispositivo mobile nello spostarsi tra visited networks risulterà trasparente al corrispondente! Quindi connessioni come TCP in corso tra corrispondente e dispositivo mobile possono essere mantenute.
+- **Contro**: Il routing indiretto è inefficiente se il corrispondente e il dispositivo mobile si trovano sulla stessa rete.
+
+### 2. Instradamento Diretto
+
+<img src="img/diretto.png" width=300>
+
+
+
