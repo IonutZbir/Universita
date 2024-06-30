@@ -99,19 +99,11 @@ In quanto CSMA, effettua il rilevamento della portante e non trasmette se trova 
 Supponiamo che una stazione wireless deve inviare un frame allora:
 
 1. 
-   - Se il canale viene percepito libero (*rilevamento della portante*) allora invia il frame dopo aver aspettato un certo periodo di tempo conosciuto come **(DIFS) Distributed Inter-Frame Space**.
-   - Se il canale viene percepito occupato si applica l'algoritmo **binary exponential backoff**
-2. Dopo aver aspettato DIFS, il valore di backoff inizia a decrementare solo quando il canale è percepito libero, se   il canale è percepito occupato il conteggio si congela.
-3. Quando il valore arriva a 0, allora il canale risulta libero e può procedere all'invio del frame.
-4. Se il frame è stato ricevuto allora viene spedito al mittente un ACK. Se non arriva nessun ACK allora si riparte dal passo due con un intervallo di backoff maggiore.
-   
-Dal punto di vista del destinatario è molto semplice, quando gli arriva un frame fa controllo con CRC e in caso non rileva errori manda ACK dopo un tempo **Short Inter-Frame Spacing (SIFS)**.
+   - Se il canaista del destinatario è molto semplice, quando gli arriva un frame fa controllo con CRC e in caso non rileva errori manda ACK dopo un tempo **Short Inter-Frame Spacing (SIFS)**.
 
 Per quanto riguardo l'evitare delle collisione, esiste un altro meccanismo basato sul protocollo CSMA, questo meccanismo prende il nome di **prenotazione esplicita**.
 
-Il nodo che vuole trasmettere manda all'AP un frame **RTS (Request To Send)** usando CSMA, chiedendo il permesso all'AP di poter trasmettere. L'AP risponderà in broadcast con un messaggio **CTS (Clear To Send)**, e in quanto in broadcast sarà ricevuto da tutti. Funge da permesso per il diretto interessato mentre per gli altri nodi funge da blocco, in questo modo non avvegono collisioni. Può comunque avvenire una collisione RTS, ma il frame è molto piccolo che non comporta grande overhead, al contrario di quando bisogna ritrasmettere frame normali.
-
-Questo meccanismo è opzionale ma viene utilizzato principalmente quando c'è la necessita di inviare frame di grandi dimensioni.
+Il nodo che vuole trasmettere manda all'AP un frame **RTS (Request To Send)** usando CSMA, chiedendo il permesso all'AP di poteri
 
 ## Struttura del frame 802.11
 
