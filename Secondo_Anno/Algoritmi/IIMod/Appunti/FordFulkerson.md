@@ -11,8 +11,7 @@ Una **rete di flusso** è una tupla $G = (V, E, s, t, c)$ dove $G$ è un grafo d
 > [!IMPORTANT]
 >
 > - **DEF**: Un **st-cut** è una partizione $(A, B)$ di nodi dove $s\in A$ e $t\in B$
-> - **DEF**: La **capacità** di un cut è la somma di tutte le capacità degli archi uscenti diretti da $A$ verso $B$.
-> $$cap(A, B) = \sum_{e\in A} c(e)$$1
+> - **DEF**: La **capacità** di un cut è la somma di tutte le capacità degli archi uscenti diretti da $A$ verso $B$  $$cap(A, B) = \sum_{e\in A} c(e)$$
 > - **Min cut problem**: Trovare un cut di capacità minima.
  
 <img src="img/fordfulk/st_cut.png" width="400">
