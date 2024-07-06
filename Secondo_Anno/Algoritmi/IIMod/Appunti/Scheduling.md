@@ -131,7 +131,7 @@ IntervalPartitioning(Tasks)
 ```
 **Complessità Temporale**: $T(n) = O(n log n)$ se:
 - Ordinare in funzione del tempo di inizio in $O(n log n)$.
-- Possiamo memorizzare le classi in una coda con priorità, con chiave il tempo di fine di ciascun task.
+- Possiamo memorizzare le classi in una coda con priorità, con chiave il tempo di fine dell'ultimo task.
     - per allocare una nuova classe, `INSERT` la nuova classe nella coda con priorità.
     - per schedulare il $j - esimo$ task nella classe $k$, `INCREASE-KEY` della classe $k$ a $f_{j}$.
     - per determinare se il $j - esimo$ task è compatibile con una qualunque classe, confrontare $s_{j}$ con `FIND-MIN`.
@@ -150,7 +150,9 @@ IntervalPartitioning(Tasks)
 
 > [!IMPORTANT]
 > Teorema: L'algoritmo "earliest-start-time-first" è ottimale.
-> - Sia $d$ il numero di classi che l'algoritmo alloca
+> 
+> Sia $d$ il numero di classi che l'algoritmo alloca.
+> 
 > La classe $d$ è aperta perchè dobbiamo schedulare il $j-esimo$ task, che è incompatibile con tutti i task allocati nelle $d - 1$ classi.
 > Quindi ogni $d$ task finisce dopo $s_{j}$.
 > Dato che abbiamo ordinato in funzione del tempo di inizio, ognuno di questi task incompatibili iniziano prima di $s_{j}$.

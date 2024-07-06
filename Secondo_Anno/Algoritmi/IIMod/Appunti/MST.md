@@ -19,38 +19,40 @@ Un **ciclo** è un cammino chiuso nel grafo del tipo `a-b, b-c, ...., y-z, z-a`.
 <img src="img/mst/ciclo.png" width="300" />
 
 > [!IMPORTANT]
-> Cycle property: Sia $C$ un ciclo, e sia $f$ l'arco di costo massimo appartenente a $C$. Allora esiste un MST $T^{\star}$ che non contiene $f$.
-> Dim.  
-> - Supponiamo che $f$ appartiene a $T^{\star}$.
-> - Cancellando $f$ da $T^{\star}$, si crea un cut $S$ in $T^{\star}$.
-> - L'arco $f$ sta sia nel ciclo $C$ e sia nel cutset $D$ corrsipondente a $S$. Allora esiste un altro arco, $e$ che sta sia in $C$ che in $D$.
-> - $T^{'} = T^{\star} \cup ( e ) - ( f )$ è ancora uno spanning tree.
-> - Siccome $c_{e} \leq c_{f} => cost(T^{'}) \leq cost(T^{\star})$.
-> - Allora $T^{'}$ è un MST che non contiene $f$.
+> **Cycle property:** Sia $C$ un ciclo, e sia $f = (u,v)$ l'arco di costo massimo appartenente a $C$. Allora esiste un MST $T$ che non contiene $f$ (nessun MST contiene $f$).
+>
+> **Dimostrazione:**
+> - Sia $G = (V, E)$ un grafo con pesi positivi e consideriamo un ciclo $C$ in $G$ e sia $f = (u, v)$ l'arco di peso massimo in questo ciclo.
+> - Supponiamo che esista un **MST (Albero Minimo Ricoprente, connesso e aciclico)** $T$ che include l'arco $f = (u, v)$. Rimuovendo l'arco $f = (u, v)$ da $T$, spezziamo $T$ in due componenti connesse, ovvero otteniamo un taglio $(S, V - S)$.
+> - Poiché $C$ è un ciclo, rimuovendo $f = (u, v)$ ci sono ancora percorsi alternativi tra $u$ e $v$. Sia $P$ uno di questi percorsi. Ogni arco in $P$ ha peso non maggiore di $w(u, v)$ in quanto $f = (u, v)$ è l'arco di peso massimo di $C$.
+> - Sia $e = (x, y)$ un qualsiasi arco in $P$. Costruiamo $T^{'} = T - \{(u, v)\}$ e aggiungiamo l'arco $e$ a $T^{'}$, ripristinando la connettività. Dunque $T^{'}$ è uno Spanning Tree.
+> **MA**, $T^{'}$ ha peso totale minore di $T$ e poiché abbiamo supposto che $T$ è un MST troviamo una contraddizione. Dunque $T$ non è un MST che include $f$.
+> - $f = (u, v)$ essendo l'arco di peso massimo in $C$ non può far parte di nessun MST.
 
-<img src="img/mst/ciclop.png" width="200" />
+<img src="img/mst/ciclop.png" width="400" />
 
 ### Cut
-Il **cut** è un sottoinsieme di nodi $S$. (Definito anche come una partizione di $V$: $S$ e $V - S$).
-Il **cutset** $D$ di un cut $S$ è un sottoinsieme di archi con un nodo in $S$ e un nodo in $V - S$.
+- Il **cut** è un sottoinsieme di nodi $S$. (Definito anche come una partizione di $V$: $S$ e $V - S$).
+- Il **cutset** $D$ di un cut $S$ è un sottoinsieme di archi con un nodo in $S$ e un nodo in $V - S$.
 
 <img src="img/mst/cut.png" width="300" />
 
 > [!IMPORTANT]
-> Cut property: Sia $S$ un sottoinsieme di nodi, e sia $e$ l'arco di costo minimo con un nodo in $S$ e un nodo in $V - S$. Allora 
-> esiste un MST $T^{\star}$ contenente $e$.
-> Dim.  
-> - Supponiamo che $e$ non appartiene a $T^{\star}$.
-> - Aggiungendo $e$ a $T^{\star}$ crea un ciclo $C$ in $T^{\star}$.
-> - L'arco $e$ appartiene sia a $C$ che al cutset $D$ corrsipondente a $S$, allora esiste un altro arco, $f$ che appartiene sia a $C$ che a $D$.
-> - $T^{'} = T^{\star} \cup ( e ) - ( f )$ è ancora uno spanning tree.
-> - Siccome $c_{e} \leq c_{f} => cost(T^{'}) \leq cost(T^{\star})$.
-> - Allora $T^{'}$ è un MST contenente $e$.
+> **Cut property:** Sia $S$ un sottoinsieme di nodi, e sia $e = (u, v)$ l'arco di costo minimo con un nodo in $S$ e un nodo in $V - S$ ($e$ è l'arco di peso minimo che attraversa il taglio $(S, V - S)$. Allora esiste un MST contenente $e$ (qualsiasi MST contiene $e$).
+>
+> **Dimostrazione:** 
+> - Sia $G = (V, E)$ un grafo con pesi positivi e consideriamo il taglio $(S, V - S)$.
+> - Supponiamo che $e = (u, v)$ sia l'arco di peso minimo che attraversa il taglio $(S, V - S)$ con $u \in S$ e $v \in V -S$.
+> - Supponiamo ora che esiste un **MST (Albero Minimo Ricoprente, connesso e aciclico)** $T$ che non include l'arco $e = (u, v)$.
+> - Aggiungengo $e = (u, v)$ a $T$ otteniamo un ciclo $C$, poiché abbiamo un ciclo, deve contenere almeno un altro arco che attraversa il taglio $(S, V - S)$, e questo arco è $f = (x, y)$.
+> - **MA**, poiché $e = (u, v)$ è l'arco di peso minimo che attraversa il taglio, allora, $w(u, v) \leq w(x, y)$ ovvero $w(e) \leq w(f)$.
+> - Costruiamo dunque $T^{'}$ rimuovendo $f = (x, y)$ e aggiungendo l'arco $e = (u, v)$. Otteniamo sempre uno Spanning Tree poiché rimuovendo $f$ da $C$, non abbiamo più un ciclo.
+> - **MA**, il peso totale di $T^{'}$ **non è maggiore** del peso di $T$ $(cost(T^{'}) \leq cost(T))$. Poiché abbiamo supposto che $T$ è un MST, ma costruendo $T^{'}$ abbiamo ottenuto uno Spanning Tree di costo minore a $T$, allora $T$ non è un MST. Dunque ogni MST deve conetenere l'arco $e = (u, v)$. 
 
-<img src="img/mst/cutp.png" width="200" />
+<img src="img/mst/cutp.png" width="400" />
 
 > [!IMPORTANT]
-> L'intersezione tra un ciclo e un cutset contiene un numero pari di vertici.
+> L'intersezione tra un ciclo e un cutset contiene un numero pari di archi.
 
 <img src="img/mst/intersezione.png" width="300" />
 
