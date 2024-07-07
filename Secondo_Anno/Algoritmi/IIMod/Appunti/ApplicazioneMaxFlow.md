@@ -53,12 +53,10 @@ Esiste una corrispondenza 1-1 tra $k$ cammini indipendenti e flusso di valore $k
 
 
 - $(\Leftarrow)$: Siano $P_{1}, \dots, P_{k}$ $k$ cammini indipendenti in $G_{f}$. Sia 
-$$
-f(e) = 1 \text{ se l'arco } e \text{ appartiene al percorso } P_{j}
-$$
-$$
-f(e) = 0 \text{ altrimenti }
-$$
+$$f(e) = \begin{cases}
+  1 & \text{se l'arco} e \text{appartiene al percorso} P_j \\
+  0 & \text{altrimenti}
+\end{cases}$$
 
 - $(\Rightarrow)$: Sia $f$ un flusso intero in $G^{'}$ di valore $k$. Consideriamo l'arco $(s, u)$ con $f(s, u) = 1$. Per la conservazione del flusso esiste un arco $(u, f)$ con $f(u, v) = 1$. Continuiamo cosi fino a $t$ scegliendo sempre un nuovo arco. In questo modo otteniamo $k$ cammini indipendenti.
 
