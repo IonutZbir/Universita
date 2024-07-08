@@ -52,17 +52,17 @@ Possiamo risolvere dunques questo problema attraverso l'algoritmo di Ford-Fulker
 Esiste una corrispondenza 1-1 tra $k$ cammini indipendenti e flusso di valore $k$ in G.
 
 
-- $(\Leftarrow)$: Siano $P_{1}, \dots, P_{k}$ $k$ cammini indipendenti in $G_{f}$. Sia 
-$$f(e) = \begin{cases}
-  1 & \text{se l'arco} e \text{appartiene al percorso} P_j \\
-  0 & \text{altrimenti}
-\end{cases}$$
+- $(\Leftarrow)$: Siano $P_{1}, \dots, P_{k}$ $k$ cammini indipendenti in $G_{f}$. 
+
+Sia $f(e) = 1$ se l'arco $e \in P_{j}$ e $f(e) = 0$ altrimenti
+
+Poiché i percorso sono indipendenti, allora $f$ è un flusso di valore $k$.
 
 - $(\Rightarrow)$: Sia $f$ un flusso intero in $G^{'}$ di valore $k$. Consideriamo l'arco $(s, u)$ con $f(s, u) = 1$. Per la conservazione del flusso esiste un arco $(u, f)$ con $f(u, v) = 1$. Continuiamo cosi fino a $t$ scegliendo sempre un nuovo arco. In questo modo otteniamo $k$ cammini indipendenti.
 
 <img src="img/appMaxFlow/path_disjoints_reduction.png" width="300">
 
-
+Dunque, possiamo risolvere questo problema usando l'algoritmo di Ford - Fulkerson in tempo $O(mn)$
 
 ## 3. Segmentazione di imagini
 
