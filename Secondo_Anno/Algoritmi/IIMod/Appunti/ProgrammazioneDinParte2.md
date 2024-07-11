@@ -35,7 +35,7 @@ Adesso, abbiamo tutto il necessario per progettare l'algoritmo di programmazione
 
 **Equazione di Bellman**:
 - $OPT(j) = 0$ se $j = 0$. 
-- $OPT(j) = max${ $OPT(j - 1), w_{j} + OPT(p(j))$ } se $j > 0$. 
+- $OPT(j) = \max\{OPT(j - 1), w_{j} + OPT(p(j))\}\ se\ j > 0$. 
 
 ```
 Bottom-Up(Intervals I)
@@ -48,7 +48,7 @@ Bottom-Up(Intervals I)
 ```
 
 **Complessità temporale**: $T(n) = O(n\cdot logn)$
-- Per ordina $n$ job: $O(n\cdot logn)$ con `MergeSort`.
+- Per ordinare $n$ job: $O(n\cdot logn)$ con `MergeSort`.
 - Per calcolare `p[j]`: $O(n\cdot logn)$ con la `BinarySearch`.
 - Per calcolare `OPT[]`: $O(n)$.
 
@@ -69,7 +69,7 @@ M-Compute-Opt(j)
 > [!IMPORTANT]
 > - **Lemma**: La complessità temporale di questo algoritmo è $O(n\cdot logn)$.
 > - **Dim**: 
->   - In tempo $O(n\cdot logn)$ ordiano per finish-time e calcoliamo `p[j]` per ogni j.
+>   - In tempo $O(n\cdot logn)$ ordiniamo per finish-time e calcoliamo `p[j]` per ogni j.
 >   - Ogni invocazione di `M-Compute-Opt(j)` costa $O(1)$.
 >   - Defiano $\phi$ come il numero di elementi inizializzati in M. All'inzio $\phi = 0$ e inoltre, per tutta l'esecuzione $\phi \leq n$. Ad ogni chiamata ricorsiva, incrementiamo $\phi$ di 1 $=>$ che è $\leq 2n$ chimate ricorsive. Di conseguenza il costo di `M-Compute-Opt(n)` è $O(n)$.
 
@@ -145,13 +145,13 @@ Segmented-Least-Squares(Points, c)
 - Il "knapsack" (bisaccia, zaino, borsa) ha un peso limite $W$.
 - **GOAL**: Inserire gli elementi nella bisaccia massimizzando il valore totale senza superare il peso limite $W$.
 
-| $i$ | $w_{i}$ | $v_{i}$ |
-| :-: | :-----: | :-----: |
-|  1  |  1 USD  |  1 kg   |
-|  2  |  6 USD  |  2 kg   |
-|  3  | 18 USD  |  5 kg   |
-|  4  | 22 USD  |  6 kg   |
-|  5  | 28 USD  |   7kg   |
+|  $i$  | $w_{i}$ | $v_{i}$ |
+| :---: | :-----: | :-----: |
+|   1   |  1 USD  |  1 kg   |
+|   2   |  6 USD  |  2 kg   |
+|   3   | 18 USD  |  5 kg   |
+|   4   | 22 USD  |  6 kg   |
+|   5   | 28 USD  |   7kg   |
 
 Supponiamo di avere una bisaccia con peso limite $W$.
 - Il sottoinsieme {1, 2, 5} ha valore 35 USD e peso 10.
