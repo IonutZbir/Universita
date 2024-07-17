@@ -49,6 +49,34 @@ List-Scheduling(Machines, Jobs)
     return S
 ```
 
+> [!IMPORTANT]
+>
+> **Lemma 1**: Per ogni $k$, il makespan ottimo $L^* \geq t_{k}$
+> 
+> Qualche macchina deve processare il job che spende più tempo, che sia il job $t_{k}$ o un altro job.
+
+<img src="img/approx/lemma1.png" width=300>
+
+
+> [!IMPORTANT]
+>
+> **Lemma 2**: Il makespan ottimo $L^* \geq \frac{1}{m} \sum_{k} t_{k}$
+> 
+> Il tempo totale di processamento è $\sum_{k} t_{k}$. Una delle $m$ macchine deve svolgere almeno $\frac{1}{m}$ frazione del lavoro totale.
+
+<img src="img/approx/lemma2.png" width=300>
+
+> [!IMPORTANT]
+>
+> **Teorema**: L'algoritmo greedy è un 2-approssimazione.
+> 
+> **Dim**: Consideriamo la macchina $i$ con maggiore carico. Sia $j$ l'ultimo job assegnato alla macchina $i$. Quando il job $j$ è stato assegnato alla macchina $i$, essa ha avuto il minor carico. Il suo carico prima di assegnare il job $j$ era $L[i] - t_{j}$. Siccome $L[i] - t_{j} \leq L[k]\ \forall\ 1 \leq k \leq m$. Allora vale anche: 
+> $$L[i] - t_{j} \leq \frac{1}{m} \sum_{k} L[k] = \frac{1}{m} \sum_{k} t_{k} \leq L^*$$
+>
+> Quindi, $L = L[i] = (L[i] - t_{j}) + t_{j} \leq 2L^*$, per la disuguaglianza di prima e per il lemma 1.
+
+<img src="img/approx/th2approx.png" width=300>
+
 ### 1.5-Approx
 
 > [!NOTE]
@@ -56,7 +84,7 @@ List-Scheduling(Machines, Jobs)
 > **Idea**: Considera gli $n$ job ordinati in modo decrescente. Assegna il job $j-esimo$ alla macchina con carico minimo.
 
 ```
-List-Scheduling(Machines, Jobs)
+LPT-List-Scheduling(Machines, Jobs)
     Sort Jobs in decreasing order
 
     for i = 1 to m
@@ -70,8 +98,41 @@ List-Scheduling(Machines, Jobs)
     return S
 ```
 
+> [!IMPORTANT]
+>
+> **Lemma 3**: Se ci sono più di $m$ job, allora $L^* \geq 2t_{m + 1}$
+> 
+
+<img src="img/approx/lemma3.png" width=300>
+
+> [!IMPORTANT]
+>
+> **Teorema**: L'algoritmo LPT greedy è un $\frac{3}{2}$-approssimazione.
+> 
+> **Dim**: Consideriamo la macchina $i$ con maggiore carico. Sia $j$ l'ultimo job assegnato alla macchina $i$. Quando il job $j$ è stato assegnato alla macchina $i$, essa ha avuto il minor carico. Il suo carico prima di assegnare il job $j$ era $L[i] - t_{j}$. Siccome $L[i] - t_{j} \leq L[k]\ \forall\ 1 \leq k \leq m$. Allora vale anche: 
+> $$L[i] - t_{j} \leq \frac{1}{m} \sum_{k} L[k] = \frac{1}{m} \sum_{k} t_{k} \leq L^*$$
+>
+> Quindi, $L = L[i] = (L[i] - t_{j}) + t_{j} \leq \frac{3}{2}L^*$, per la disuguaglianza di prima e per il lemma 3.
+
 ## K-Centering
 
-Il problema $k-Center$ consiste nel trovare $k$ centri in modo che la distanza massima tra un sito e il centro più vicino sia minimizzata. Questo tipo di problema è comune in vari campi, come la gestione delle risorse, la logistica, e l'allocazione di servizi.
+Il problema **k-Center** consiste nel trovare $k$ centri in modo che la distanza massima tra un sito e il centro più vicino sia minimizzata. Questo tipo di problema è comune in vari campi, come la gestione delle risorse, la logistica, e l'allocazione di servizi.
 
 Dati in input $n$ siti e un intero $k > 0$. Dobbiamo selezionare $k$ centri $C$ in modo tale che la distanza massima dal sito più lontano al centro più vinico sia minimizzata. Il centro è un punto qualsiasi che serve come punto di riferimento per i siti circostanti.
+
+- $dist(x, y)$: distanza da $x$ a $y$
+- $dist(s_{i}, C) = \min_{c \in C} \{dist(s_{i}, c)\}$: distanza dal sito $s_{i}$ al centro più vicino.
+- $r(C) = \max_{i} \{dist(s_{i}, C)\}$: minimo raggio ricoprente
+
+L'obiettivo è dunque quello di trovare un insieme di centri $C$ tale che $r(C)$ è minima e $|C| = k$.
+
+```
+K-Center(k, Sites)
+    C = NULL
+    for i = 1 to k
+        s_i = argmax(s_i, C) // il sito più lontano da ogni centro
+        aggiungi s_i a C
+    return C
+```
+
+L'algoritmo greedy è un 2-approssimazione.
