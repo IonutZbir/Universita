@@ -1,0 +1,4 @@
+public enum Mansione {
+
+    DIRETTORE, RESPONSABILE, IMPIEGATO, STAGISTA
+}
