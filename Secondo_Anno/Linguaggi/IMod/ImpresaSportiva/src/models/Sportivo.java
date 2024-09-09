@@ -19,10 +19,10 @@ public class Sportivo {
         this.nome = nome;
         this.cognome = cognome;
         this.reti = new HashMap<>();
-        this.dataAssunzione = dataAssunzione;
         this.tipologia = tipologia;
         this.nrIscrizione = "TEAM_" + (++nrProgressivo);
         this.setLivello(livello);
+        this.setDataAssunzione(dataAssunzione);
     }
 
     public String getNome() {
@@ -59,6 +59,9 @@ public class Sportivo {
     }
 
     public void setDataAssunzione(LocalDate dataAssunzione) {
+        if (dataAssunzione.getYear() < 2000) {
+            throw new IllegalArgumentException("L'anno di assunzione deve essere >= 2000!");
+        }
         this.dataAssunzione = dataAssunzione;
     }
 
@@ -94,7 +97,5 @@ public class Sportivo {
         return "Sportivo [nome=" + nome + ", cognome=" + cognome + ", reti=" + reti + ", dataAssunzione="
                 + dataAssunzione + ", tipologia=" + tipologia + ", nrIscrizione=" + nrIscrizione + ", livello="
                 + livello + "]";
-    }
-
-    
+    }    
 }

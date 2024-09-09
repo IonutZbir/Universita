@@ -1,9 +1,0 @@
-package it.uniroma2.info.lmp;
-
-public class LMP {
-	public static void main(String[] args) {
-		PersonImp p1 = new PersonImp("Mario", "Rossi");
-		System.out.println(p1);
-		p1.saluta();
-	}
-}

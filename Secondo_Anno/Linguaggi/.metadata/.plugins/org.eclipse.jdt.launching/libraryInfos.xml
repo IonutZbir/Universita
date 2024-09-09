@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<libraryInfos>
-    <libraryInfo home="/app/eclipse/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_17.0.7.v20230425-1502" version="17.0.7"/>
-    <libraryInfo home="/usr/lib/jvm/java-21-openjdk" version="21"/>
-    <libraryInfo home="/app/eclipse/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_17.0.7.v20230425-1502/jre" version="17.0.7"/>
-    <libraryInfo home="/usr/lib/eclipse/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_17.0.8.v20230831-1047" version="17.0.8.1"/>
-    <libraryInfo home="/usr/lib/eclipse/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_17.0.8.v20230831-1047/jre" version="17.0.8.1"/>
-</libraryInfos>

@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"services","l":"GestioneSportivi"},{"p":"models","l":"GestioneSportiviInterface"},{"p":"models","l":"Sportivo"},{"p":"models","l":"TipologiaSportivo"}];updateSearchResults();
