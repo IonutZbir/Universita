@@ -39,6 +39,7 @@ public class GestionePresititi {
             if (prestito.getProdotto().equals(prodotto) && prestito.getNome().equals(nome)
                     && prestito.getCognome().equals(cognome)) {
                 prestito.setFine(LocalTime.now());
+                prestito.getProdotto().setQuantita(prestito.getProdotto().getQuantita() + 1);
                 archivioPrestiti.put(dataPrestito, prestito);
             }
         }
@@ -57,5 +58,4 @@ public class GestionePresititi {
         }
         return max;
     }
-
 }
