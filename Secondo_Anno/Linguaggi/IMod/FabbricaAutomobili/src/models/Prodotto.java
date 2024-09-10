@@ -1,60 +1,78 @@
 package models;
 
-import java.sql.Time;
 import java.util.ArrayList;
 
 public class Prodotto {
     private String identificativo;
     private String etichetta;
-    private double costoProduzione;
-    private double prezzoAcquisto;
-    private ArrayList<Componente> componenti;
-    private static double costoGiornaliero;
+    ArrayList<Componente> componenti;
+    private double costoGiornaliero;
+    private int tempoRealizzazione;
+    private double fattoreGuadagno;
 
-    public Prodotto(String identificativo, String etichetta, double costoProduzione, double prezzoAcquisto,
-            ArrayList<Componente> componenti) {
+    public Prodotto(String identificativo, String etichetta,
+            ArrayList<Componente> componenti, double costoGiornaliero, int tempoRealizzazione, double fattoreGuadagno) {
         this.identificativo = identificativo;
         this.etichetta = etichetta;
-        this.costoProduzione = costoProduzione;
-        this.prezzoAcquisto = prezzoAcquisto;
         this.componenti = componenti;
+        this.costoGiornaliero = costoGiornaliero;
+        this.tempoRealizzazione = tempoRealizzazione;
+        this.fattoreGuadagno = fattoreGuadagno;
     }
 
-    public int getNumeroComponenti(){
-        return componenti.size();
+    public String getIdentificativo() {
+        return identificativo;
     }
 
-    public int getStimaOrdinazione(){
-        int maxTime = 0;
-        for (Componente comp : componenti) {
-            maxTime = Math.max(maxTime, comp.getTempoOrdinazione());
+    public String getEtichetta() {
+        return etichetta;
+    }
+
+    public void setCostoGiornaliero(double costoGiornaliero) {
+        this.costoGiornaliero = costoGiornaliero;
+    }
+
+    public void setFattoreGuadagno(double fattoreGuadagno) {
+        this.fattoreGuadagno = fattoreGuadagno;
+    }
+
+    public int getTempoTotaleStimatoOrdineComponenti(){
+        int max = 0;
+        for (Componente comp : this.componenti) {
+            max = Math.max(max, comp.getTempoDiOrdinazione());
         }
-        return maxTime;
+        return max;
     }
 
-    public int getTempoTotAssemblaggio(){
-        int totTime = 0;
+    public int getNumeroDiComponenti(){
+        return this.componenti.size();
+    }
 
-        for (Componente comp : componenti) {
-            totTime += comp.getTempoOrdinazione();
+    public double getCostoDiRealizzazione(){
+        return (double)this.tempoRealizzazione * this.costoGiornaliero;
+    }
+
+    private double getCostoComplessivoComponenti(){
+        double costo = 0;
+        for (Componente comp : this.componenti) {
+            costo += comp.getCosto();
         }
-
-        return totTime;
+        return costo;
     }
 
-    public double getCostoDiProduzione(){
-        return getTempoTotAssemblaggio() * costoGiornaliero;
+    private double getCostoComplessivoProduzione(){
+        return this.getCostoComplessivoComponenti() + this.getCostoDiRealizzazione();
     }
 
-    public void setCostoGiornaliero(double costo){
-        this.costoGiornaliero = costo;
+    public double getPrezziAcquirenti(){
+        return this.getCostoComplessivoProduzione() + this.fattoreGuadagno;
     }
 
-    public ArrayList<Componente> getComponenti() {
-        return componenti;
+    @Override
+    public String toString() {
+        return "Prodotto [identificativo=" + identificativo + ", etichetta=" + etichetta + ", componenti=" + componenti
+                + ", getPrezziAcquirenti()=" + getPrezziAcquirenti() + "]";
     }
 
-    public void setComponenti(ArrayList<Componente> componenti) {
-        this.componenti = componenti;
-    } 
+    
 }

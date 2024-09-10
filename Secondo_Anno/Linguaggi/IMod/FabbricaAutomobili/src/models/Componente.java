@@ -1,54 +1,43 @@
 package models;
 
-import java.util.ArrayList;
-
-public class Componente extends Prodotto{
+public class Componente {
     private String nome;
     private String paese;
-    private int tempoOrdinazione; // giorni
-    private double costoProduzione; 
+    private Visibilita visibilita;
+    private int tempoDiOrdinazione;
+    private double costo;
 
-    public Componente(String identificativo, String etichetta, double costoProduzione, double prezzoAcquisto,
-            ArrayList<Componente> componenti, String nome, String paese, int tempoOrdinazione) {
-        super(identificativo, etichetta, costoProduzione, prezzoAcquisto, componenti);
+    public Componente(String nome, String paese, Visibilita visibilita, int tempoDiOrdinazione, double costo) {
         this.nome = nome;
         this.paese = paese;
-        this.tempoOrdinazione = tempoOrdinazione;
+        this.visibilita = visibilita;
+        this.tempoDiOrdinazione = tempoDiOrdinazione;
+        this.costo = costo;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getPaese() {
         return paese;
     }
 
-    public void setPaese(String paese) {
-        this.paese = paese;
+    public Visibilita getVisibilita() {
+        return visibilita;
     }
 
-    public int getTempoOrdinazione() {
-        return tempoOrdinazione;
+    public int getTempoDiOrdinazione() {
+        return tempoDiOrdinazione;
     }
 
-    public void setTempoOrdinazione(int tempoOrdinazione) {
-        this.tempoOrdinazione = tempoOrdinazione;
+    public double getCosto() {
+        return costo;
     }
 
-    public double getCostoProduzione() {
-        return costoProduzione;
+    @Override
+    public String toString() {
+        return "Componente [nome=" + nome + ", paese=" + paese + ", visibilita=" + visibilita + ", tempoDiOrdinazione="
+                + tempoDiOrdinazione + ", costo=" + costo + "]";
     }
-
-    public void setCostoProduzione(double costoProduzione) {
-        this.costoProduzione = costoProduzione;
-    }
-   
-    
-
-    
 }
