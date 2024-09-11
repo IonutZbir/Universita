@@ -5,6 +5,10 @@ import models.Esame;
 import models.Studente;
 
 public class Main {
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         Studente s1 = new Studente("Ionut", "Zbirciog", "21214141");
         Studente s2 = new Studente("Franchino", "ErCriminogeno", "1232151");

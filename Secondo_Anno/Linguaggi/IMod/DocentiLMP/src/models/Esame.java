@@ -25,11 +25,13 @@ public class Esame {
 
     
 
+    
+    /** 
+     * @return LocalDate
+     */
     public LocalDate getDataEsame() {
         return dataEsame;
     }
-
-
 
     public void getVotoStudentePerProva(Studente s, TipoProva tp){
         switch (tp) {
