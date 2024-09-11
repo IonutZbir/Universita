@@ -1,0 +1,5 @@
+filetype:ristorante
+partita_IVA:6321367
+sede:Milano
+categoria:italiano
+in_attività_dal:2023

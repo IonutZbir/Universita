@@ -1,0 +1,4 @@
+filetype:associazione
+sede:Napoli
+in_attività_dal:2000
+scopo:culturale

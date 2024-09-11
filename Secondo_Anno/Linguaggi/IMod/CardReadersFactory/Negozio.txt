@@ -1,0 +1,5 @@
+filetype:negozio
+partita_IVA:3113132141
+sede:Roma
+merce_venduta:12
+in_attività_dal:2012
