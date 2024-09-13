@@ -1,5 +1,0 @@
-filetype:negozio
-sede:roma
-partita_iva:123456789
-in_attivita_dal:2010
-merce_venduta:armi
