@@ -16,30 +16,26 @@ public class Prodotto{
         this.seqPrestiti = new ArrayList<>();
     }
 
-    public void addPrestito(LocalDate dataInizio, LocalDate dataPrevistaConsegna, LocalDate dataConsegna, String nome,
+    public void addPrestito(LocalDate dataInizio, LocalDate dataPrevistaConsegna, String nome,
             String cognome, double costoAffitto){
-        this.seqPrestiti.add(new Prestito(dataInizio, dataPrevistaConsegna, dataConsegna, nome, cognome, costoAffitto));
+        this.seqPrestiti.add(new Prestito(dataInizio, dataPrevistaConsegna, nome, cognome, costoAffitto));
     }
 
     public void setTitolo(String titolo) {
         this.titolo = titolo;
     }
 
-
     public void setEntePubblicante(String entePubblicante) {
         this.entePubblicante = entePubblicante;
     }
-
 
     public void setAnno(int anno) {
         this.anno = anno;
     }
 
-
     public void setSeqPrestiti(ArrayList<Prestito> seqPrestiti) {
         this.seqPrestiti = seqPrestiti;
     }
-
 
     public String getTitolo() {
         return titolo;

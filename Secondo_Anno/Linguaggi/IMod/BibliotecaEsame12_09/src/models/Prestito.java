@@ -10,26 +10,29 @@ public class Prestito {
     String cognome;
     private double costoAffitto;
     private static final double PENA = 10; 
-    public Prestito(LocalDate dataInizio, LocalDate dataPrevistaConsegna, LocalDate dataConsegna, String nome,
+    public Prestito(LocalDate dataInizio, LocalDate dataPrevistaConsegna, String nome,
             String cognome, double costoAffitto) {
         setDate(dataInizio, dataPrevistaConsegna, dataConsegna);
         this.costoAffitto = costoAffitto;
         this.nome = nome;
         this.cognome = cognome;
-        checkConsegna();
     }
 
-    private void checkConsegna(){
-        if(dataConsegna != null && dataPrevistaConsegna != null && dataConsegna.isAfter(dataPrevistaConsegna) ){
+    public void setDataConsegna(LocalDate dataConsenga){
+        this.dataConsegna = dataConsenga;
+        if(checkConsegna()){
             this.costoAffitto += PENA;
-            System.out.println("Hai consegnato in ritardo.\nNuovo costo: " + this.costoAffitto);
-        }
+            System.out.println("Hai consegnato in ritardo, nuovo costo " + this.costoAffitto);
+        } 
+    }
+
+    private boolean checkConsegna(){
+        return this.dataConsegna.isAfter(this.dataPrevistaConsegna);
     }
 
     public void setDate(LocalDate dataInizio, LocalDate dataPrevistaConsegna, LocalDate dataConsegna) {
         if(dataInizio.isAfter(dataConsegna) || dataInizio.isAfter(dataPrevistaConsegna)){
-            System.out.println("La data di inizio è invalida: " + dataInizio);
-            return;
+            throw new IllegalArgumentException("La data di inizio non può essere dopo la data di consegna o consegna prevista!");
         }
         this.dataInizio = dataInizio;
         this.dataPrevistaConsegna = dataPrevistaConsegna;
@@ -37,10 +40,6 @@ public class Prestito {
     }
 
     public void setDataPrevistaConsegna(int giorni) {
-        if(this.dataPrevistaConsegna == null){
-            System.out.println("Non è stato possibile modificare la data prevista di consegna per il seguente prestito:\n " + toString() + "\n");
-            return;
-        }
         this.dataPrevistaConsegna = this.dataPrevistaConsegna.plusDays(giorni);
     }
     

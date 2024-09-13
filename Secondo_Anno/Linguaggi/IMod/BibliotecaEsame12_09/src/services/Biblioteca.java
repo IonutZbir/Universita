@@ -3,6 +3,7 @@ package services;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 import models.Dvd;
 import models.Libro;
@@ -23,8 +24,7 @@ public class Biblioteca {
     public Prodotto getProdotto(String titolo){
         Prodotto p = archivioProdotti.get(titolo);
         if(p == null){
-            System.out.println("Il prodotto non è stato trovato");
-            System.exit(0);
+            throw new NoSuchElementException("Il prodotto " + titolo + " non è presente!");
         }
         return p;
     }
@@ -35,16 +35,14 @@ public class Biblioteca {
         }
     }
 
-    public int maxGiorniPrestiti(Prodotto p, String  nome, String cognome){
+    public int maxGiorniPrestiti(Prodotto p){
         int max = 0;
         for (Prestito pre : p.getSeqPrestiti()) {
-            if(pre.getNome().equals(nome) && pre.getCognome().equals(cognome)){
                 Period periodo = Period.between(pre.getDataInizio(), pre.getDataConsegna());
                 int days = periodo.getDays();
                 if(days > max){
                     max = days;
                 }
-            }
         }
         return max;
     }
