@@ -164,7 +164,45 @@ Per migliorare la probabilità di errore, esegue l'algoritmo $k$ volte sulla ste
    2. Contrai i 2 nodi connessi da quel arco ed elimina tutti gli archi che collegano i due nodi
 2. Ritorna l'insieme di archi che collegano i due 2 nodi rimanenti.
 
+!!! note
+    **Invariante**: Ad ogni iterazione, il numero di nodi decresce di 1, dopo $n-2$ passi, otteniamo sempre un grafo/multigrafo con 2 nodi.
+
 L'algoritmo ogni volta che fa un contrazione di un arco, si deve ricordare i nodi che sono confluiti nel metanodo. Perché poi alla fine dell'algoritmo bisogna ritornare l'insieme degli archi contratti, per cui ha bisogno di ricordare ogni volta qualche arco ha contratto.
+Quindi si deve ricordare tutte le contrazzione effettuate nel corso dell'algoritmo.
 
 ![Edge Contraction](img/edge_contraction.png "Esempio di min-cut con edge contraction"){width="600" style="display: block; margin: 0 auto"}
 
+!!! success
+    **Teorema**: L'algoritmo restituisce un taglio minimo con probabilità $\geq \frac{1}{n(n-1)}$. Questa rappresenta la probabilità di successo che decresce con l'aumentare di $n$, però la possiamo abbassare andando sempre a ripetere l'algoritmo $k$ volte sulla stessa istanza.
+
+Se ripeti l'algoritmo indipendentemente per un numero polinomiale di volte e adotti una strategia di selezione (come prendere il minimo o il massimo risultato, a seconda del contesto), puoi ridurre significativamente la probabilità di fallimento.
+Se la probabilità di successo in un singolo tentativo è $\frac{1}{p(n)}$, ripetendo l'algoritmo $k$ volte, la probabilità complessiva di fallimento diminuisce esponenzialmente rispetto a $k$. Con un numero sufficiente di tentativi (dell'ordine dell'inverso della probabilità di successo, eventualmente moltiplicato per un fattore logaritmico per ottimizzare), puoi garantire che almeno uno dei tentativi avrà successo con alta probabilità.
+
+!!! note
+    **Lemma**: La contrazione dei archi non riduce la dimensione del minimo taglio. La contrazione può soltanto aumentarla.
+
+Adesso procediamo con l'analisi dell'algoritmo.
+Supponiamo di avere un min-cut $C$ di dimensione $k$. L'obiettivo è quello di stimare la probabilità che nessun arco appartenente a $C$ venga contratto nel processo di contrazione, poiché se un arco del min-cut $C$ viene contratto, l'algoritmo ha *fallito* nel trovare il min-cut corretto.
+
+Andiamo a definire ora i seguenti eventi:
+
+- $E_i$: L'evento in cui l'arco contratto nell'iterazione $i$ non è in $C$
+- $F_i = \bigcap_{j=1}^i E_i$: L'evento in cui nessun arco di $C$ è stato contratto nelle prime $i$ iterazioni.
+
+Dobbiamo quindi calcolare la probabilità $Pr(F_{n-2})$. Iniziamo calcolando $Pr(E_1) = Pr(F_1)$. Poiché il min-cut ha dimensione $k$, tutti i nodi del grafo devono avere grado almeno $k$, allora il numero di archi è almeno $\frac{nk}{2}$. Il primo arco è scelto uniformemente random dal insieme degli archi, dunque
+$$Pr(E_1) = Pr(F_1) \geq 1 - \frac{k}{\frac{nk}{2}} = 1 - \frac{2}{n}$$
+
+Supponiamo ora che la prima contrazione non abbia eliminato un arco di $C$, quindi andiamo a condizionare su $F_1$. Ora abbiamo un grafo con cut-set di dimensione sempre $k$ (appunto perché abbiamo supposto di non aver eliminato un arco di $C$) e avente $n-1$ nodi e di conseguenza $\frac{(n - 1)k}{2}$ archi, dunque
+$$Pr(E_2|F_1) \geq 1 - \frac{k}{\frac{(n - 1)k}{2}} = 1 - \frac{2}{n - 1}$$
+
+Generalizzando, otteniamo
+$$Pr(E_i|F_{i-1}) \geq \frac{k}{\frac{(n - i + 1)k}{2}} = 1 - \frac{2}{n - i + 1}$$
+
+Per calcolare infine $Pr(F_{n-2})$ usiamo $Pr(A \cap B) = Pr(A|B)Pr(B)$, e andando a iterare otteniamo che
+$$Pr(F_{n-2}) = \frac{2}{n(n - 1)}$$
+
+Siccome l'algoritmo è un **one-sided-error**, possiamo ridurre la probabilità ripetendo l'algoritmo per $n(n - 1)ln(n)$ volte e andando poi a sciegliere come minimo taglio, in minimo di tutte le iterazioni, allora la probabilità che l'output non è il minimo taglio è delimitata da
+$$\biggl(1 - \frac{2}{n(n-1)}\biggr)^{n(n-1)ln(n)} \leq e^{-2ln(n)} = \frac{1}{n^2}$$
+
+!!! note
+    Nella disuguaglianza sopra è stata usata la regola $1 - x \leq e^{-x}$
