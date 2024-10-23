@@ -206,3 +206,41 @@ $$\biggl(1 - \frac{2}{n(n-1)}\biggr)^{n(n-1)ln(n)} \leq e^{-2ln(n)} = \frac{1}{n
 
 !!! note
     Nella disuguaglianza sopra è stata usata la regola $1 - x \leq e^{-x}$
+
+## Applicazione: Quick Sort
+
+Il Quick Sort è un algoritmo di ordinamento. Dato un insieme S di elementi, li ordina in modo crescente o decrescente. Tale algoritmo
+ha complessità worst case $O(n^2)$. Osserviamo ora 2 versione del Quick Sort che migliorano la complessità worst case.
+
+### RQS
+
+!!! note
+    Procedure Random-Quick-Sort($S$)
+        1. Scegli uniformemente random un elemento $y$ di $S$
+        2. Confronta gli elementi di $S$ con $y$ e siano $$S_1 = \{x \in S - \{y\} | x \leq y\},\ S_2 = \{x \in S - \{y\} | x > y\}$$
+        3. Return Random-Quick-Sort($S_1$),y,Random-Quick-Sort($S_2$)
+
+Dunque abbiamo modificato il Quick-Sort in modo da scegliere il pivot in modo randomico. La radomizzazione fa sì che è molto improbabile che vengano scelti ripetutamente i perni sbagliati. Dimostreremo in seguito che il numero di confronti che esegue il RQS è $2n ln(n) + (n)$ rientrando dunque nel lower bound $\Omega(n ln(n))$ degli algoritmi di ordinamento basati su confronto.
+
+!!! success
+    **Teorema**: Supponiamo che, quando avviene la scelta random del pivot nel RQS, esso è scelto indipendentemente dagli altri e uniformemente random. Allora, per ogni input, il numero atteso di confronti eseguiti dal RQS è $2n ln(n) + O(n)$.
+
+    **Dimostrazione**: Siano $y_1, y_2, \dots, y_n$ gli elementi di $S$ ordinati in ordine crescente. Per $i < j$, definiamo $X_{ij}$ una variabile aleatoria che assume valore 1 se due elementi $y_i$ e $y_j$ sono stati confrontati durante l'esecuzione dell'algortimo, altrimenti 0. Allora il numero totale di confronti è $$X = \sum_{i = 1}^{n}\sum_{j > i} X_{ij}$$
+    Noi siamo interessati dunque a calcolare $E[X] = E\biggl[\sum_{i = 1}^{n}\sum_{j > i} X_{ij}\biggr] = \sum_{i = 1}^{n}\sum_{j > i} E[X_{ij}]$.
+    Dobbiamo adesso calcolare quanto vale $Pr(X_{ij}) = 1$. $y_{i}$ è confrontato con $y_{j}$ se soltanto se uno dei due è scelto come pivot dall'insieme $Y^{ij} = \{y_{i}, y_{i + 1}, \dots, y_{j - 1}, y_{j}\}$. Questo perche se $y_i\ (o\ y_j)$ è il primo pivot selezionato da questo insieme, allora $y_i$ e $y_j$ dovranno stare nella stessa sottolista, e di conseguenza verranno confrontati una volta sola. Altrimenti, se nessuno dei due è stato scelto come pivot, $y_i$ e $y_j$ saranno separati in due sottoliste distinte e non verranno mai confrontati. Siccome i pivot sono scelti uniformemente random dall'insieme $Y^{ij}$, allora la probabilità che essi verranno scelti è: $Pr(X_{ij} = 1) = \frac{2}{j - i + 1}$. Andando a fare i calcoli otteniamo che $$E[X] \leq n\ \sum_{k = 1}^{n} \frac{2}{k} \leq 2nH_n = n ln(n) + O(n)$$
+
+### DQS
+
+!!! note
+    Procedure Deterministic-Quick-Sort($S$)
+        1. Sia $y$ il primo elemento di $S$
+        2. Confronta gli elementi di $S$ con $y$ e siano $$S_1 = \{x \in S - \{y\} | x \leq y\},\ S_2 = \{x \in S - \{y\} | x > y\}$$
+        3. Return Deterministic-Quick-Sort($S_1$),y,Deterministic-Quick-Sort($S_2$)
+
+Dunque in questo caso usiamo l'algoritmo deterministico del Quick Sort ma consideriamo un modello probabilistico per l'input. Una *permutazione* di un insieme di $n$ elementi è solo una delle $n!$ possibili ordinamenti degli elementi di quest'insieme. Invece di trovale il peggior input possibile, assumiamo che l'input ci è stato dato in modo random.
+
+!!! success
+    **Teorema**: Supponiamo che, quando avviene la scelta random del pivot nel RQS, esso è il primo elemento della sottolista. Se l'input è scelto uniformememente random da tutte le sue permutazioni di valori, allora, il numero atteso di confronti eseguiti dal RQS è $2n\ ln(n) + O(n)$.
+
+    **Dimostrazione**: La dimostrazione è essenzialmente simile a quella del RQS. Come prima, $y_i$ e $y_j$ sono confrontati se soltanto se uno dei due è scelto come pivot dall insieme $Y^{ij}$. Siccome l'ordine degli elementi in ciascuna sottolista è lo stesso come nell'originale, allora il primo pivot selezionato dall'insieme $Y^{ij}$ è il primo elemento dell'insieme e poiché tutte le possibili permutazioni dei valori di input sono ugualmente probabili, ogni elemento in $Y^{ij}$ è ugualmente probabile per essere il primo elemento. Da qui possiamo usare la linearità della speranza matematica e otteniamo che 
+    $$E[X] = E\biggl[\sum_{i = 1}^{n}\sum_{j > i} X_{ij}\biggr] = O(n\ ln(n))$$
