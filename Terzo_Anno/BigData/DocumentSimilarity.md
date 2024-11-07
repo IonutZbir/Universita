@@ -85,6 +85,10 @@ Una volta calcolata la matrice caratteristica, possiamo già iniziare a determin
 
 La tecnica utilizzata per questa operazione è chiamata **MinHashing**. Per eseguire il *minhash* di un insieme rappresentato da una colonna della matrice caratteristica, si applica una permutazione casuale delle righe. Il minhash di una colonna è quindi l'indice della prima riga, nella colonna permutata, in cui compare un 1.
 
+![Lettura di una permutazione](img/permutazione.png){width="600" style="display: block; margin: 0 auto"}
+
+!!! note
+    Dunque la permutazione $\pi(x)$ si legge in ordine crescente, non dalla prima posizione, ma dall'elemento 1.
 !!! success
     Supponiamo che le righe della matrice $M$ sono permutate, secondo una permutazione casuale $\pi$.
     **Def**: Per ogni colonna $C$, definiamo **Min-Hash function** $h_{\pi}(c)$ l'indice della prima riga (nella permutazione $\pi$) in cui nella colonna $C$ appare il valore 1 (è lo chiamiamo $min(\pi(C))$).
@@ -97,3 +101,53 @@ Questo significa che, se abbiamo due insiemi e applichiamo una permutazione casu
 
 - Se $J.sim(C_1, C_2)$ è **alta**, allora con alta probabilità $h(C_1) = h(C_2)$
 - Se $J.sim(C_1, C_2)$ è **bassa**, allora con alta probabilità $h(C_1) \neq h(C_2)$
+
+!!! success
+    **Teorema - J-Similarity Preserving**: Fissate $C_1$ e $C_2$ due colonne della matrice caratteristica. Scelta uniformemente random una permutazione $\pi$. Allora
+    $$Pr_{\pi}[h_{\pi}(C_1) = h_{\pi}(C_2)] = J.sim(C_1, C_2)$$
+
+    Consideriamo un documento \( X \), cioè una colonna nella matrice caratteristica. Ogni riga di \( X \) corrisponde a uno *shingle* (per esempio, una sottostringa di testo), e la cella è impostata a 1 se lo shingle appartiene al documento \( X \), 0 altrimenti. Pertanto, possiamo vedere \( X \) come un insieme di shingle, con \( y \in X \) che indica uno shingle presente in \( X \) (ossia, la cella in corrispondenza di \( y \) è posta a 1).
+
+    **Dimostrazione:**
+
+    **Passo 1**: Calcolo della probabilità che uno shingle sia il minimo in una permutazione.
+
+    Per una permutazione casuale $\pi$, la probabilità che uno shingle specifico $y \in X$ venga mappato come *minhash* della colonna $X$ è data da:
+    \[
+    \Pr[\pi(y) = \min(\pi(X))] = \frac{1}{|X|}
+    \]
+    poiché ogni shingle $y \in X$ ha uguale probabilità di essere il minimo rispetto a $\pi$.
+
+    **Passo 2**: Calcolo della probabilità che $h_{\pi}(C_1) = h_{\pi}(C_2)$.
+
+    Per stimare $J.sim(C_1, C_2)$, dobbiamo calcolare la probabilità che il *minhash* delle due colonne $C_1$ e $C_2$ sia lo stesso, ovvero $\Pr_{\pi}[h_{\pi}(C_1) = h_{\pi}(C_2)]$.
+
+    1. Sia $y$ l'elemento tale che $\pi(y) = \min(\pi(C_1 \cup C_2))$. Ciò significa che $y$ è l'elemento con il valore minimo nella permutazione unione $C_1 \cup C_2$.
+    
+    2. Notiamo che:
+    - Se $y \in C_1$, allora $\pi(y) = \min(\pi(C_1))$.
+    - Se $y \in C_2$, allora $\pi(y) = \min(\pi(C_2))$.
+    
+    In altre parole, il valore minimo della permutazione per $C_1$ o $C_2$ sarà dato da uno shingle presente in almeno una delle due colonne.
+
+    3. Il caso favorevole, in cui $h_{\pi}(C_1) = h_{\pi}(C_2)$, si verifica se e solo se $y \in C_1 \cap C_2$ (ossia, $y$ è uno shingle presente in entrambe le colonne $C_1$ e $C_2$). In tal caso, $y$ sarà il minimo in entrambe le colonne.
+
+    4. Poiché la permutazione $\pi$ è uniforme e casuale, possiamo dire che la probabilità che il minimo di $\pi(C_1 \cup C_2)$ appartenga sia a $C_1$ sia a $C_2$ è proprio la probabilità di intersezione rispetto all'unione degli shingle, cioè:
+    \[
+    \Pr_{\pi}[h_{\pi}(C_1) = h_{\pi}(C_2)] = \frac{|C_1 \cap C_2|}{|C_1 \cup C_2|} = J.sim(C_1, C_2)
+    \]
+
+    **Conclusione**
+
+    Abbiamo dimostrato che la probabilità che il *minhash* di $C_1$ sia uguale al *minhash* di $C_2$ per una permutazione casuale $\pi$ è esattamente la Jaccard Similarity tra $C_1$ e $C_2$. Questo conclude la dimostrazione.
+
+Dalla matrice caratteristica iniziale possiamo ottenere una matrice molto più piccola, chiamata **matrice delle firme (signature matrix)**. Se applichiamo una sola permutazione casuale, la matrice delle firme sarà costituita da $N$ colonne e una sola riga. Tuttavia, aumentando il numero di permutazioni e quindi il numero di firme per ciascuna colonna, possiamo migliorare la stima della Jaccard Similarity. Questo processo di miglioramento della "fiducia" nella stima di similarità si basa sul concetto di *concentrazione intorno al valore atteso*. Di conseguenza, per ciascuna colonna otteniamo una serie di Min-Hash signatures.
+
+Definiamo quindi la firma di un documento $C$ come un vettore di più Min-Hash signatures indipendenti:
+
+$$SIG(C) = \langle h_{\pi_1(C)}, h_{\pi_2(C)}, \dots, h_{\pi_t(C)} \rangle$$
+
+dove $t$ è un numero molto grande di permutazioni $(t >> 1)$. Questa raccolta di firme consente di aumentare la precisione nella stima di similarità tra due colonne.
+
+Per due vettori di signature, $SIG(C_1)$ e $SIG(C_2​)$, definiamo la similarità $Sign-Sim$ come la frazione di signature scelte in cui $C_1$ e $C_2$​ sono d'accordo (cioè hanno lo stesso Min-Hash signature). In pratica, si calcola la *media* delle similarità ottenute su tutte le permutazioni considerate. Al crescere di *t*, questa media tende al valore atteso, ovvero alla Jaccard Similarity.
+In pratica contiamo in numero di righe per cui due colonne hanno lo stesso minhash.
