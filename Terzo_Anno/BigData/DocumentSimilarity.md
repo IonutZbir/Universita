@@ -149,5 +149,31 @@ $$SIG(C) = \langle h_{\pi_1(C)}, h_{\pi_2(C)}, \dots, h_{\pi_t(C)} \rangle$$
 
 dove $t$ è un numero molto grande di permutazioni $(t >> 1)$. Questa raccolta di firme consente di aumentare la precisione nella stima di similarità tra due colonne.
 
-Per due vettori di signature, $SIG(C_1)$ e $SIG(C_2​)$, definiamo la similarità $Sign-Sim$ come la frazione di signature scelte in cui $C_1$ e $C_2$​ sono d'accordo (cioè hanno lo stesso Min-Hash signature). In pratica, si calcola la *media* delle similarità ottenute su tutte le permutazioni considerate. Al crescere di *t*, questa media tende al valore atteso, ovvero alla Jaccard Similarity.
-In pratica contiamo in numero di righe per cui due colonne hanno lo stesso minhash.
+Per due vettori di signature, $SIG(C_1)$ e $SIG(C_2)$, definiamo la similarità $Sign-Sim$ come la frazione di signature scelte in cui $C_1$ e $C_2$​ sono d'accordo (cioè hanno lo stesso Min-Hash signature). Dunque, si calcola la *media* delle similarità ottenute su tutte le permutazioni considerate. Al crescere di *t*, questa media tende al valore atteso, ovvero alla Jaccard Similarity.
+
+**Random-Algorithm-Doc-Pair-Check**($Col_1$, $Col_2$, $T$)
+
+- Col_1, Col_2 colonne della matrice caratteristica
+- T parametreo di confidenza
+
+1. Scegli una permutazione uniformemente random $\pi_j \in \Pi_m$
+2. Calcola il *minhash* $h_{\pi j}(C_1)$ e $h_{\pi j}(C_2)$
+3. Return $Sign-Sim(C_1, C_2) = \frac{\bigm| \{\ j:\ h_{\pi j}(C_1)\ =\ h_{\pi j}(C_2)\ \} \bigm|}{t}$
+
+!!! success
+    **Corollario**: Per $t$ che tende a $\infty$, $Sign-Sim(C_1, C_2) = J.sim(C_1, C_2)$.
+
+#### Complessità spaziale MinHash
+
+Scegliamo un $t = 100$ fisso di permutazioni random delle righe. Questo numero di permutazioni viene utilizzato per generare una firma (o sketch) che rappresenta il documento o l'insieme in maniera compatta.
+
+Sia $SIG(i, C)$ l'indice della prima riga che contiene un valore 1 nella colonna $C$ secondo la permutazione casuale $i$. Ogni valore $SIG(i, C)$ occupa spazio proporzionale a $\theta(log(|C|)) = \theta(log(m))$ dove $m$ rappresenta il numero totale di possibilit $k-shingles$. L'insieme di tutti questi $SIG(i, C)$, cioè $SIG(*, C)$ rappresenta una firma del documento o dell'insieme $C$. Questa firma è compatta, circa 100 byte. In termini generali, la dimensione della firma è proporzionale a $theta(t\ log(m))$.
+
+In coclusione, grazie al minhash si è riusciti a "comprimere" i vettori di bit lunghi in firme più corte, cioè in **sketch**, in pratica si passa da un vettore di dimensione $m = |\Sigma|^k$ ad un vettore $t\ log(m)$.
+
+#### Ottimizzazione MinHash
+
+La fase di Min-Hash, quindi di comprimere la matrice grande richiede di creare diverse permutazioni random delle righe della matrice originale per ciascun documento. Sapendo che $m = |\Sigma|^k$, e supponendo di usare l'alfabeto inglese e $k = 10$, allora anche generare una **SOLA** permutazione per $27^{10}$ righe sarebbe troppo dispendioso in termini di tempo e risorse.
+
+Invece di generare $t$ permutazioni, si sostituiscono le permutazione con le funzioni hash randomizzate (**Randomized Hash Functions**). Si scelgono $t$ funzioni hash $f_i$. Ogni funzione hash  $f_i: [m] \rightarrow [m]$, mappando le righe in modo casuale (ci potrebbe essere delle collisioni, ma vedremo che la probabilità delle collisioni è molto bassa).
+
