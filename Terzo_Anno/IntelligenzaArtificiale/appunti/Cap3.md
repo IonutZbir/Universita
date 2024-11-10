@@ -132,3 +132,113 @@ Questo implica che l'agente esplora lo spazio in modo "cieco", ovvero seguendo u
 ### 3.4.1 Ricerca in ampiezza
 
 Quando tutte le azioni hanno lo stesso costo, una strategia appropriata è la **ricerca in ampiezza (BFS)**, in cui si espande prima il nodo radice, poi tutti i suoi successori e cosi via. Potremmo implementare la ricerca in ampiezza come chiamata di `RICERCA-BEST-FIRST` con la funzione di valutazione $f(n)$ uguale alla profondità del nodo, cioè al numero di azioni necessario per raggiungerlo.
+
+Per ottenere maggior efficienza, invece di una coda con priorità possiamo usare una coda FIFO. Inoltre, una volta espanso un nodo non possiamo più trovare un cammino migliore per raggiungerlo e quindi possiamo effettuare un **test obiettivo anticipato**, controllando se un nodo è soluzione non appena viene *generato*, invece di effettuare il **test obiettivo a posteriori** come nella ricerca best-first.
+La ricerca in ampiezza è ottimale rispetto al costo per problemi in cui tutte le azioni hanno lo stesso costo, ma non per problemi che non hanno tale proprietà. In termini di costo, supponendo che ogni stato ha $b$ successori, allora il costo è $O(b^d)$ dove $d$ è la profondità dell'albero.
+
+![BFS](img/bfs_sim.png){width=400px, style="display: block; margin: 0 auto"}
+
+Oltre alla complessità temporale ad essere esponenziale, anche la complessità spaziale è $O(b^d)$ in quanto tutti i nodi rimangono in memoria. Nella ricerca in ampiezza, i requisiti di memoria rappresentano un problema più importante rispetto al tempo di esecuzione. Tuttavia, il tempo rimane comunque un fattore importante.
+
+![BFS](img/bfs_code.png){width=400px, style="display: block; margin: 0 auto"}
+
+### 3.4.2 Algoritmo di Dijkstra o ricerca a costo uniforme
+
+Quando le azioni hanno costi diversi, la scelta ovvia è quella di usare una ricerca best-first in cui la funzione di valutazione è il costo del cammino dalla radice al nodo corrente. Questa ricerca, che nella comunità dell’informatica teorica si chiama **algoritmo di Dijkstra**, nella comunità dell’IA si chiama **ricerca a costo uniforme**.
+
+![RCU](img/rcu.png){width=400px, style="display: block; margin: 0 auto"}
+
+La complessità della ricerca a costo uniforme è caratterizzata in termini di $C^*$, il costo della soluzione ottima,ed $\epsilon$, un limite inferiore imposto al costo di ogni azione, con $\epsilon > 0$. Quindi, nel caso peggiore la complessità temporale e spaziale dell’algoritmo è $O(b^{1+\frac{C^*}{\epsilon}})$, che può essere molto maggiore di $b^d$.
+
+### 3.4.3 Ricerca in profondità e problema della memoria
+
+La ricerca in profondità espande sempre per primo il nodo a profondità maggiore nella frontiera. Potrebbe essere implementata con una chiamata di `RICERCA-BEST-FIRST` in cui la funzione di valutazione $f$ è l’opposto (negativo) della profondità.
+
+Per spazi degli stati finiti che sono alberi, la ricerca in profondità è efficiente e completa; per spazi degli stati aciclici potrebbe arrivare a espandere lo stesso stato più volte attraverso cammini diversi.
+
+In spazi degli stati ciclici, la ricerca in profondità può bloccarsi in un ciclo infinito, perciò alcune implementazioni controllano ciascun nodo nuovo per verificare la presenza di cicli. Infine, in spazi degli stati infiniti la ricerca in profondità non è sistematica: può entrare in un cammino infinito, anche se non vi sono cicli. Quindi, la ricerca in profondità è incompleta.
+
+Pur avendo tutti questi problemi, la ricerca in profondità è spesso utilizzata quando è necessario effettuare una ricerca ad albero, in quanto ha esigenze di memoria più piccole in quanto non viene mantenuta una tabella dei nodi raggiunti e la frontiera è molto piccola.
+
+Per uno spazio degli stati finito e a forma di albero, una ricerca ad albero in profondità richiede un tempo proporzionale al numero degli stati e ha una complessità di memoria solo $O(bm)$, dove $b$ è il fattore di ramificazione e $m$ è la massima profondità dell’albero.
+
+![DFS](img/dfs.png){width=400px, style="display: block; margin: 0 auto"}
+
+Esiste una variante della ricerca in profondità, la ricerca con **backtracking**.
+
+### 3.4.4 Ricerca a profondità limitata e ad approfondimento limitato
+
+Per evitare che la ricerca in profondità si perda in un cammino infinito possiamo usare la **ricerca a profondità limitata**, in cui forniamo un limite di profondità, $l$, e consideriamo tutti i nodi a profondità $l$ come se non avessero successori. La complessità temporale è $O(b^l)$ è spaziale $O(bl)$. Sfortunatamente, se si sceglie male $l$ l’algoritmo non riuscirà a trovare la soluzione, per cui è ancora incompleto. La **ricerca ad approfondimento iterativo** risolve il problema di trovare un buon valore di $l$ provando tutti i valori: prima 0, poi 1, poi 2, e così via fino a quando si trova una soluzione, oppure la ricerca a profondità limitata restituisce il valore *fallimento* anziché il valore soglia.
+
+Come nella ricerca in profondità, i requisiti di memoria sono modesti: $O(bd)$ quando esiste una soluzione, $O(bm)$ su spazi degli stati finiti senza soluzione. La ricerca ad approfondimento operativo è ottima per problemi in cui tutte le azioni hanno lo stesso costo, ed è completa su spazi degli stati aciclici finiti, o su qualsiasi spazio degli stati finito quando controlliamo i nodi per la presenza di cicli risalendo l’intero cammino.
+La complessità temporale è $O(b^d)$ quando esiste una soluzione, $O(b^m)$ quando non esiste.
+
+![RPL](img/rpl.png){width=400px, style="display: block; margin: 0 auto"}
+
+### 3.4.5 Ricerca bidirezionale
+
+Un approccio alternativo è quello della ricerca bidirezionale, che ricerca procedendo simultaneamente in avanti a partire dallo stato iniziale e all’indietro a partire dallo stato obiettivo (o dagli stati obiettivi, se sono più di uno) nella speranza che le due ricerche si incontrino. L’idea di base è che $b^{\frac{d}{2}} + b^{\frac{d}{2}}$ è molto minore di $b^d$.
+
+Affinché questa strategia funzioni, è necessario tenere traccia di due frontiere e due tabelle di stati raggiunti, e occorre essere in grado di ragionare all’indietro: se lo stato $s'$ è un successore di $s$ nella direzione in avanti, allora dobbiamo sapere che $s$ è un successore di $s'$ nella direzione all’indietro. Abbiamo una soluzione quando le due frontiere collidono.
+
+![RBI](img/rbi.png){width=400px, style="display: block; margin: 0 auto"}
+
+### 3.4.6 Confronto tra le strategie di ricerca non informata
+
+![Confronto](img/confronto.png){width=400px, style="display: block; margin: 0 auto"}
+
+## 3.5 Strategie di ricerca informata o euristica
+
+Andiamo adesso a vedere come una strategia di ricerca informata, che sfrutta conoscenza specifica del dominio applicativo per fornire suggerimenti su dove si potrebbe trovare l’obiettivo, possa trovare soluzioni in modo più efficiente di una strategia non informata. I suggerimenti hanno la forma di una funzione euristica denotata con $h(n)$.
+
+- $h(n)$ = costo stimato del cammino meno costoso dallo stato del nodo $n$ a uno stato obiettivo.
+
+### 3.5.1 Ricerca best-first greedy
+
+La ricerca **best-first greedy** è una forma di ricerca best-first che espande prima il nodo con il valore più basso di $h(n)$, cioè quello che appare più vicino all'obiettivo, sulla base del fatto che è probabile che questo porti rapidamente a una soluzione. Perciò la funzione di valutazione è $f(n) = h(n)$. Per esempio si può pensare di risolvere il problema dell'itinerario usando l'euristica **distanza in linea d'aria**, ovvero si conosce la distanza in linea d'aria dal nodo obiettivo verso tutti gli altri nodi, e ogni volta si espande il nodo con distanza minore.
+
+### 3.5.2 Ricerca A*
+
+La forma di ricerca più diffusa di algoritmo di ricerca informata è la **ricerca A\***, una ricerca best first che utilizza come funzione di valutazione: $f(n) = g(n) + h(n)$, dove $g(n)$ è il costo del cammino dal nodo iniziale al nodo $n$ e $h(n)$ rappresenta il costo *stimato* del cammino più breve da $n$ a uno stato obiettivo, per cui abbiamo:
+
+- $f(n)$ = costo stimato del cammino migliore che continua da $n$ fino a un obiettivo.
+
+La ricerca A* è completa. Il fatto che sia o meno ottimale rispetto al costo dipende da alcune proprietà dell’euristica. Una proprietà fondamentale è **l’ammissibilità**: un’**euristica ammissibile** è tale se *non sovrastima mai* il costo per raggiungere un obiettivo, dunque è un euristica **ottimista**. Quindi vale che $h(n) \leq h^*(n)$, dove $h^*(n)$ rappresenta il costo reale minimo per raggiungere l'obiettivo a partire da $n$.
+
+!!! success
+    **Teorema**: Con un’euristica ammissibile la ricerca $A*$ è ottima rispetto al costo.
+    **Dimostrazione**: Supponiamo che il percorso ottimo abbia un costo $C^*$, ma che l'algoritmo $A^*$ restituisca un percorso con un costo maggiore $C > C^*$. Per assurdo, esiste un nodo $n$ che:
+    - Si trova sul cammino ottimo ma non è stato espanso da $A^*$. Se fosse stato espanso da $A^*$ allora avrebbe portato alla soluzione ottima $C^*$.
+    - Se tutti i nodi sul cammino ottimo fossero stati espansi, $A^*$ avrebbe trovato la soluzione ottimale.
+    Allora definiamo:
+    - $g^*(n):$ il costo ottimo dall'inizio fino a $n$.
+    - $h^*(n):$ il costo minimo da $n$ fino all'obiettivo.
+    Per un nodo $n$ abbiamo che:
+    $$
+    f(n) = g(n) + h(n) = g^*(n) + h(n) \quad \text{dato che } n \text{ si trova sul cammino minimo}
+    $$
+    $$
+    \leq g^*(n) + h^*(n) = C^* \quad \text{per ipotesi } h(n) \leq h^*(n)
+    $$
+    $$
+    \Rightarrow f(n) \leq C^* \text{ che contraddice } C > C^*
+    $$
+
+Un altra proprietà è quella di **consistenza**: un'euristica $h(n)$ è consistente se, per ogni nodo $n$ e ogni suo successore n′n′ generato da un'azione aa, vale la seguente disuguaglianza:
+$$h(n) \leq c(n, a, n') + h(n')$$
+dove:
+
+- $h(n)$ è il valore dell'euristica per il nodo $n$
+- $c(n, a, n')$ è il costo dell'azione $a$ che porta da $n$ a $n'$
+- $h(n')$ è il valore dell'euristica per il nodo successore $n'$
+
+In altre parole, la consistenza richiede che il valore dell'euristica per un nodo $n$ non superi il costo di raggiungere un nodo successore $n'$ sommato al valore dell'euristica di $n'$.
+
+Ogni euristica consistente è ammissibile (ma non vale il vice versa), perciò $A^*$ con un’euristica consistente è ottima rispetto al costo. Con un’euristica consistente, la prima volta che raggiungiamo uno stato sarà su un cammino ottimo.
+
+Con un’euristica inconsistente, invece, potremmo ritrovarci con più cammini che raggiungono lo stesso stato, e se ogni cammino nuovo ha un costo inferiore al precedente, finiremo con l’avere più nodi corrispondenti a quello stato sulla frontiera, con un aggravio di costo temporale e spaziale.
+
+Con un’euristica inammissibile, $A^*$ può essere ottima rispetto al costo oppure no. Due casi in cui lo è sono i seguenti: 
+
+1. Se vi è anche un solo cammino ottimo rispetto al costo lungo cui $h(n)$ è ammissibile per tutti i nodi $n$ sul cammino, allora tale cammino verrà trovato a prescindere da quanto affermi l’euristica per gli stati al di fuori di esso.
+2. Se la soluzione ottima ha costo $C^*$ e la seconda migliore ha costo $C_2$ , e se $h(n)$ sovrastima alcuni costi, ma mai più di $C_2 − C^*$, allora $A^*$ restituisce sempre soluzioni ottime rispetto al costo.
