@@ -68,7 +68,7 @@ Questo significa che una famiglia di funzioni hash è considerata universale se 
 **Osservazione**: Il teorema ci dice che, fissato un elemento $u \in S$, il numero atteso di elementi in $S$ mappati nello stesso bucket di $h(u)$ è $E[X] = 1 + \frac{n}{m}$. Questo significa che nel bucket associato a $h(u)$, oltre a $u$ stesso, ci aspettiamo in **MEDIA** $\frac{n}{m}$ altri elementi di $S$.
 Conoscendo $n$, possiamo scegliere $m = O(n)$ in modo tale che la dimensione di ciascun bucket sia $\approx O(1)$. In altre parole, **se il numero di bucket è proporzionale al numero di elementi**, ci aspettiamo che ogni bucket contenga in media un numero costante di elementi.
 
-### Una prima famiglia di funzione hash randomizzate
+### Una prima famiglia di funzioni hash randomizzate
 
 Come progettisti della funzione hash, ci è dato sapere alcune informazioni: $|U| = N$, $|S| = n$. Adesso con queste informazioni dobbiamo determinare la dimensione corretta della Hash Table. Sia $m$ dunque la dimensione della Hash Table, un numero **primo** tale che $n \leq m \leq 2n$, e tale numero $m$ esiste sempre grazie ad un teorema dimostrato da *Chebyshev*.
 
@@ -109,3 +109,61 @@ Pertanto, il costo complessivo per memorizzare e computare $h_a(x)$ è molto eff
     Per il *Principle Of Deffered Decision*, $\sum_{i = 1, i \neq j}^r a_i(x_i - y_i)\ mod\ m$ è un numero fissato non più una variabile random, dunque l'unica variabile random è $a_j$. La probabilità che valga quell'uguaglianza è $\frac{1}{m}$ in quanto è la probabilità di scegliere $a_j \in [m]$ necessario per rendere verà l'uguaglianza.
 
     **Conclusione**: $\mathbb{H} = \{h_a : a \in U\}$ è universale in quanto $Pr[h_a(x) = h_a(y)] \leq \frac{1}{m}$.
+
+### Una seconda famiglia di funzioni hash randomizzate
+
+- TODO: Lezione martedì 12-11-24
+
+## Perfect Randomized Hashing - Optimal Static Dictionary
+
+Il **perfect hashing** è un tipo di hash usato per la creazione di dizionari statici, ovvero dove il data set è fisso e non cambia dopo la sua costruzione. Questa tecnica garantisce che non ci sono collisioni, ogni chiave nel dizionario è mappata in un'unico slot della hash table.
+
+Quindi il probleda del dizionario staitico consiste in: dato un insieme $S$ di $n$ elementi (chiavi), l'obiettivo è costruire una struttura dati che supporti solo l'operazione di `search`. Con il perfect hashing si ottengono le seguenti prestazioni:
+
+- $O(1)$ tempo di `search` nel caso peggiore.
+- $O(n)$ spazio.
+- Tempo di costruzione quasi lineare con alta probabilità.
+
+### Costruzione del dizionario
+
+Un approccio usato del perfect hashing è quello di usare una funzione hash a 2 livelli.
+
+1. Il primo livello partiziona le chiavi in bucket usando una hash function.
+2. Ogni bucket è poi mappato individualmente, e inoltre, ciascun bucket ha la propria funzione hash randomizzata per mappare poi i singoli elementi garantendo 0 collisioni.
+
+#### Step 1
+
+1. Scegliamo uniformemente random una funzione hash universale $h_1: U \rightarrow \{0, 1, 2, \dots, m - 1\}$. Ricordiamo che una funzione hash universale ha questa proprietà: $\Pr_{h \in \mathbb{H}} [h(u) = h(v)] \leq \frac{1}{m}$, ovvero minimizza le collisioni.
+2. Il valore di $m$ è scelto proporzionalmente al numero di elementi $n$ dati in input, ovvero $m = \theta(n)$, principalmente $m$ è un numero primo.
+3. Dopodichè, usando $h_1$, si mappano tutti gli elementi di $S$ nella tabella principale. Se più elementi vengono mappati allo stesso slot, si crea una lista concatenata (linked list) per contenere tutti gli elementi in collisione, gestendo così le collisioni.
+
+#### Step 2
+
+Ora gestiamo le collisioni del **Step 1** creando tabelle hash individuali per ogni slot che ha più elementi.
+
+1. Per ogni slot $j \in \{1, 2, \dots, m - 1\}$ prendiamo tutti gli elementi che sono stati mappati nel $j$-esimo slot da $h_1$. Sia inoltre $n_j$ il numero di elementi mappati nello slot $j$.
+2. Scegliamo ora, per ogni $j$, scegliamo uniformemente random una senconda funzione hash universale $h_{2,j}$ che mappera ciascun elemento della linked list relativa allo slot $j$ in una seconda tabella. La dimensione di tale tabella è $n^2_j \leq m_j \leq O(n^2_j)$. Tale scelta di $m$ ci garantisce abbastanza spazio per memorizzare tutti gli elementi mappati nello slot $j$ evitando collisioni.
+3. Per ogni slot $j$ per cui ci sono state collisione al primo step, sostituiamo la linked list con una tabella di dimensione $m_j$. Gli elementi di questa tabella saranno mappati dalla funzione hash $h_{2,j}$, eliminando definitivamente le collisioni.
+
+Oltre a questi 2 step, vi sono degli step interdeti. I step 1.5 e 2.5 aggiungono dei controlli e verifiche al processo di costruzione della tabella hash per garantire che la struttura finale sia efficiente e senza collisioni a livello del secondo hash.
+
+#### Step 1.5
+
+Dopo aver scelto la funzione hash h1h1​ e aver mappato tutti gli elementi di SS nei vari slot della tabella principale, si aggiunge un controllo per verificare se il risultato è efficiente.
+
+1. Per ciascuno slot $j$ della tabella principale, contiamo il numero di elementi $n_j$ che sono stati mappati in quello slot tramite $h_1$. La somma $\sum_{j = 0}^{m - 1} n^2_j$ rappresenta il totale dei quadrati dei numeri di elementi in ciascuno slot.
+2. Se questa somma supera una certa soglia, ossai se:
+$$\sum_{j = 0}^{m - 1} n^2_j > c \cdot n$$
+per un valore costante $c$ (che verrà scelto più avanti), allora si decide di **rifare il passo 1** (ovvero, di scegliere una nuova funzione hash $h_1$, e di rifare la mappatura degli elementi). Questo passaggio serve per limitare la concentrazione di elementi in alcuni slot, il che potrebbe rendere il secondo livello inefficiente se ci fossero troppi elementi in un singolo slot. Rifacendo il primo passaggio, si cerca una distribuzione migliore dei njnj​, riducendo la probabilità di avere slot troppo carichi.
+
+#### 2.5
+
+Una volta che siamo passati al secondo livello, per ogni slot $j$ che contiene più elementi (ossia, per ciascun $j$ con $n_j > 1$), creiamo una hash table dedicata per quel gruppo di elementi usando una seconda funzione hash $h_{2,j}$​.
+Tuttuavia, c'è ancora la possibilità che, nel secondo livello, ci siano collisioni per alcuni elementi nella tabella secondaria di un dato slot.
+
+1. Per ogni coppia di elementi $u$ e $v$ mappati nel secondo livello tramite $h_{2,j}$, si controlla che $h_{2,j}(u) \neq h_{2,j}(v)$. Se $h_{2,j}(u) = h_{2,j}(v)$ (cioè se si verifica una collisione al secondo livello per lo stesso slot $j$), allora si sceglie una nuova funzione hash $h_{2,j}$ dalla famiglia universale e si rimappano tutti i $n_j$ elementi nel secondo livello per quello slot $j$.
+2. Si continua a ripetere questo processo finché non troviamo una funzione hash $h_{2,j}$ che mappa tutti gli $n_j$ elementi in slot unici della tabella secondaria, garantendo che non ci siano collisioni a livello del secondo hash.
+
+### Analisi del tempo computazionale per la costruzione del dizionario
+
+Rimane ora da analizzare per quante volte andiamo a ripetere gli step $1.5$ e $2.5$. Iniziamo con analizzare lo step $2.5$.

@@ -238,7 +238,71 @@ Ogni euristica consistente è ammissibile (ma non vale il vice versa), perciò $
 
 Con un’euristica inconsistente, invece, potremmo ritrovarci con più cammini che raggiungono lo stesso stato, e se ogni cammino nuovo ha un costo inferiore al precedente, finiremo con l’avere più nodi corrispondenti a quello stato sulla frontiera, con un aggravio di costo temporale e spaziale.
 
-Con un’euristica inammissibile, $A^*$ può essere ottima rispetto al costo oppure no. Due casi in cui lo è sono i seguenti: 
+Con un’euristica inammissibile, $A^*$ può essere ottima rispetto al costo oppure no. Due casi in cui lo è sono i seguenti:
 
 1. Se vi è anche un solo cammino ottimo rispetto al costo lungo cui $h(n)$ è ammissibile per tutti i nodi $n$ sul cammino, allora tale cammino verrà trovato a prescindere da quanto affermi l’euristica per gli stati al di fuori di esso.
 2. Se la soluzione ottima ha costo $C^*$ e la seconda migliore ha costo $C_2$ , e se $h(n)$ sovrastima alcuni costi, ma mai più di $C_2 − C^*$, allora $A^*$ restituisce sempre soluzioni ottime rispetto al costo.
+
+### 3.5.3 Confini di ricerca
+
+Nella ricerca $A^*$ con una buona euristica, le bande $g + h$ si allungheranno verso uno obiettivo e diventeranno sempre più strettamente focalizzate attorno al cammino ottim formando quindi un *confine di ricerca*.
+
+![Confine di Ricerca](img/confine_ricerca.png){width=400px, style="display: block; margin: 0 auto"}
+
+É chiaro che quando si estende un cammino, i costi $g$ sono **monotoni** (o crescono o rimangono invariati): il costo del cammino aumenta sempre mentre lo si percorre, poiché i costi di azione sono sempre positivi.
+Invece il costo del cammino è monotono crescente se $h(n) \leq c(n, a, n') + h(n')$, quindi in altre parole se soltanto se l'euristica è consistente (equivalente a dire euristica monotona).
+
+Se $C^*$ è il costo del cammino della soluzione ottima, possiamo dire quanto segue:
+
+- $A^*$ espande tutti i nodi che possono essere raggiunti dallo stato iniziale su un cammino in cui per ogni nodo si ha $f(n) < C^*$. Diciamo che questi sono **nodi certamente espansi**.
+- $A^*$ potrebbe poi espandere alcuni dei nodi proprio sul "confine obiettivo" prima di selezionare il nodo obiettivo.
+- $A^*$ non espande alcun nodo con $f(n) > C^*$.
+
+Diciamo che $A^*$ con un'euristica consistente è **ottimamente efficiente** nel senso che qualsiasi algoritmo che estende cammini di ricerca a partire dallo stato iniziale e usa la stessa euristica deve espandere tutti i nodi che sono certamente espansi da $A^*$. $A^*$ è efficiente perché esegue la potatura dall’albero di ricerca dei nodi non necessari per trovare una soluzione ottima. Il concetto di potatura - scartare alcune possibilità senza doverle nemmeno esaminare è importante per molti campi dell’IA.
+
+### 3.5.4 Ricerca soddisfacente: euristiche inammisibili e ricerca $A^*$ pesata
+
+La ricerca $A^*$ ha ottime qualità ma espande un numero grande di nodi. È possibile espandere un numero minore di nodi se si è disponibili ad accetare soluzioni non ottima ma **soddisfacenti**.
+Quando si introduce un'**euristica inammissibile** (che può sovrastimare il costo), $A^*$ potrebbe deviare dal percorso ottimale, rischiando di non trovare la soluzione migliore. Tuttavia, una sovrastima può aiutare l'algoritmo a essere più "aggressivo" nelle scelte, migliorando la precisione dell'euristica e potenzialmente riducendo il numero di nodi espansi, dato che l'algoritmo è più focalizzato sulle opzioni che sembrano promettenti.
+
+!!! example
+    Per esempio, gli ingegneri civili conoscono il concetto di i**ndice di deviazione**, un coefficiente moltiplicatore applicato alla distanza in linea d’aria per tenere conto dei cambi di curvatura delle strade.
+    Un indice di deviazione di 1,3 significa che, se due città sono distanti 10 km in linea d’aria, una buona stima del miglior percorso stradale per andare da una all’altra è 13 km.
+
+L'approccio **ricerca** $A^*$ **pesata** in cui diamo un peso maggiore al valore dell’euristica, con la funzione di valutazione $f(n) = g(n) + W \cdot h(n)$, per $W > 1$.
+
+![A* pesata](img/ricerca_pesata.png){width=400px, style="display: block; margin: 0 auto"}
+
+La figura mostra un problema di ricerca su una griglia.
+
+- In (a), una ricerca $A^*$ trova la soluzione ottima, ma per ottenerla deve esplorare un’ampia porzione dello spazio degli stati.
+- In (b), una ricerca $A^*$ pesata trova una soluzione leggermente più costosa, ma con un tempo
+di ricerca molto inferiore.
+
+Notiamo che la ricerca pesata focalizza il confine degli stati raggiunti verso un obiettivo: ciò significa che vengono esplorati meno stati, ma se il cammino ottimo va al di fuori del confine della ricerca pesata, il cammino ottimo non viene trovato. In generale se la soluzione ottima ha costo $C^*$, allora la soluzione di $A^*$ pesato ha costo compresto tra $C^*$ e $W \cdot C^*$.
+
+La ricerca $A^*$ pesata può essere vista come una generalizzazione delle altre:
+
+|                           |                       |                   |
+|---------------------------|-----------------------|-------------------|
+| Ricerca $A^*$             | $g(n) + h(n)$         | $W = 1$           |
+| Ricerca a costo uniforme  | $g(n)$                | $W = 0$           |
+| Ricerca best-first greedy | $h(n)$                | $W = \infty$      |
+| Ricerca $A^*$ pesata      | $g(n) + W \cdot h(n)$ | $1 <  W < \infty$ |
+
+### 3.5.5 Ricerca con memoria limitata
+
+La principale problematica della ricerca $A^*$ è legata all'impiego della memoria.
+
+La **ricerca beam** è un tipo di ricerca euristica che introduce una restrizione sulla memoria utilizzata, limitando la quantità di nodi esplorati. La sua caratteristica principale è quella di restringere il numero di nodi considerati ad ogni livello di ricerca, concentrandosi solo sui nodi più promettenti, cioè quelli con i migliori costi euristici.
+
+La ricerca beam funziona in questo modo:
+
+1. Invece di espandere tutti i nodi ad ogni livello, la ricerca beam tiene traccia solo dei migliori $k$ nodi. Questo riduce il consumo di memoria e velocizza la ricerca, perché espande solo un numero limitato di nodi in ogni livello.
+2. Poiché la ricerca scarta dei nodi potenzialmente promettenti, non è garantito che trovi sempre il percorso ottimale e, in alcuni casi, potrebbe non trovare una soluzione affatto. Tuttavia se il valore di $k$ è scelto bene, la ricerca beam può arrivare a soluzioni che sono *vicine* a quelle ottimali, utilizzando molta meno memoria.
+3. Si puo immaginare la ricerca come una serie di confini concentrici che si espandono intorno allo stato iniziale, la ricerca beam non esplora tutto il confine. Invece, esplora solo una "fetta" di questi confini, "fascio" contenente i $k$ nodi migliori, come un raggio di luce focalizzato su una porzione di spazio di ricerca.
+4. In un altra versione della ricerca beam, non si impone un limite fisso sui nodi, ma si mantiene ogni nodo il cui costo $f$ è entro un fattore $\delta$ rispetto al nodo con il costo migliore.
+
+I vantaggi della ricerca beam è che è molto più veloce rispetto a metodi come la ricerca $A^*$, dato che considera meno nodi. È utile in problemi in cui trovare una soluzione subottimale o vicina all'ottimo è accettabile e la memoria è limitata.
+
+La **ricerca** $A^*$ **ad approfondimento iterativo** ($IDA^*$) sta alla ricerca $A^*$ come la ricerca ad approfondimento iterativo sta alla ricerca in profondità. Fornisce i vantaggi di $A^*$ senza la necessità di mantenere in memoria tutti gli stati raggiunti. Nell'approfondimento iterativo ala soglia era la profondità, mentre in $IDA^*$ la soglia è il costo $f(g + h)$; a ogni iterazione il valore soglia è il più piccolo costo $f$ di qualsiasi nodo che abbia superato la soglia nella precedente iterazione. In altre parole, ogni iterazione esegue una ricerca esaustiva di un confine $f$, trova un nodo appena al di là di tale confine e utilizza il costo $f$ di tale nodo come confine successivo. Per un problema in cui ogni nodo ha un costo $f$ diverso, invece, ogni nuovo confine potrebbe contenere un solo nodo nuovo e il numero di iterazioni potrebbe essere uguale al numero di stati.

@@ -177,3 +177,34 @@ La fase di Min-Hash, quindi di comprimere la matrice grande richiede di creare d
 
 Invece di generare $t$ permutazioni, si sostituiscono le permutazione con le funzioni hash randomizzate (**Randomized Hash Functions**). Si scelgono $t$ funzioni hash $f_i$. Ogni funzione hash  $f_i: [m] \rightarrow [m]$, mappando le righe in modo casuale (ci potrebbe essere delle collisioni, ma vedremo che la probabilità delle collisioni è molto bassa).
 
+#### Algortimo per il calcolo del MinHash
+
+```javascript
+// Input: Original matrix M of size m x N, number of hash functions t
+// Output: Signature matrix SIG of size t x N
+
+// Step 1: Initialize the signature matrix
+for each column C = 1 to N do
+    for each hash function i = 1 to t do
+        SIG[i][C] = ∞    // Initialize SIG(i, C) to infinity
+
+// Step 2: Populate the signature matrix
+for each row j = 1 to m do
+    for each column C = 1 to N do
+        if M[j][C] == 1 then (**)           // If the element in M is 1
+            for each hash function i = 1 to t do
+                h_value = f_i(j)        // Compute the hash function i on row j
+                if h_value < SIG[i][C] then
+                    SIG[i][C] = h_value // Update SIG(i, C) with the minimum hash value
+
+```
+
+Osserviamo inanzitutto che questo algoritmo impiega tempo $\theta(mN)$. L'ottimizzazione di questo algoritma sta nel fatto che non generiamo pià $t$ permutazioni random delle $m$ righe, ma generiamo invece $t$ funzioni hash. Infatti per generare una permutazione delle $m$ righe impieghiamo tempo $O(n log(n))$ mentre per generare una singola funzione hash impieghiamo tempo $log(m)$. Infatti:
+
+$$\mathcal{H} = \{h_{a,b} : [m] \rightarrow [m]\}$$
+dove lo spazio per memorizzare una singola hash function è $O(log(m))$ e il tempo per generarla è $O(log(m))$.
+
+$$\Pi(log(m!)) \approx m log(m)$$
+dove lo spazio per memorizzare una singola permutazione è $O(m)$ e il tempo per generarla è $O(m log(m))$.
+
+Inoltre, ponendo la condizione (**), possiamo usare la proprietà che la matrice caratteristica è molto sparsa, andando a calcolare la funzione hash solo per quelle righe in cui c'è un 1.
