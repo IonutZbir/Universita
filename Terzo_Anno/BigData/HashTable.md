@@ -131,6 +131,8 @@ Un approccio usato del perfect hashing è quello di usare una funzione hash a 2 
 1. Il primo livello partiziona le chiavi in bucket usando una hash function.
 2. Ogni bucket è poi mappato individualmente, e inoltre, ciascun bucket ha la propria funzione hash randomizzata per mappare poi i singoli elementi garantendo 0 collisioni.
 
+![Double Hashing](img/double_hashing.png){width="400" style="display: block; margin: 0 auto"}
+
 #### Step 1
 
 1. Scegliamo uniformemente random una funzione hash universale $h_1: U \rightarrow \{0, 1, 2, \dots, m - 1\}$. Ricordiamo che una funzione hash universale ha questa proprietà: $\Pr_{h \in \mathbb{H}} [h(u) = h(v)] \leq \frac{1}{m}$, ovvero minimizza le collisioni.
@@ -156,14 +158,96 @@ Dopo aver scelto la funzione hash h1h1​ e aver mappato tutti gli elementi di S
 $$\sum_{j = 0}^{m - 1} n^2_j > c \cdot n$$
 per un valore costante $c$ (che verrà scelto più avanti), allora si decide di **rifare il passo 1** (ovvero, di scegliere una nuova funzione hash $h_1$, e di rifare la mappatura degli elementi). Questo passaggio serve per limitare la concentrazione di elementi in alcuni slot, il che potrebbe rendere il secondo livello inefficiente se ci fossero troppi elementi in un singolo slot. Rifacendo il primo passaggio, si cerca una distribuzione migliore dei njnj​, riducendo la probabilità di avere slot troppo carichi.
 
-#### 2.5
+#### Step 2.5
 
 Una volta che siamo passati al secondo livello, per ogni slot $j$ che contiene più elementi (ossia, per ciascun $j$ con $n_j > 1$), creiamo una hash table dedicata per quel gruppo di elementi usando una seconda funzione hash $h_{2,j}$​.
 Tuttuavia, c'è ancora la possibilità che, nel secondo livello, ci siano collisioni per alcuni elementi nella tabella secondaria di un dato slot.
 
 1. Per ogni coppia di elementi $u$ e $v$ mappati nel secondo livello tramite $h_{2,j}$, si controlla che $h_{2,j}(u) \neq h_{2,j}(v)$. Se $h_{2,j}(u) = h_{2,j}(v)$ (cioè se si verifica una collisione al secondo livello per lo stesso slot $j$), allora si sceglie una nuova funzione hash $h_{2,j}$ dalla famiglia universale e si rimappano tutti i $n_j$ elementi nel secondo livello per quello slot $j$.
-2. Si continua a ripetere questo processo finché non troviamo una funzione hash $h_{2,j}$ che mappa tutti gli $n_j$ elementi in slot unici della tabella secondaria, garantendo che non ci siano collisioni a livello del secondo hash.
+2. Si continua a ripetere questo processo finché non troviamo una funzione hash $h_{2,j}$ che mappa tutti gli $n_j$ elementi in slot unici della tabella secondaria, garantendo che non ci siano collisioni a livello del secondo hash e usando spazio lineare.
 
 ### Analisi del tempo computazionale per la costruzione del dizionario
 
-Rimane ora da analizzare per quante volte andiamo a ripetere gli step $1.5$ e $2.5$. Iniziamo con analizzare lo step $2.5$.
+Si studia ora il tempo di costruzione della struttura dati impiegato dall'algoritmo.
+Ricordando che il calcolo di una delle funzioni hash universali viste in precedenza richiede tempo costante, si ha che i passi $(1)$ e $(2)$ richiedono tempo $O(n)$.
+
+Rimane ora da analizzare per quante volte andiamo a ripetere gli step $1.5$ e $2.5$.
+
+!!! note
+    Se $\bigm| S \bigm| = n$ allora $\sum_{j = 0}^{n - 1} n_j = n$ **ma** siccome abbiamo posto $m_j = \theta(n_j^2)$ potremmo avere che $\sum_{j = 0}^{n - 1} m_j = \sum_{j = 0}^{n - 1} \theta(n_j^2) = \omega(n)$, ovvero occupiamo molto più spazio rispetto a spazio lineare. Dunque questo rappresenta il nostro evento "cattivo", che non deve mai succedere.
+
+- Dunque, per il passo $(2.5)$ si ha che
+\[
+\begin{aligned}
+    Pr_{h_{2,j}}[h_{2,j}(u) = h_{2,j}(v), \; u \neq v]
+    &\leq \sum_{\substack{u, v \in S \\ u \neq v \\ h_1(u) = h_1(v)}} Pr[h_{2,j}(u) = h_{2,j}(v)] \\
+    &\leq \frac{1}{2} n_j (n_j - 1) \\
+    &= \frac{n_j (n_j - 1)}{2 n_j^2} \\
+    &= \frac{n_j - 1}{2 n_j} \\
+    &< \frac{1}{2}.
+\end{aligned}
+\]
+
+Dove:
+
+- $Pr_{h_{2,j}}[h_{2,j}(u) = h_{2,j}(v)] < \frac{1}{m_j} = \frac{1}{n_j^2}$ in quanto $m = \theta(n_j^2)$ e $h_{2,j}$ è una funzione hash universale.
+- $\{u, v \in S\ u \neq v\ h_1(u) = h_1(v)\}$ rappresenta l'insieme di tutte le possibili coppie di elementi mappati nello stesso slot da $h_1$ è sono: $\binom{n_j}{2} = \frac{n_j(n_j - 1)}{2}$.
+
+Quindi, ogni prova è come un lancio di moneta. Se l'esito è "testa", si passa allo step successivo. Si ha quindi che $E [\text{numero di prove}] \leq 2$ , ovvero, in media sono neccessari 2 iterazioni dello step per slot $(2.5)$.
+
+Tuttavia, quando vogliamo garantire che tutti gli slot $j$ abbiano una distribuzione priva di collisioni, dobbiamo prendere in considerazione un evento complessivo su più slot contemporaneamente. È qui che entra in gioco la **concentrazione delle probabilità**.
+
+Grazie alla concentrazione delle probabilità, possiamo dire che, con alta probabilità, il massimo numero di tentativi richiesto per ottenere un successo per tutti gli slot $j$ non supererà $O(log(n))$.
+
+Questo è un risultato comune in probabilità: se si ha una bassa probabilità di fallimento per ciascun evento indipendente (in questo caso, ciascuno slot $j$), allora per **il principio di unione e il lemma di Chernoff (disuguaglianza di Chernoff)**, possiamo dire che il numero massimo di tentativi necessari sarà solo $O(log(⁡n))$, invece di un valore molto più alto.
+
+In sintesi, il $O(log(n))$ deriva dal fatto che vogliamo una garanzia con alta probabilità per tutti gli slot simultaneamente, e la concentrazione delle probabilità ci permette di ottenere questa garanzia limitando i tentativi a $O(log(n))$.
+
+In conclusione, per ogni $j$, facciamo in media 2 tentativi, quindi per la **Chernoff inequality**, effettuiamo $log(n)$ tenativi, ciascun tentativo richiede $O(n_j)$ tempo, quindi:
+$$\sum_{j}(\text{ numero tentativi per } j)O(n_j) = \sum_{j}log(n)O(n_j) = O(n log(n))$$
+
+- Passiamo ora al passo $(1.5)$.
+Si vuole dimostrare che $E\bigm[ \sum_{j = 0}^{m - 1} n_j^2 \bigm] = \theta(n)$, tale sommatoria rappresenta la somma dei quadrati del numero di elementi mappati in ogni slot $j$. Se molti elementi si accumulano nello stesso slot, questo valore cresce, indicando una struttura inefficiente. Ci serve dimostrare questa uguaglianza per poter applicare poi la disuguaglianza di Markov.
+
+Definiamo la variabile aleatoria:
+\[
+X_{u,v} =
+\begin{cases}
+1 & \text{se } h_1(u) = h_1(v) \\
+0 & \text{altrimenti}
+\end{cases}
+\]
+
+Dove $h_1$ è la funzione hash scelta casualmente, e $X_{u,v} = 1$ indica che c'è una collisione tra $u$ e $v$.
+
+!!! info
+    $$\sum_{j = 0}^{m - 1} n_j^2 = \sum_{u \in S}\sum_{v \in S}X_{u,v}$$
+    - **Dim**
+    $$\sum_{u \in S}\sum_{v \in S}X_{u,v} = n_1 \times n_1 + n_2 \times n_2 + \dots + n_m \times n_m$$
+    Dove $n_j \times n_j$ rappresenta gli elementi mappati nello slot $j$-esimo. Consideriamo ora tutti gli elementi $z_1, \dots z_j$ mappati nello slot $j$. Consideriamo tutte le coppie $z_e,\ z_m$, allora tutte le varibiali aleatorie $X_{e,m}$ sono uguali a 1 per $e = 1, 2, \dots, n_j$ e $m = 1, 2, \dots, n_j$. Quante sono? $n_j^2$.
+
+Si ha dunque:
+
+\[
+E\left[ \sum_{j=0}^{m-1} n_j^2 \right] = \sum_{u \in S} \sum_{v \in S} E[X_{u, v}] = \sum_{u \in S} \sum_{v \in S} \left( \Pr[h_1(u) = h_2(v)] \right)
+\]
+
+\[
+\leq \sum_{u \in S} 1 + \frac{n}{m} \leq n + \frac{n^2}{m} \leq 2n
+\]
+
+- $\sum_{v \in S}\bigm(Pr[h_1(u) = h_2(v)]\bigm) \leq 1 + \frac{n}{m}$ Per l'universalità di $h_1$.
+
+Per la disuguaglianza di Markov si ha
+$$Pr\left[ \sum_{j=0}^{m-1} n_j^2 > cn \right] \leq \frac{E\left[ \sum_{j=0}^{m-1} n_j^2 \right]}{cn} \leq \frac{2n}{cn} \leq \frac{2}{c}$$
+
+Per $c \geq 4$ si ha che una probabilità $\leq \frac{1}{2}$.
+
+Si ha quindi che $E[\text{numero di prove}] \leq 2$ e sempre per il ragionamento di prima, usando la **Chernoff inequality**, il numero di prove è $O(log(n))$ con alta probabilità. In coclusione il tempo per necessario per lo step ($1.5$) è $O(n log(n))$.
+
+#### Conclusione
+
+Il tempo di costruzione del dizionario è:
+
+$$O(n) + O(n log(n)) + O(n) + O(n log(n)) = O(n log(n))$$
+con alta probabilità.

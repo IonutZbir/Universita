@@ -208,3 +208,5 @@ $$\Pi(log(m!)) \approx m log(m)$$
 dove lo spazio per memorizzare una singola permutazione è $O(m)$ e il tempo per generarla è $O(m log(m))$.
 
 Inoltre, ponendo la condizione (**), possiamo usare la proprietà che la matrice caratteristica è molto sparsa, andando a calcolare la funzione hash solo per quelle righe in cui c'è un 1.
+
+### Step 3. Locality-Sensitive Hashing: Si concentra su coppie di firme che probabilmente appartengono a documenti
