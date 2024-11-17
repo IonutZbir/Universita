@@ -153,8 +153,8 @@ Per due vettori di signature, $SIG(C_1)$ e $SIG(C_2)$, definiamo la similarità 
 
 **Random-Algorithm-Doc-Pair-Check**($Col_1$, $Col_2$, $T$)
 
-- Col_1, Col_2 colonne della matrice caratteristica
-- T parametreo di confidenza
+- $Col_1$, $Col_2$ colonne della matrice caratteristica
+- $T$ parametreo di confidenza
 
 1. Scegli una permutazione uniformemente random $\pi_j \in \Pi_m$
 2. Calcola il *minhash* $h_{\pi j}(C_1)$ e $h_{\pi j}(C_2)$
@@ -209,4 +209,42 @@ dove lo spazio per memorizzare una singola permutazione è $O(m)$ e il tempo per
 
 Inoltre, ponendo la condizione (**), possiamo usare la proprietà che la matrice caratteristica è molto sparsa, andando a calcolare la funzione hash solo per quelle righe in cui c'è un 1.
 
-### Step 3. Locality-Sensitive Hashing: Si concentra su coppie di firme che probabilmente appartengono a documenti
+### Step 3. Locality-Sensitive Hashing: Si concentra su coppie di firme che probabilmente appartengono a documenti simili
+
+Anche se possiamo utilizzare il minhashing per comprimere documenti di grandi dimensioni in firme ridotte e preservare la similarità attesa tra qualsiasi coppia di documenti, potrebbe comunque essere impossibile trovare in modo efficiente le coppie con la maggiore similarità. Il motivo è che il numero di coppie di documenti potrebbe essere troppo elevato, anche se i documenti non sono particolarmente numerosi.
+
+!!! example
+    Supponiamo di avere un milione di documenti e di utilizzare firme di lunghezza 250. In questo caso, utilizziamo 1000 byte per documento per le firme, e l'intero dataset occupa un gigabyte – meno della memoria principale tipica di un laptop. Tuttavia, ci sono $\binom{1.000.000}{2}$, ovvero mezzo trilione di coppie di documenti. Se occorre un microsecondo per calcolare la similarità tra due firme, sarebbero necessari quasi sei giorni per calcolare tutte le similarità su quel laptop.
+
+Dunque l'obiettivo principale dell'approccio **LSH** è ridurre il numero di confronti necessari per identificare coppie simili in un insieme di elementi, evitando il confronto tra ogni coppia possibile.
+
+L'idea generale è di usare una funzione hash universale usata per "hashare" gli elementi in una hash table in modo tale che gli elementi simili abbiano maggiore possibilità di essere hashati nello stesso bucket rispetto agli elementi diverse.
+
+Alla fine di questo procedimento, per vedere quali sono le possibili coppie *candidate*, andiamo a considerare ciasun bucket, sapendo che in un bucket sono stati mappati tutte quelle possibili coppie candidate ad essere simili. L'obiettivo è che la maggior parte delle coppie diverse non venga mai hashata nello stesso bucket e quindi non venga mai controllata. Le coppie diverse che invece vengono hashate nello stesso bucket sono falsi positivi. Tali coppie possono essere poi facilmente controllate alla fine, andando a fare una ricerca nella matrice caratteristica, ovvero nella matrice degli shingling. Allo stesso modo, si spera che la maggior parte delle coppie effettivamente simili venga hashata nello stesso bucket. Quelle che non lo fanno sono falsi negativi, e l'obiettivo è di minimazzare il numero di tali coppie, poiché è molto difficile andare a controllare quali siano.
+
+- **Falso Positivo**: Sono tutte quelle coppie che non risultano simili ma che vengono mappate nello stesso bucket. Qui basta semplicemente prendere tutte le coppie candidate che sono molto di meno rispetto $N$ documenti inziali, e andare ad efettuare un ulteriore controllo nella matrice caratteristica.
+- **Falso Negativo**: Sono tutte quelle coppie che risultano simili ma che vengono mappate in bucket diversi. Qui il problema sta nel identificare quali siano queste coppie.
+
+Quindi, dato in input una soglia limite $s\ (0 < s < 1)$, allora
+
+!!! info
+    **Def**: Due colonne $x$ e $y$ sono dette **coppie candidate** se la loro firma $SIG(*, x)$ e $SIG(*, y)$ concordano su almeno una frazione $s$ delle loro righe, ovvero:
+    $$\frac{\left| \{i \in [t]: SIG(i, x) = SIG(i, y)\}\right|}{t} \geq s$$
+
+!!! note
+    La similarità tra le firme di due colonne non deriva da piccole differenze in alcuni o diversi valori delle loro righe: ma richiede che un numero significativo di valori (o la maggior parte) delle righe sia identico tra due colonne!
+
+Poiché hashare l'intera colonna delle firme in un unico bucket può generare molti falsi positivi e falsi negativi, possiamo adottare un approccio alternativo basato sempre su LSH.
+
+Quando disponiamo delle firme MinHash per gli elementi, un metodo efficace consiste nel dividere la matrice delle firme in $b$ **bande**, ciascuna formata da $r$ **righe**. Per ogni banda, si calcola un hash unico del vettore di $r$ righe (ovvero la porzione corrispondente della colonna).
+
+![Bande LSH](img/lsh_bands.png){width="400" style="display: block; margin: 0 auto"}
+
+Questa divisione introduce un vincolo più forte per considerare due colonne simili: devono avere valori identici in **tutte** le righe di almeno una banda per essere mappate nello stesso bucket. In altre parole:
+
+- Colonne simili (con valori identici nella maggior parte delle righe) hanno una buona probabilità di finire nello stesso bucket in almeno una banda, diventando coppie candidate.
+- Colonne diverse difficilmente avranno valori identici in tutte le righe di una banda e quindi saranno escluse come candidate.
+
+Quindi, due colonne sono considerate coppie candidate secondo la Jaccard similarity se almeno una banda è mappata nello stesso bucket. Questo approccio riduce i falsi positivi e negativi rispetto all’hash dell’intera colonna, bilanciando precisione ed efficienza.
+
+![Bande LSH](img/lsh_bands_buckets.png){width="500" style="display: block; margin: 0 auto"}

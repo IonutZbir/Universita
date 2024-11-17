@@ -305,4 +305,68 @@ La ricerca beam funziona in questo modo:
 
 I vantaggi della ricerca beam è che è molto più veloce rispetto a metodi come la ricerca $A^*$, dato che considera meno nodi. È utile in problemi in cui trovare una soluzione subottimale o vicina all'ottimo è accettabile e la memoria è limitata.
 
-La **ricerca** $A^*$ **ad approfondimento iterativo** ($IDA^*$) sta alla ricerca $A^*$ come la ricerca ad approfondimento iterativo sta alla ricerca in profondità. Fornisce i vantaggi di $A^*$ senza la necessità di mantenere in memoria tutti gli stati raggiunti. Nell'approfondimento iterativo ala soglia era la profondità, mentre in $IDA^*$ la soglia è il costo $f(g + h)$; a ogni iterazione il valore soglia è il più piccolo costo $f$ di qualsiasi nodo che abbia superato la soglia nella precedente iterazione. In altre parole, ogni iterazione esegue una ricerca esaustiva di un confine $f$, trova un nodo appena al di là di tale confine e utilizza il costo $f$ di tale nodo come confine successivo. Per un problema in cui ogni nodo ha un costo $f$ diverso, invece, ogni nuovo confine potrebbe contenere un solo nodo nuovo e il numero di iterazioni potrebbe essere uguale al numero di stati.
+La **ricerca** $A^*$ **ad approfondimento iterativo** ($IDA^*$) sta alla ricerca $A^*$ come la ricerca ad approfondimento iterativo sta alla ricerca in profondità. Fornisce i vantaggi di $A^*$ senza la necessità di mantenere in memoria tutti gli stati raggiunti. Nell'approfondimento iterativo la soglia era la profondità, mentre in $IDA^*$ la soglia è il costo $f(g + h)$; a ogni iterazione il valore soglia è il più piccolo costo $f$ di qualsiasi nodo che abbia superato la soglia nella precedente iterazione. In altre parole, ogni iterazione esegue una ricerca esaustiva di un confine $f$, trova un nodo appena al di là di tale confine e utilizza il costo $f$ di tale nodo come confine successivo. Per un problema in cui ogni nodo ha un costo $f$ diverso, invece, ogni nuovo confine potrebbe contenere un solo nodo nuovo e il numero di iterazioni potrebbe essere uguale al numero di stati.
+
+Andiamo adesso ad analizzare **IDA\***
+
+1. **È completo perché**:
+    - Quando le azioni hanno costo costante $k$ (caso tipico 1), il valore di $f-limit$ viene incrementato di $k$.
+    - Quando le azioni hanno costo variabile, l'incremento di $f-limit$ è $\leq \epsilon$ (che rappresenta il minimo costo degli archi).
+    - Il nuovo $f-limit$ è calcolato come il minimo valore di $f$ tra i nodi generati e esclusi nell'iterazione precedente.
+2. **Occupazione di memoria**:
+    - L'occupazione è $O(bd)$, come l'algoritmo Depth-First (DF), perché si memorizzano solo i nodi di un cammino quindi tiene in memoria solo i nodi del percorso attuale.
+
+La **ricerca best-first ricorsiva (RBFS)** cerca di usare meno memoria (lineare) svolgendo però del lavoro aggiuntivo. Assomiglia a una ricerca in profondità ricorsiva, ma invece di continuare a seguire indefinitamente il cammino corrente, utilizza la variabile $f_{lim}$ per tenere traccia il valore $f$ del miglior cammino alternativo che parte da uno qualsiasi degli antenati del nodo corrente.
+Se il nodo corrente supera questo limite, la ricorsione torna indietro al cammino alternativo. Durante il ritorno, RBFS sostituisce il valore f di ogni nodo lungo il cammino con un valore di backup, il miglior il valore f dei suoi nodi figli.
+In questo modo RBFS ricorda il valore f della foglia migliore nel sottoalbero abbandonato e può quindi decidere in seguito di ri-espanderlo.
+
+L'algoritmo **IDA\*** (Simplified Memory-Bounded A*) è una versione modificata di A* progettata per gestire il problema del consumo di memoria, garantendo che la ricerca funzioni anche con memoria limitata
+
+**SMA\*** procede come A* fino ad esaurimento della memoria disponibile.A questo punto “dimentica” il nodo peggiore, dopo avere aggiornato il valore del padre. A parità di $f$ si sceglie il nodo migliore più recente e si dimentica il nodo peggiore più vecchio. **SMA\*** è ottimale solo se la soluzione (cioè il percorso dall'inizio alla fine) può essere memorizzata completamente nella memoria disponibile.
+
+## 3.6 Funzioni euristiche
+
+### 3.6.1 Effetto dell’accuratezza dell’euristica sulle 1prestazioni
+
+Un modo di caratterizzare la qualità di un’euristica è il fattore di ramificazione effettivo, indicato con $b^*$. Se il numero totale di nodi generati da A\* per un particolare problema è $N$, e la profondità è $d$, allora $b^*$ è il fattore di ramificazione che un albero uniforme di profondità $d$ dovrebbe avere per contenere $N + 1$ nodi. Quindi,
+$$N + 1 = 1 + b^* + (b^*)^2 + \dots + (b^*)^d$$
+
+Siano $h_1$ e $h_2$ due euristiche. Diciamo che $h_2$ **domina** $h_1$ se per ogni nodo $n$, $h_2(n) \geq h_1(n)$. Questa definizione si traduce in: la ricerca A* che usa $h_2$ non espanderà mai più nodi di quella che usa $h_1$.1
+
+!!! success
+    - **Teorema**: Se $h_1 \leq h_2$, i nodi espansi da $A^*$ con $h_2$ sono un sottoinsieme di quelli espansi da $A^*$ con
+    h_1.
+    - **Dimostrazione**: La dimostrazione si basa su un'osservazione chiave:
+    L'algoritmo $A^*$ espande tutti i nodi nn per cui $f(n)<C^*$, dove $C^*$ è il costo del percorso ottimale.
+    Questo è equivalente a dire che espande i nodi per cui:
+    $$g(n) + h(n) < C^*  \Rightarrow  h(n) < C^* − g(n)$$.
+    Se $h_2(n) \geq h_1(n)$, allora:
+        - Tutti i nodi espansi con $h_2$ soddisferanno la condizione sopra (e quindi verranno espansi anche con $h_1$).
+        - Tuttavia, $h_1$, essendo meno informata, potrebbe causare l'espansione di nodi aggiuntivi che $h_2$ eviterebbe.
+
+!!! info
+    **"Un'euristica più informata riduce lo spazio di ricerca (è più efficiente), ma è tipicamente più costosa da calcolare."**. Questo evidenzia un compromesso pratico: calcolare $h_2$ potrebbe richiedere più tempo o risorse rispetto a $h_1$. Bisogna bilanciare il costo del calcolo dell'euristica con il beneficio della riduzione del numero di nodi espansi.
+
+### 3.6.2 Generare euristiche da problemi rilassati
+
+Un problema con meno restrizioni sulle azioni possibili è detto problema rilassato. Il grafo dello spazio degli stati per il **problema rilassato** è un *supergrafo* di quello dello spazio degli stati originale, perché la rimozione dei vincoli crea nuovi archi nel grafo.
+
+!!! example
+    Nel gioco dell’8 mossa da A a B possibile se:
+    1. B adiacente a A
+    2. B libera
+    - $h_1$ e $h_2$ sono calcoli della distanza esatta della soluzione in versioni semplificate del puzzle:
+        - $h_1$ (nessuna restrizione): sono sempre ammessi scambi a piacimento tra caselle, quindi è il numero di caselle fuori posto.
+        - h2 (solo restrizione 1): sono ammessi spostamenti anche su caselle occupate, purché adiacenti, quindi rappresenta la somma delle distanze Manhattan.
+
+Se per un problema abbiamo una collezione di euristiche ammissibili $h_1, \dots, h_m$ e nessuna domina le altre, quale dovremmo scegliere? Possiamo prendere il meglio di tutte definendo:
+$$h(n) = max\{h_1(n), \dots , h_m(n)\}$$
+Dato che tutte le euristiche componenti sono ammissibili, $h$ è ammissibile (e se le $h_i$ sono tutte consistenti, $h$ è consistente). L’unico svantaggio è che $h(n)$ richiede più tempo di calcolo.
+
+### 3.6.3 Generare euristiche da sottoproblemi: database di pattern
+
+È possibile derivare euristiche ammissibili dal costo della soluzione di un sottoproblema del problema dato. L’idea alla base dei **database di pattern** è di memorizzare i costi esatti delle soluzioni di ogni possibile istanza di sottoproblema.
+
+- Durante la ricerca, si ottiene $h_{DB}$​ per uno stato semplicemente consultando il database, che contiene i costi associati a configurazioni specifiche di sottoproblemi.
+- Il database viene creato eseguendo una ricerca all'indietro dallo stato obiettivo. Per ogni nuova configurazione incontrata, si calcola e memorizza il costo.
+- Il costo di costruzione del database è **ammortizzato** perché può essere riutilizzato in molteplici istanze dello stesso problema.
