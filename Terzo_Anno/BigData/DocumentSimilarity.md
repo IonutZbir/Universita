@@ -248,3 +248,49 @@ Questa divisione introduce un vincolo più forte per considerare due colonne sim
 Quindi, due colonne sono considerate coppie candidate secondo la Jaccard similarity se almeno una banda è mappata nello stesso bucket. Questo approccio riduce i falsi positivi e negativi rispetto all’hash dell’intera colonna, bilanciando precisione ed efficienza.
 
 ![Bande LSH](img/lsh_bands_buckets.png){width="500" style="display: block; margin: 0 auto"}
+
+#### Esempio
+
+Analizziamo un esempio di LSH applicato per identificare coppie di documenti simili, supponendo il seguente scenario:
+
+- Numero di documenti: $N = 100,000$ (ciascun documento è rappresentato come una colonna).
+- Dimensione delle firme (signature): Ogni documento è rappresentato da una firma di $100$ interi ($t =100$ righe totali per firma).
+- La firma rappresenta una sintesi del contenuto del documento (generata usando tecniche come il MinHash).
+Complessivamente, le firme occupano circa 40 MB in memoria.
+
+Adesso dobbiamo capire come suddividere le righe:
+
+- Si suddivide ogni firma in $b = 20$ bande. Ogni banda contiene $r=5$ righe.
+- Questo implica che la firma di 100 righe è divisa in $b \times r = 20 \times 5 = 100$ righe totali, corrispondenti esattamente alla lunghezza della firma.
+
+In input, oltre ai documenti prendiamo un parametro $s$, ovvero la soglia di similitudine, in questo caso supponiamo $s = 0.8$. Quindi l'obiettivo è trovare tutte le coppie di documenti con Jaccard Similarity $\geq 0.8$.
+
+1. **Primo caso**, assumiamo che date due colonne $C_1$ e $C_2$, $J.sim(C_1, C_2) = 0.8$.
+
+    !!! note
+        Affinché $C_1$ e $C_2$​ siano considerate una **coppia candidata**, devono avere nello stesso bucket almeno una banda in comune. Questo implica che le loro righe in quella banda devono essere identiche.
+
+    - **Fatto 1: Probabilità che $C_1$ e $C_2$​ siano identiche in una banda**,
+      - In una banda di 5 righe $(r = 5)$, la probabilità che tutte le righe corrispondano è $(0.8)^5 = 0.328$. Questo deriva dal fatto che, con $J.sim = 0.8$, ogni riga ha una probabilità di $0.8$ di essere identica.
+    - **Fatto 2: Probabilità che $C_1$ e $C_2$ non siano identiche in tutte le 20 bande**,
+      - Se in una banda la probabilità che 2 righe non corrispondono è $1 - 0.328 = 0.672$, allora la probabilità che non corrispondano in nessuna delle 20 bande è $(0.672)^{20} \approx 0.00035$.
+
+    Quindi, in conclusione abbiamo che la probabilità che $C_1$​ e $C_2$​ non siano mai candidate (nessuna banda uguale) è $0.00035$, cioè $0.035 \%$. Questo significa che c'è una bassissima probabilità di **falsi negativi**, ovvero di perdere coppie realmente simili. In pratica, si riescono a identificare il $99.965 \%$ delle coppie di documenti realmente simili.
+
+2. **Secondo caso**, assumiamo che date due colonne $C_1$ e $C_2$, $J.sim(C_1, C_2) = 0.3$, quindi in questo caso si spera che con poca probabilità nessuna delle bande di $C_1$ e $C_2$ finiscano nello stesso bucket.
+
+   - **Fatto 1: Probabilità che $C_1$ e $C_2$​ siano identiche in una banda**,
+     - In una banda di 5 righe $(r = 5)$, la probabilità che tutte le righe corrispondano è $(0.3)^5 = 0.00243$. Questo deriva dal fatto che, con $J.sim = 0.3$, ogni riga ha una probabilità di $0.3$ di essere identica.
+   - **Fatto 2: Probabilità che $C_1$ e $C_2$ non siano identiche in tutte le 20 bande**,
+     - Se in una banda la probabilità che non corrispondono in una banda è $1 - 0.00243 = 0.99757$, allora la probabilità che non corrispondano in nessuna delle 20 bande è $(0.99757)^{20} \approx 0.9526$. Dunque, la probabilità che vengano hashate nello stesso bucket **alemno una volta (evento falso positivo)** è $1 - 0.9526 = 0.0474$
+
+   Quindi, in conclusione, circa il $4.74 \%$ delle coppie di documenti con $J.sim(C_1, C_2)=0.3$ vengono considerate coppie candidate. Questo è un **falso positivo**, poiché queste coppie vengono selezionate come candidate ma non soddisfano la soglia di similarità $s$. Tale percentuale non è un problema così grande, in quanto i falsi positivi possono essere poi controllati usando la matrice caratteristica degli shingles. Il problema occorre quando il numero di falsi negativi è troppo grande in quanto è molto più difficile identificare tali coppie.
+
+#### Analisi LSH
+
+In un scenario ideale, LSH è in grado di separare in modo perfetto i documenti simili da quelli non simili, a patto di impostare correttamente la soglia di similarità. Tuttavia, nella realtà, LSH non è perfetto e ci possono essere dei casi in cui documenti simili non vengono raggruppati o viceversa. Quindi in un scenario ideale, data una soglia di similitudine $s$ vorremmo che: presa una coppie di documenti/colonne $C_1$ e $C_2$, se $J.sim(C_1, C_2) = x$.
+
+- Se $x > s$ la probabilità che queste due colonne siano simili deve essere pari a 1, altrimenti;
+- Se $x < s$, allora con probabilità 0 queste due colonne non siano classificate come simili.
+
+![LSH Ideale](img/lsh_ideal.png){width="500" style="display: block; margin: 0 auto"}
