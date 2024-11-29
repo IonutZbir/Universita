@@ -141,3 +141,12 @@ Dove:
 - L'addizione incorpora il nuovo carattere.
 
 Questo metodo opera in tempo costante per gli aggiornamenti, ma l'algoritmo deve memorizzare gli ultimi $n$ caratteri del flusso per accedere a $x[i − n + 1]$​. Di conseguenza, richiede uno spazio $O(n)$.
+
+## Sampling in un datastream
+
+Poiché non possiamo mantenere in memoria l'intero flusso di dati, un approccio naturale consiste nel memorizzare solo un campione del flusso, su cui poi eseguire le nostre query. Esistono due approcci comuni:
+
+1. Eseguire il campionamento di una **proporzione fissa** di elementi dallo stream, ad esempio, un decimo dei dati.
+2. Mantenere un campione casuale di **dimensione fissa**, anche su flussi potenzialmente infiniti.
+
+L'obiettivo che vogliamo perseguire è il seguente: ad ogni istante di tempo $t$, vogliamo che il campione $s$ contenga solo elementi che abbiano la stessa probabilità di essere selezionati dallo stream, indipendentemente dal momento in cui sono stati osservati.
