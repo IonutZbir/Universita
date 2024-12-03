@@ -15,6 +15,7 @@
       - [Primo approccio (intuizione)](#primo-approccio-intuizione)
       - [Secondo approccio (giusto)](#secondo-approccio-giusto)
       - [Come mantenere le condizioni del DGIM](#come-mantenere-le-condizioni-del-dgim)
+      - [Output dell'algoritmo](#output-dellalgoritmo)
 
 # Mining Data Stream
 
@@ -595,3 +596,29 @@ In coclusione, poiché ci sono al massimo $log_2(N)$ diverse dimensioni di bucke
     2. **Aggiornamenti efficienti**: Le operazioni di inserimento, eliminazione e rotazione sono tutte \( O(\log N) \), garantendo che il sistema rimanga bilanciato anche con flussi di aggiornamenti frequenti.
     3. **Facilità di fusione**: Quando un bucket più piccolo deve essere eliminato o fuso con uno più grande, gli AVL ti permettono di accedere al bucket precedente o successivo in modo efficiente.
     4. **Memoria limitata**: Non ci sono overhead significativi oltre alla struttura bilanciata, il che è utile per un approccio come \( O(\log^2 N) \) richiesto dall'algoritmo.
+
+#### Output dell'algoritmo
+
+Supponiamo di voler calcolare quanti "1" sono presenti negli ultimi $k$ bit di una finestra, per un valore $1 \leq k \leq N$. Utilizzando l'algorimo **DGIM** otteniamo:
+
+1. Si individua il bucket $b$ con il timestamp meno recente che include almeno una parte degli $k$ bit più recenti.
+2. Si somma la dimensione di tutti i bucket attivi che hanno un timestamp inferiore o uguale a $k$.
+3. Infine, si aggiunge **metà** della dimensione del bucket $b$ che ha un timestamp inferiore o uguale a $k$, poiché non si può determinare con precisione quanti degli 1 in quel bucket appartengano effettivamente alla sottofinestra obiettivo.
+
+!!! success
+    #### Teorema
+    L'errore di approssimazione di **DGIM** per il calcolo di $\#1(I, N, k)$ è al massimo $1.5$ nel caso peggiore.
+    #### Dimostrazione
+    Si vuole dimostrare che, nel caso peggiore, il rapporto tra la stima $Y$ calcolata dall'algoritmo **DGIM** e il valore reale $\#1(I,N,k)$ non supera mai 1.5. Questo significa che **DGIM** garantisce un errore massimo del 50% rispetto al valore corretto.
+    - Assumiamo che il bucket più vecchio nella finestra abbia una dimensione $2^r$.
+    - Assumiamo inoltre che il numero di 1 nella finestra si **inferiore** al valore approssimato, cioé $\#1(I, N, k) < Y$.
+
+    $$Y = \sum_{j = 0}^{r - 1} a_j \cdot 2^j + \frac{1}{2} \cdot 2^r = \Sigma + \frac{1}{2} \cdot 2^r = \Sigma + 2^{r - 1}$$
+
+    dove $a_j \in \{1, 2\}$ è il numero di buckets aventi size $2^j$.
+
+    Nel **caso peggiore**, il numero reale di 1 è: $\#1(I, N, k) \geq \Sigma + 1$, questo perché ci sono almeno i contributi di tutti i bucket completi ($\Sigma$) e almeno un 1 del bucket più vecchio.
+    Il rapporto tra la stima $Y$ e il valore reale $\#1(I, N, k)$ è dato da:
+    $$\frac{Y}{\#1(I, N, k)} \leq \frac{\Sigma + 2^{r - 1}}{\Sigma + 1}$$
+    Poiché esiste almeno un bucket per ogni dimensione minore di $2^r$, allora: $\Sigma \geq 2^r - 1$, allora:
+    $$\frac{Y}{\#1(I, N, k)} \leq \frac{(2^r - 1) + 2^{r - 1}}{(2^r - 1) + 1} \leq 1 + $$
