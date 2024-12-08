@@ -1,14 +1,14 @@
 - [Mining Data Stream](#mining-data-stream)
-  - [Pattern Matching](#pattern-matching)
+  - [1. Pattern Matching](#1-pattern-matching)
     - [Cos'è uno sketch?](#cosè-uno-sketch)
     - [Funzione Hash di Rabin](#funzione-hash-di-rabin)
     - [Algoritmo di Karp-Rabin](#algoritmo-di-karp-rabin)
-  - [Sampling in un datastream](#sampling-in-un-datastream)
+  - [2. Sampling in un datastream](#2-sampling-in-un-datastream)
     - [Sampling di una proporzione fissata](#sampling-di-una-proporzione-fissata)
       - [Algoritmo wrong](#algoritmo-wrong)
       - [Algoritmo corretto](#algoritmo-corretto)
     - [Sample di dimensione fissa](#sample-di-dimensione-fissa)
-  - [Sliding Window - Contare Bit](#sliding-window---contare-bit)
+  - [3. Sliding Window - Contare Bit](#3-sliding-window---contare-bit)
     - [Problema](#problema)
     - [Soluzione Approssimata](#soluzione-approssimata)
     - [L'algoritmo di Datar-Gionis-Indyk-Motwani](#lalgoritmo-di-datar-gionis-indyk-motwani)
@@ -16,6 +16,15 @@
       - [Secondo approccio (giusto)](#secondo-approccio-giusto)
       - [Come mantenere le condizioni del DGIM](#come-mantenere-le-condizioni-del-dgim)
       - [Output dell'algoritmo](#output-dellalgoritmo)
+      - [Contare gli interi](#contare-gli-interi)
+  - [4. Filtering a data stream](#4-filtering-a-data-stream)
+    - [First-Cut Algorithm](#first-cut-algorithm)
+      - [Proprietà dell'algoritmo](#proprietà-dellalgoritmo)
+      - [Analisi](#analisi)
+    - [Bloom Filter](#bloom-filter)
+      - [Analisi](#analisi-1)
+  - [5. Contare elementi distinti](#5-contare-elementi-distinti)
+    - [Approccio "Magico" di Flajolet-Martin](#approccio-magico-di-flajolet-martin)
 
 # Mining Data Stream
 
@@ -49,7 +58,7 @@ I flussi di dati possono essere archiviati in un archivio di grandi dimensioni p
 
 Per l'elaborazione operativa delle query, si utilizza invece una memoria di lavoro (cache), che può contenere sintesi o porzioni di dati del flusso, ovvero i nostri sketch e sample.
 
-## Pattern Matching
+## 1. Pattern Matching
 
 Un primo problema fondamentale di statistica sui flussi di dati è il **pattern matching**. Supponiamo che gli elementi del flusso $x_i$​ appartengano a un alfabeto $\Sigma$, rendendo il flusso una stringa di lunghezza $m$ su $\Sigma$.
 
@@ -161,7 +170,7 @@ Dove:
 
 Questo metodo opera in tempo costante per gli aggiornamenti, ma l'algoritmo deve memorizzare gli ultimi $n$ caratteri del flusso per accedere a $x[i − n + 1]$​. Di conseguenza, richiede uno spazio $O(n)$.
 
-## Sampling in un datastream
+## 2. Sampling in un datastream
 
 Poiché non possiamo mantenere in memoria l'intero flusso di dati, un approccio naturale consiste nel memorizzare solo un campione del flusso, su cui poi eseguire le nostre query. Esistono due approcci comuni:
 
@@ -429,7 +438,7 @@ La soluzione a questo problema è il **Reservoir Sampling**, un algoritmo per ma
     #### Conclusione
     Per induzione, abbiamo dimostrato che, dopo \( n + 1 \) passi, ogni elemento visto finora ha probabilità \( \frac{s}{n + 1} \) di essere incluso nel campione \( S \). L'algoritmo quindi garantisce un campionamento uniforme con memoria \( O(s) \) e tempo \( O(1) \) per elemento.
 
-## Sliding Window - Contare Bit
+## 3. Sliding Window - Contare Bit
 
 Le sliding window rappresentano un modello molto utile nel contesto dell'elaborazione di flussi di dati. L'idea è quella di analizzare i dati in arrivo considerando una "finestra" di lunghezza $N$, che include solo gli ultimi $N$ elementi ricevuti. In questo modo possiamo concentrarci sui dati più recenti trascurando quelli passati. Un caso particolarmente interessante è quello in cui $N$ è cosi grande da rendere impossibile memorizzare tutti i dati in memoria o sul disco.
 
@@ -621,4 +630,179 @@ Supponiamo di voler calcolare quanti "1" sono presenti negli ultimi $k$ bit di u
     Il rapporto tra la stima $Y$ e il valore reale $\#1(I, N, k)$ è dato da:
     $$\frac{Y}{\#1(I, N, k)} \leq \frac{\Sigma + 2^{r - 1}}{\Sigma + 1}$$
     Poiché esiste almeno un bucket per ogni dimensione minore di $2^r$, allora: $\Sigma \geq 2^r - 1$, allora:
-    $$\frac{Y}{\#1(I, N, k)} \leq \frac{(2^r - 1) + 2^{r - 1}}{(2^r - 1) + 1} \leq 1 + $$
+    $$\frac{Y}{\#1(I, N, k)} \leq \frac{(2^r - 1) + 2^{r - 1}}{(2^r - 1) + 1} \leq \frac{(2^r - 1) + 2^{r - 1}}{(2^r - 1)} \leq 1 + \frac{2^{r - 1}}{2^r - 1} \approx 1 + 0.5$$
+    Poiché
+    $$\lim_{r \to \infty} \frac{2^{-1+r}}{-1 + 2^r} = \lim_{r \to \infty} \frac{\frac{2^r}{2}}{-1 + 2^r} = \frac{\frac{2^r}{2} \cdot \frac{1}{2^r}}{\left(-1 + 2^r\right) \cdot \frac{1}{2^r}} = \frac{\frac{1}{2}}{-\frac{1}{2^r} + 1}$$
+    Quando \( r \to \infty \), il termine \( \frac{1}{2^r} \) tende a 0, poiché \( 2^r \) cresce indefinitamente. Pertanto:
+    $$-\frac{1}{2^r} + 1 \to 1 \Rightarrow \lim_{r \to \infty} \frac{2^{-1+r}}{-1 + 2^r} = \frac{1}{2}$$
+
+!!! info
+    #### Idea chiave per ridurre l'errore
+    Invece di consentire 1 o 2 buckets per ciascuna dimensione, possiamo mantenere $b-1$ o $b$ buckets per ciascuna dimensione ($b > 2$). Per poter rappresentare qualsiasi numero possibile di "1", dobbiamo rilassare questa condizione per i buckets della dimensione 1 e per i buckets della dimensione più grande presente; in questi casi ci possono essere da 1 a $r$ buckets. La regola per combinare i buckets è essenzialmente la stessa, se ci troviamo con $r + 1$ bukcets della dimensione $2^j$, combiniamo i due buckets più a sinistra in un buckets della dimensione $2^{j+1}$. Questo, a sua volta, potrebbe causare la presenza di $r + 1$ secchi della dimensione $2^{j+1}$; in tal caso, continuiamo a combinare i secchi di dimensioni maggiori.
+
+    In questo modo, l'errore si riduce ad al più $O(\frac{1}{r})$. Scegliendo opportunamente $t$, possiamo bilanciare il compromesso tra la complessità spaziale e l'errore di approssimazione.
+
+#### Contare gli interi
+
+Si vuole vedere come estendere l'algoritmo per sommare gli ultimi $k$ elementi di uno stream, nel caso in cui tale flusso non fosse composto unicamente da cifre binarie ma da interi. L'idea è quella che, partendo dall'ipotesi di avere all'interno del flusso interi positivi nel range che va da 1 a $2^m$, per i quali sono quindi necessari $m$ bit per rappresentare ciascuno di questi valori univocamente, si considerino gli $m$ bits di ciascun intero come un flusso
+separato. Così facendo, si può usare l'algoritmo **DGIM** per stimare il numero di 1 che costituiscono un intero. Si supponga che il conto dell'i−esimo bit sia $c^i$. Si ha allora che la somma degli interi è:
+$$\sum^{m - 1}_{i = 0} c_i 2^i$$
+
+## 4. Filtering a data stream
+
+Un processo comune nei flussi di dati è la selezione o il filtraggio. Questo consiste nell'accettare solo le tuple del flusso che soddisfano un determinato criterio. Le tuple accettate vengono inviate come un nuovo flusso a un altro processo, mentre le altre vengono scartate.
+
+Se il criterio di selezione è calcolabile direttamente (ad esempio, "il primo componente è minore di 10"), la selezione è semplice.
+Il problema diventa più complesso se il criterio implica verificare l'appartenenza della tupla a un insieme. Questo è particolarmente difficile quando l'insieme è troppo grande per essere memorizzato nella memoria principale.
+
+Formalemente parlando abbiamo che:
+
+- **Stream Model**: Ciascun elemento del flusso di dati $X$ è un tupla $x = \langle key_1, key_2, \dots, key_k \rangle$.
+- **Input**: Una lista *buona* di elementi (coppie $(key, value)$) e un sottoinsieme $S$ di **valori buoni** per $key_1$.
+- **Task**: Determinare e **filtrare** tutte quelle tuple $x \in X$ avente la chiave $key_1(x)$ in $S$.
+
+Una soluzione banale consiste in memorizzare in una **Hash Table $T$** ogni elemento di $S$, e quando arriva un elemento $x$ del flusso, calcoliamo l'hash di $key_1(x)$ e verifichiamo se $x$ è presente in $T$. Questo approccio funziona bene per insiemi piccoli o moderati, ma si rompe quando $S$ è molto grande, come nel caso di Big Data.
+
+### First-Cut Algorithm
+
+**Fase 1: Pre-Prossessing**
+
+**Input:** Set $S$ of *good values* for $key_1$, size of bit array $n$
+**Output:** Bit array $B[1 \dots n]4 representing the filter
+
+1. Initialize $B[1 \dots n]$ to all $0s$
+2. Choose a hash function $h: U \Rightarrow [1, n]$
+3. For each element $s \in S$:
+       - Compute index $i = h(s)$
+       - Set $B[i] = 1$
+
+**Fase 2: Online**
+
+**Input:** Stream element $x = \langle x_1, ..., x_k \rangle$, bit array $B$, hash function $h$
+**Output:** Decision to accept or reject the stream element $x$
+
+1. Compute index $i = h(x_1)$
+2. If $B[i] = 1$:
+        - Accept stream element $x$
+   Else:
+        - Reject stream element $x$
+
+#### Proprietà dell'algoritmo
+
+- **False Positives (Falsi positivi):**
+    - Un elemento $x$ potrebbe essere accettato anche se non appartiene realmente a $S$. Ciò avviene perché più elementi possono essere mappati allo stesso indice (collisioni) e un bit impostato a 1 può non corrispondere all'elemento giusto.
+    - Esempio: Un elemento "non buono" mappa su un indice già impostato a 1 da un elemento buono.
+
+- **No False Negatives (Nessun falso negativo):**
+    - Se un elemento appartiene effettivamente a $S$, viene sempre accettato, perché la fase di pre-elaborazione si assicura che i bit corrispondenti agli elementi di $S$ siano impostati a 1.
+    - Questo garantisce che gli elementi validi non vengano mai scartati.
+
+#### Analisi
+
+L'analisi del problema viene tradotta nel seguente esperimento:
+
+- **Palline:** Ogni elemento di $S$ (cioè gli hash dei buoni valori di $S$).
+- **Contenitori:** I bucket $B[0], B[1], \dots, B[n−1]$, rappresentati da $n$ bit.
+- **Distribuzione casuale:** Una funzione hash assegna casualmente ogni pallina a uno dei $n$ contenitori.
+- **Obiettivo:** Stimare la probabilità che un contenitore riceva almeno una pallina.
+
+- Per ogni pallina (elemento hashato), la probabilità che finisca in un contenitore specifico è $\frac{1}{n}$, dato che la funzione hash distribuisce uniformemente gli elementi tra gli $n$ contenitori.
+- La probabilità che nessuna delle $m$ palline finisca in un contenitore specifico è $\left(1 − \frac{1}{n} \right)^m$, cioè tutte le $m$ palline mancano quel contenitore.
+- Di conseguenza, la probabilità che almeno una pallina finisca in quel contenitore è:
+$$Pr[\text{Un contenitore contiene almeno una pallina }] = 1 - \left(1 − \frac{1}{n} \right)^m$$
+Per $m$ grande e $n$ sufficientemente grande, possiamo approssimare $\left(1 − \frac{1}{n} \right)^m$ con $e^{-m/n}$ utilizzando l'espansione $(1−x)^m \approx e^{−mx}$.
+Quindi, la probabilità diventa:
+$$Pr[\text{ Errore }] \approx 1 − e^{−m/n}$$
+In conclusione, la probibilità che ci siano dei falsi positivi è: $1 − e^{−m/n}$.
+
+### Bloom Filter
+
+**Input:** Set $S$ di elementi buoni, dimensione del bit array $B = n$, $k$ funzioni hash indipendenti $h_1, \dots, h_k$
+**Output:** Bit array $B$ inizializzato per rappresentare $S$
+
+1. Inizializza $B[1 \dots n]$ a tutti 0
+2. Per ogni elemento $s \in S$:
+    - Per ogni funzione hash $h_i (i = 1, \dots, k)$:
+        - Calcola indice: $index = h_i(s)$
+        - Imposta $B[index] = 1$
+
+**Input:** Elemento del flusso $x$, bit array $B$, $k$ funzioni hash indipendenti $h_1, \dots, h_k$
+**Output:** Decidi se accettare o scartare $x$
+
+1. Per ogni funzione hash $h_i (i = 1, \dots, k)$:
+       - Calcola indice: $index = h_i(x)$
+       - if $B[index] \neq 1$:
+            - Scarta $x$ (non può essere in $S$)
+            - Esci
+
+2. if tutti $B[index] = 1$ per tutte le funzioni hash $h_1, \dots, h_k$:
+       - Accetta $x$ (potrebbe essere in $S$) altrimenti scarta $x$
+
+#### Analisi
+
+Per analizzare il bloom filter supponiamo di trovarci nel seguente scenario: stiamo "lanciando $k \cdot m$" palline in $n$ contenitori (dove $k$ è il numero di funzioni hash, $m$ è il numero di elementi, e $n$ è la dimensione del array di bit $B$). La frazione dei bit impostati a 1 nel vettore $B$ può essere approssimata come:
+$$(1 − e^{−km/n})$$
+dove:
+- $km$: Numero totale di hash calcolati (cioè "palline").
+- $n$: Numero di contenitori (dimensione di $B$).
+Un falso positivo si verifica quando un elemento $x$ non appartenente a $S$ viene erroneamente accettato perché tutti i bit corrispondenti alle sue $k$ hash sono 1. La probabilità di falso positivo è quindi:
+$$(1 − e^{−km/n})^k$$
+ovvero che per tutte le $k$ funzioni hash i bit siano impostati a 1.
+Poiché dobbiamo minimizzare il numero di falsi positivi, il valore ottimale di $k$ per minimizzare i falsi positivi è dato da:
+$$k_{opt} = \frac{n}{m}ln⁡(2)$$
+
+!!! question
+    #### Cosa succede aumentando $k$?
+
+    - Per valori di $k$ troppo bassi, non ci sono abbastanza hash per separare gli elementi, e i falsi positivi aumentano.
+    - Per valori di $k$ troppo alti, molti hash aggiuntivi finiscono per sovraccaricare i bit, causando collisioni e, di conseguenza, un aumento della probabilità di falsi positivi.
+    - C'è quindi un equilibrio che viene raggiunto quando $k$ è vicino al valore ottimale $k_{opt} = \frac{n}{m}ln⁡(2)$.
+
+## 5. Contare elementi distinti
+
+Si considera un flusso di dati composto da una sequenza di elementi selezionati da un insieme universo $U$ di dimensione $N$.
+Obiettivo: Mantenere un conteggio $d$ del numero di elementi distinti visti finora nel flusso.
+
+Un approccio banale è il seguente: teniamo traccia degli elementi distinti che appaiono nel flusso utilizzando una **Hash Table** o una struttura simile. Ogni volta che arriva un elemento dal flusso, si verifica se è gia presente nell'insieme, se non lo è aggiorniamo il contatore $d$ e inseriamo l'elemento nuovo nell'insieme. Questo metodo funziona bene per insiemi piccoli o moderati, tuttavia, quando la dimensione dell'universo $\left | U \right |$ è molto grande, l' uso di una Hash Table può diventare inefficiente in temini di memoria.
+
+La soluzione a questo problema è un algoritmo randomizzato probabilistico, infatti accettiamo un'approssimazione per $d$, cioè permettiamo un errore controllato nel calcolo, ma con la condizione che la probabilità di errore sia limitata.
+
+### Approccio "Magico" di Flajolet-Martin
+
+L'algoritmo **Flajolet-Martin** si basa su una proprietà probabilistica legata ai numeri binari e utilizza una semplice rappresentazione compatta (**sketch**).
+
+1. **Pre-Processing**
+
+Si sceglie una funzione hash $h$ che mappa ogni elemento dell'universo $U$ in una stringa binaria: $h: U \Rightarrow \{0, 1\}^s$
+
+- $s \geq log_2(N)$, dove $N$ è la dimensione dell'universo $U$.
+- La funzione hash deve distribuire gli elementi in modo uniforme.
+
+2. **Calcolo di $r(a)$**
+
+Per ogni elemento del flusso $a$, si calcola $h(a)$, il valore hash.
+Si definisce $r(a)$ come la posizione del primo 1 contando da destra nella rappresentazione binaria di $h(a)$.
+
+- Esempio: Se $h(a) = 01100$, allora $r(a) = 3$.
+
+3. **Sketch $R$**
+
+Si mantiene uno sketch compatto $R$, che è semplicemente il massimo valore di $r(a)$ osservato finora:
+$$R = \max \{ r(a) | a \text{ visto finora } \}$$
+
+4. **Stima del numero di elementi distinti**
+
+L'idea chiave dell'algoritmo è che il valore di $R$ è legato al numero di elementi distinti $d$ osservati. La formula per stimare $d$ è:
+$$m = 2^R$$
+Questo restituisce una stima approssimativa $(m)$ del numero di elementi distinti nel flusso.
+
+**Esempio pratico**
+
+1. Supponiamo di avere un flusso con elementi \( \{a, b, c, d\} \).
+2. La funzione hash produce i seguenti valori binari:
+   - \( h(a) = 01000 \) $\rightarrow$ \( r(a) = 4 \)
+   - \( h(b) = 00010 \) $\rightarrow$ \( r(b) = 2 \)
+   - \( h(c) = 00100 \) $\rightarrow$ \( r(c) = 3 \)
+   - \( h(d) = 10000 \) $\rightarrow$ \( r(d) = 5 \)
+3. Lo sketch \( R \) è il massimo: \( R = 5 \).
+4. Stima del numero di elementi distinti: $m = 2^R = 2^5 = 32$
