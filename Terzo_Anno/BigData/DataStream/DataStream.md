@@ -25,6 +25,13 @@
       - [Analisi](#analisi-1)
   - [5. Contare elementi distinti](#5-contare-elementi-distinti)
     - [Approccio "Magico" di Flajolet-Martin](#approccio-magico-di-flajolet-martin)
+      - [Anasili dell'algoritmo](#anasili-dellalgoritmo)
+  - [6. Calcolare momenti](#6-calcolare-momenti)
+    - [Metodo AMS (Alon, Matias, Szegedy)](#metodo-ams-alon-matias-szegedy)
+      - [Analisi](#analisi-2)
+    - [Momenti di ordine maggiore](#momenti-di-ordine-maggiore)
+      - [Problema dei flussi illimitati](#problema-dei-flussi-illimitati)
+      - [Soluzione: Campionamento a dimensione fissa (Fixed-Size Sampling)](#soluzione-campionamento-a-dimensione-fissa-fixed-size-sampling)
 
 # Mining Data Stream
 
@@ -773,7 +780,7 @@ L'algoritmo **Flajolet-Martin** si basa su una proprietà probabilistica legata 
 
 1. **Pre-Processing**
 
-Si sceglie una funzione hash $h$ che mappa ogni elemento dell'universo $U$ in una stringa binaria: $h: U \Rightarrow \{0, 1\}^s$
+Si sceglie una funzione hash $h$ che mappa ogni elemento dell'universo $U$ in una stringa binaria: $h: U \rightarrow \{0, 1\}^s$
 
 - $s \geq log_2(N)$, dove $N$ è la dimensione dell'universo $U$.
 - La funzione hash deve distribuire gli elementi in modo uniforme.
@@ -806,3 +813,199 @@ Questo restituisce una stima approssimativa $(m)$ del numero di elementi distint
    - \( h(d) = 10000 \) $\rightarrow$ \( r(d) = 5 \)
 3. Lo sketch \( R \) è il massimo: \( R = 5 \).
 4. Stima del numero di elementi distinti: $m = 2^R = 2^5 = 32$
+
+**Proprietà**
+
+- Occorrenze ripetute dello stesso elemento non influiscono sul valore di $R$. Infatti un elemento $a$ sarà sempre mappato nello stesso hash $h(a)$, dunque avrà sempre lo stesso valore di $r(a)$.
+- Se abbiamo una collezione di sketch $R_1, R_2, \dots, R_k$ da diversi stream, possiamo combinarli facilmente per calcolare il valore $d$ in questo modo: $\max \{R_1, R_2, \dots, R_k\}$.
+
+#### Anasili dell'algoritmo
+
+La funzione hash $h : [N] \rightarrow \{0, 1\}^2$ è una funzione perfetta che assegna un hash binario a ciascun elemento del dominio. La condizione $s \geq log(⁡N)$ garantisce che ci sia abbastanza spazio per rappresentare tutti i valori possibili.
+
+- **Fatto 1:** Per ogni $a$, vale che $Pr[r(a) \geq r] = \frac{2^{s - r}}{2^s} = \frac{1}{2^r}$. Defianiamo dunque una variabile aleatoria $X_r = 1$ se e solo se esiste un elemento $a$ dello stream tale che $r(a) \geq a$.
+- **Fatto 2:** $Pr[X_r = 1] = 1 - (1 - 2^{-r})^d$ e $Pr[X_r = 0] = (1 - 2^{-r})^d$ dove:
+  - (1 - 2^{-r}) è la probabilità che dato un elemento $a$, $r(a) < r$.
+  - $d$ è il numero reale di elementi distinti, ovvero il nostro numero target da stimare.
+
+Sia $m = 2^R$ la nostra approssimazione per $d$, possiamo calcolare la probabilità di errore per ogni costante $c > 0$ nel seguente modo:
+
+1. Caso $m > 2^c \cdot d$, ovvero in output diamo una sovrastima per $d$.
+
+\[
+\begin{aligned}
+\Pr[m > 2^c \cdot d] &= \Pr[2^R > 2^c \cdot d] \\
+&= \Pr[\log_2(2^R) > \log_2(2^c \cdot d)] \\
+&= \Pr[R \cdot \log_2(2) > \log_2(2^c) + \log_2(d)] \\
+&= \Pr[R > \log_2(d) + c] \\
+&= \Pr[X_{\log_2(d) + c} = 1] \\
+&= 1 - (1 - 2^{-(\log_2(d) + c)})^d \\
+&\leq d \cdot 2^{-(\log_2(d) + c)} \\
+&= \frac{d}{2^{\log_2(d) + c}} = \frac{d}{d \cdot 2^{-c}} \\
+&= 2^{-c}
+\end{aligned}
+\]
+
+È stata usata la seguente disuguaglianza: $(1 - x)^d \geq 1 - xd$ con $x = 2^{-(\log_2(d) + c)}$
+
+2. Caso $m < 2^c \cdot d$, ovvero in output diamo una sottostima per $d$.
+
+\[
+\begin{aligned}
+\Pr[m < 2^c \cdot d] &= \Pr[2^R < 2^c \cdot d] \\
+&= \Pr[R < \log_2(d) - c] \\
+&= \Pr[X_{\log_2(d) - c} = 0] \\
+&= (1 - 2^{-(\log_2(d) - c)})^d \\
+&\leq \exp(-2^{-(\log_2(d) - c)} \cdot d) \\
+&= \exp(-2^{c - 1}),
+\end{aligned}
+\]
+
+dove
+
+\[
+-2^{-(\log_2(d) - c)} \cdot d = -2^{-\log_2(d)} \cdot 2^c \cdot d = -\frac{2^c \cdot d}{2^{\log_2(d)}} = -2^c.
+\]
+
+È stata usata la seguente disuguaglianza: $(1 - x)^d \leq e^{-xd}$ con $x = 2^{-(\log_2(d) + c)}$
+
+Dovendo mantenere un unico contatore, lo spazio richiesto è: $O(log(log(N)))$.
+
+- \( E[2^R] \), l'aspettativa di \( 2^R \), risulta **infinita**. Questo accade perché, nonostante la probabilità di avere valori elevati di \( R \) diminuisca esponenzialmente, i valori di \( 2^R \) crescono ancora più rapidamente.
+- In altre parole, quando \( R \) aumenta di 1, la probabilità di \( R \) si dimezza, ma il valore \( 2^R \) raddoppia, causando un'esplosione nell'aspettativa.
+- Il problema viene mitigato utilizzando **molte funzioni hash** (\( h_i \)) per generare **molti sketch** (\( R_i \)) indipendenti tra loro.
+
+Un primo aproccio è quello di calcolare la media o la mediana di questi sketch.
+  - **Media** Può essere sensibile a valori estremamente grandi di \( 2^{R_i} \), che influenzano in modo eccessivo il risultato.
+  - **Mediana** È più robusta, ma può ancora introdurre errori sistematici poiché tutte le stime sono potenze di 2.
+
+**La soluzione pratica è**:
+  - Si divide l'insieme dei campioni in **piccoli gruppi**.
+  - Si calcola la **mediana** per ogni gruppo.
+  - Si calcola infine la **media** delle mediane. Questo metodo bilancia la robustezza della mediana con l'accuratezza della media.
+
+## 6. Calcolare momenti
+
+Supponiamo che un flusso (stream) consista di elementi scelti da un insieme universale. Assumiamo che l'insieme universale sia ordinato, così da poter parlare del $i$-esimo elemento per qualsiasi $i$. Sia $m_i$​ il numero di occorrenze dell'elemento $i$-esimo per ogni $i$. Allora il $k$-esimo momento del flusso è dato da:
+$$\sum_{i}(m_i)^k$$
+
+1. **Momento di ordine 0**:
+   - **\( 0^\text{th} \) moment = numero di elementi distinti**:
+   - Questo rappresenta semplicemente il conteggio degli elementi distinti nel flusso. È spesso legato al problema di calcolare la diversità o la cardinalità di un insieme di dati.
+
+2. **Momento di ordine 1**:
+   - **\( 1^\text{st} \) moment = numero totale di elementi**:
+   - È uguale alla cardinalità totale del flusso (\( |I| \)), ovvero il numero complessivo di elementi, contando tutte le occorrenze. È semplice da calcolare, poiché corrisponde alla somma di tutte le \( m_i \).
+
+3. **Momento di ordine 2**:
+   - **\( 2^\text{nd} \) moment = "surprise number" (\( S \))**:
+   - Questo momento misura quanto è **irregolare** (o "non uniforme") la distribuzione degli elementi nel flusso. Valori più alti di \( S \) indicano una distribuzione più sbilanciata, dove alcuni elementi appaiono molto più frequentemente di altri.
+
+### Metodo AMS (Alon, Matias, Szegedy)
+
+Il metodo **AMS** funziona per tutti i momenti e fornisce una stima non distorta del momento. In questo contesto, ci concentriamo sul secondo momento $S$.
+
+Viene selezionato e aggiornato un campione di $k$ variabili casuali indipendenti e identicamente distribuite $\{X_j: j = 1, \dots, k\}$, ciascuna definita da due attributi:
+
+- $X.el$: rappresenta un elemento specifico $i$ del flusso.
+- $X.val$: rappresenta il numero di occorrenze future dell’elemento $i$ nel sottostream successivo.
+
+l conteggio $X.val$ richiede memoria principale per monitorare le occorrenze dunque il numero di variabili $k$ deve essere limitato per mantenere l’efficienza.
+
+Formalmente abbiamo che:
+
+1. **Input**:
+   - Il flusso è rappresentato come \( I[1, \dots, L] \), di lunghezza \( L \).
+
+2. **Definizione di \( X.el \) e \( X.val \)**:
+   - Si sceglie un **tempo \( t \)** a caso (uniformemente) nell’intervallo \( [1, L] \).
+   - Si imposta \( X.el = i \), dove \( i \) è l’elemento del flusso corrispondente alla posizione \( t \) (\( i = I[t] \)).
+   - Si calcola \( X.val = c \), dove \( c \) è il numero di occorrenze future dell’elemento \( i \) nel sottostream \( I[t, \dots, L] \).
+
+3. **Stima del secondo momento**:
+   - L’algoritmo utilizza una funzione \( f(X) \) per stimare \( S \):
+     \[
+     S = f(X) = L \cdot (2 \cdot c - 1),
+     \]
+     dove \( c \) è il conteggio delle occorrenze future di \( X.e \).
+
+4. **Risultato finale**:
+   - L’algoritmo calcola più variabili \( X_1, X_2, \dots, X_k \) e combina i risultati.
+   - La stima finale è ottenuta come la media:
+     \[
+     S = \frac{1}{k} \sum_{j=1}^k f(X_j).
+     \]
+
+#### Analisi
+
+Possiamo dimostrare che il valore atteso di qualsiasi variabile costruita come mostrato sopra è il momento secondo del flusso da cui è costruita.
+
+Sia $L$ la lunghezza dello stream, allora:
+$$E[S] = E[L \cdot (2c - 1)] = \sum_{i = 1}^{L} L \cdot (2c(i) - 1) \cdot \frac{1}{L} = \sum_{i = 1}^{L} (2c(i) - 1)$$
+dove $\frac{1}{L}$ rappresenta la probabilità uniforme di selezionare uno specifico istante $t$ nell flusso.
+
+Per ogni elemento $a$ nel flusso, se l'elemento appare $m_a$ volte nel flusso, i suoi contributi sono calcolati considerando i punti in cui $a$ appare nel flusso.
+
+![AMS Method](../img/data_stream/ams.png){width="400" style="display: block; margin: 0 auto"}
+
+Se l'elemento $a$ appare $m_a$ volte nel flusso, i suoi contributi sono calcolati considerando i punti in cui $a$ appare nel flusso:
+
+- Per la prima occorrenza, $c(j(1))$ = m_a$
+- Per la seconda, $c(j(2)) = m_a − 1$,
+- Fino all'ultima, $c(j(m_a)) = 1$.
+
+In generale, per la $z - esima$ posizione
+$$c(j(z)) = m_a - (z - 1)$$
+
+Riscrivendo il risultato precendente, tenendo conto di questa ulteriore osservazione, abbiamo che:
+$$E[S] = E[L \cdot (2c - 1)] = \sum_{a \in A} \sum_{z = 1}^{m_a} (2z - 1) = \sum_{a \in A} (m_a)^2$$
+ricordando che $\sum_{i = 1}^l (2i - 1) = l^2$.
+
+### Momenti di ordine maggiore
+
+Il metodo **AMS** può essere generalizzato per stimare momenti di ordine $k \geq 2$, sostituendo il termine $2v − 1$ con $v^k − (v − 1)^k$ nella formula. Questa generalizzazione si basa sulle proprietà algebriche delle differenze tra potenze successive e consente di calcolare i momenti superiori con lo stesso principio fondamentale.
+
+L’obiettivo è migliorare l’accuratezza delle stime aumentando la fiducia nel risultato. Il processo funziona così:
+
+1. Calcolo della funzione $f(X)$:
+    - Si calcola $f(X) = n(2c−1)$ dove:
+    - $n$ è la lunghezza del flusso.
+    - $c$ è il numero di occorrenze future di un elemento $i$ associato alla variabile $X$.
+    - Questo calcolo viene ripetuto per più variabili indipendenti $(X_1, X_2, \dots ,X_k)$ fino al limite della memoria disponibile.
+
+2. Media dei campioni:
+    Per migliorare la stabilità della stima, si divide il set di variabili $X$ in gruppi e si calcola la media dei risultati $f(X)$ per ogni gruppo. La media di questi gruppi riflette il valore atteso $E(X)$, aiutando a ridurre il rumore casuale.
+3. Mediana delle medie:
+    Infine, si calcola la mediana delle medie dei gruppi. La mediana è robusta rispetto agli outlier, quindi questa strategia riduce l’impatto di campioni anomali, producendo una stima più stabile.
+
+Questa diapositiva affronta il problema di gestire **flussi di dati infiniti** nel contesto del metodo AMS, dove la memoria è limitata e non si possono conservare tutte le informazioni relative al flusso.
+
+#### Problema dei flussi illimitati
+
+1. **La variabile \( X \) dipende dalla lunghezza del flusso \( L \):**
+   - Quando si calcola \( f(X) = L \cdot (2c - 1) \), il valore \( L \) (lunghezza del flusso) cresce all'infinito nei flussi reali.
+   - Una possibile soluzione è gestire \( L \) separatamente, mantenendo solo il conteggio \( c \) associato alla variabile \( X \), riducendo così la memoria necessaria.
+
+2. **Memoria limitata (\( k \)):**
+   - Se possiamo memorizzare solo \( k \) conteggi (\( X_1, X_2, \dots, X_k \)), dobbiamo **eliminare alcune variabili \( X \)** man mano che il flusso cresce.
+   - Questo introduce la necessità di selezionare \( X \) in modo che il campione rimanga rappresentativo del flusso intero.
+
+Per garantire che ogni **posizione \( t \)** nel flusso sia scelta con una probabilità uniforme \( k / L \), dove \( L \) è il numero totale di elementi osservati fino a quel momento.
+
+#### Soluzione: Campionamento a dimensione fissa (Fixed-Size Sampling)
+
+Questo problema viene risolto utilizzando una tecnica nota come **Reservoir Sampling**, che permette di mantenere un campione casuale di dimensione \( k \) da un flusso infinito. Il processo funziona così:
+
+1. **Inizializzazione:**
+   - Seleziona i primi \( k \) elementi del flusso in modo deterministico e memorizzali. Questo è semplice perché inizialmente il flusso è più corto di \( k \).
+
+2. **Gestione degli elementi successivi (\( L > k \)):**
+   - Quando il flusso raggiunge un elemento \( L \) (dove \( L > k \)), selezionalo con probabilità:
+     \[
+     \text{Probabilità} = \frac{k}{L}.
+     \]
+   - Questo assicura che ogni elemento del flusso, incluso quello corrente, abbia una probabilità uniforme di essere scelto nel campione.
+
+3. **Sostituzione:**
+   - Se l'elemento corrente viene selezionato, elimina uno dei \( k \) elementi esistenti dal campione, scelto **a caso**.
+   - Questo mantiene il campione di dimensione fissa \( k \), garantendo che sia sempre rappresentativo.
