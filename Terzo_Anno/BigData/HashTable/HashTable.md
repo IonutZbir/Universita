@@ -24,7 +24,7 @@ L'idea è quella di tenere in memoria un tabella (array $H$) e ogni $H[i]$ è un
 
 Una **collisione** avviene quando, dati due elementi $u \in U$ e $v \in V$ tali che $u \neq v$, e $h(u) = h(v)$.
 
-L'obiettivo è trovare una funzione $h$ di hash tale che rispetti le seguenti caratteristiche:
+L'obiettivo è trovare una funzione hash $h$ tale che rispetti le seguenti caratteristiche:
 
 1. Deterministica: La stessa chiave deve produrre lo stesso indice.
 2. Uniforme: Le chiavi devono essere distribuite uniformemente nell'array per minimizzare le collisioni.
@@ -46,7 +46,7 @@ Di conseguenza, la stessa chiave $u$ potrebbe essere associata a indici diversi 
 
 Per ovviare a questo problema, è necessario memorizzare esplicitamente ogni coppia $(u,\ h(u))$. Così, ogni volta che vogliamo fare una ricerca (`lookup`), possiamo trovare la posizione esatta di $u$ senza dipendere dalla generazione casuale di $h(u)$.
 
-Tuttavia, memorizzare tutte le coppie $(u,\ h(u))$ equivale essenzialmente a tenere traccia di ogni elemento con il proprio valore hash associato, trasformando questo sistema in un dizionario o una mappa in cui ogni chiave ha un valore associato (quindi stiamo cercando di risolvere il problema del dizionraio mediante un dizionari).
+Tuttavia, memorizzare tutte le coppie $(u,\ h(u))$ equivale essenzialmente a tenere traccia di ogni elemento con il proprio valore hash associato, trasformando questo sistema in un dizionario o una mappa in cui ogni chiave ha un valore associato (quindi stiamo cercando di risolvere il problema del dizionraio mediante un dizionario).
 
 !!! success
     Una famiglia $\mathbb{H}$ di funzioni hash si dice **universale** se per ogni $u,\ v \in U\ u \neq v$ la probabilità $\Pr_{h \in \mathbb{H}} [h(u) = h(v)] \leq \frac{1}{m}$
@@ -54,7 +54,7 @@ Tuttavia, memorizzare tutte le coppie $(u,\ h(u))$ equivale essenzialmente a ten
 Questo significa che una famiglia di funzioni hash è considerata universale se la probabilità che due elementi distinti $u$ e $v$ dell'universo $U$ vengano mappati allo stesso valore è al più $\frac{1}{m}$ dove $m$ è la dimensione dell'intervallo delle funzioni hash.
 
 !!! success
-    **Teorema**: Sia $\mathbb{H}$ una famiglia di funzioni hash universale. Sia $S \subseteq U$ di $n$ elementi. Sia $u \in S$. Scegliamo uniformemente random una funzione $h$ all'interno di $\mathbb{H}$ e sia $X$ una varibiale aleatoria che conta il numero di elementi di $S$ mappati nello slot $h(u)$. Allora $$E[X] = 1 + \frac{n}{m}$$
+    **Teorema**: Sia $\mathbb{H}$ una famiglia di funzioni hash universale. Sia $S \subseteq U$ di $n$ elementi. Sia $u \in S$. Scegliamo uniformemente random una funzione $h$ all'interno di $\mathbb{H}$ e sia $X$ una variabile aleatoria che conta il numero di elementi di $S$ mappati nello slot $h(u)$. Allora $$E[X] = 1 + \frac{n}{m}$$
     **Dimostrazione**: Fissato $u$, per ogni $s \in S$,
     $$
     X_s = \begin{cases}
@@ -63,7 +63,13 @@ Questo significa che una famiglia di funzioni hash è considerata universale se 
     \end{cases}
     $$
     e $X = \sum_{s \in S} X_s$.
-    $$E[X] = E\bigm[\sum_{s \in S} X_s\bigm] = \sum_{s \in S} E[X_s] = \sum_{s \in S} Pr[h(s) = h(u)] = 1 + \sum_{s \in S-\{u\}} Pr[h(s) = h(u)] \leq 1 + \frac{n}{m}$$
+    \[
+    E[X] = E\left[\sum_{s \in S} X_s\right] = \sum_{s \in S} E[X_s] = \sum_{s \in S} \Pr[h(s) = h(u)] 
+    \]
+
+    \[
+    = 1 + \sum_{s \in S \setminus \{u\}} \Pr[h(s) = h(u)] \leq 1 + \frac{n}{m}
+    \]
 
 **Osservazione**: Il teorema ci dice che, fissato un elemento $u \in S$, il numero atteso di elementi in $S$ mappati nello stesso bucket di $h(u)$ è $E[X] = 1 + \frac{n}{m}$. Questo significa che nel bucket associato a $h(u)$, oltre a $u$ stesso, ci aspettiamo in **MEDIA** $\frac{n}{m}$ altri elementi di $S$.
 Conoscendo $n$, possiamo scegliere $m = O(n)$ in modo tale che la dimensione di ciascun bucket sia $\approx O(1)$. In altre parole, **se il numero di bucket è proporzionale al numero di elementi**, ci aspettiamo che ogni bucket contenga in media un numero costante di elementi.

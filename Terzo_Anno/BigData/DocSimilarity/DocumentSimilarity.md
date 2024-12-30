@@ -8,7 +8,7 @@ Una soluzione banale impiegherebbe tempo $O(N^2 \cdot h)$, che per quanto abbiam
 
 ## Document Similarity
 
-Passiamo ora all'argomento **Similar Items**, concentrandoci su un caso specifico per approfondire: il problema **Document Similarity**. Questo implica individuare tutte le coppie di documenti di testo che risultano simili tra loro. Tale problema ha applicazioni molto importanti in vari campi, come:
+Passiamo ora all'argomento **Similar Items**, concentrandoci su un caso specifico da approfondire: il problema **Document Similarity**. Questo implica individuare tutte le coppie di documenti di testo che risultano simili tra loro. Tale problema ha applicazioni molto importanti in vari campi, come:
 
 - Rilevamento di Plagio
 - Identificazione di pagine web simili
@@ -29,14 +29,14 @@ La domanda che sorge spontanea è: come possiamo utilizzare la Jaccard similarit
 
 Ricapitolando, la nostra situazione è la seguente:
 
-Abbiamo $Doc \in Sigma^*$, dove $\Sigma$ rappresenta l'alfabeto, e dobbiamo trovare un modo per trasformare i documenti in insiemi, così da poter applicare la Jaccard similarity.
+Abbiamo $Doc \in \Sigma^*$, dove $\Sigma$ rappresenta l'alfabeto, e dobbiamo trovare un modo per trasformare i documenti in insiemi, così da poter applicare la Jaccard similarity.
 
 Prima di andare nel dettaglio, osserviamo ad alto livello l'algoritmo.
 
-1. **Input**: In insieme grande di documenti;
+1. **Input**: Un insieme grande di documenti;
 2. **Shingling**: Convertire i documenti in **insiemi** (molto grandi);
 3. **Min-Hashing**: Convertire gli insiemi molto grandi in piccole **firme (signatures)**, mantenendo la Jaccard similarity;
-4. **Localitive-Sensitive Hashing (LSH)**: LSH si concentra su coppie di firme che probabilmente appartengono a documenti simili secondo la Jaccard similarity;
+4. **Locality-Sensitive Hashing (LSH)**: LSH si concentra su coppie di firme che probabilmente appartengono a documenti simili secondo la Jaccard similarity;
 5. **Output**: Ritorna le coppie di documenti candidate ad essere simili.
 
 ### Step 1. Shingling: Convertire i documenti in insiemi
@@ -69,7 +69,7 @@ $$
 
 ![Shingle Vector](../img/shingle_vec.png){width="600" style="display: block; margin: 0 auto"}
 
-Possiamo rappresentare un insieme di documenti come una collezione di insiemi, dove ciascun insieme è descritto da un vettore binario. Questi insiemi formano la cosiddetta matrice caratteristica, in cui le colonne corrispondono ai documenti (vettori binari) e le righe agli shingle ordinati.
+Possiamo rappresentare un insieme di documenti come una collezione di insiemi, dove ciascun insieme è descritto da un vettore binario. Questi insiemi formano la cosiddetta matrice caratteristica, in cui le colonne corrispondono ai documenti (vettori binari) e le righe ai shingle ordinati.
 
 | Element | S₁ | S₂ | S₃ | S₄ |
 | :-----: |----|----|----|----|
@@ -103,12 +103,12 @@ Questo significa che, se abbiamo due insiemi e applichiamo una permutazione casu
 - Se $J.sim(C_1, C_2)$ è **bassa**, allora con alta probabilità $h(C_1) \neq h(C_2)$
 
 !!! success
-    **Teorema - J-Similarity Preserving**: Fissate $C_1$ e $C_2$ due colonne della matrice caratteristica. Scelta uniformemente random una permutazione $\pi$. Allora
+    **Teorema | J-Similarity Preserving**: Fissate $C_1$ e $C_2$ due colonne della matrice caratteristica. Scelta uniformemente random una permutazione $\pi$. Allora
     $$Pr_{\pi}[h_{\pi}(C_1) = h_{\pi}(C_2)] = J.sim(C_1, C_2)$$
 
-    Consideriamo un documento \( X \), cioè una colonna nella matrice caratteristica. Ogni riga di \( X \) corrisponde a uno *shingle* (per esempio, una sottostringa di testo), e la cella è impostata a 1 se lo shingle appartiene al documento \( X \), 0 altrimenti. Pertanto, possiamo vedere \( X \) come un insieme di shingle, con \( y \in X \) che indica uno shingle presente in \( X \) (ossia, la cella in corrispondenza di \( y \) è posta a 1).
-
     **Dimostrazione:**
+    
+    Consideriamo un documento \( X \), cioè una colonna nella matrice caratteristica. Ogni riga di \( X \) corrisponde a uno *shingle* (per esempio, una sottostringa di testo), e la cella è impostata a 1 se lo shingle appartiene al documento \( X \), 0 altrimenti. Pertanto, possiamo vedere \( X \) come un insieme di shingle, con \( y \in X \) che indica uno shingle presente in \( X \) (ossia, la cella in corrispondenza di \( y \) è posta a 1).
 
     **Passo 1**: Calcolo della probabilità che uno shingle sia il minimo in una permutazione.
 
@@ -130,9 +130,9 @@ Questo significa che, se abbiamo due insiemi e applichiamo una permutazione casu
     
     In altre parole, il valore minimo della permutazione per $C_1$ o $C_2$ sarà dato da uno shingle presente in almeno una delle due colonne.
 
-    3. Il caso favorevole, in cui $h_{\pi}(C_1) = h_{\pi}(C_2)$, si verifica se e solo se $y \in C_1 \cap C_2$ (ossia, $y$ è uno shingle presente in entrambe le colonne $C_1$ e $C_2$). In tal caso, $y$ sarà il minimo in entrambe le colonne.
+    1. Il caso favorevole, in cui $h_{\pi}(C_1) = h_{\pi}(C_2)$, si verifica se e solo se $y \in C_1 \cap C_2$ (ossia, $y$ è uno shingle presente in entrambe le colonne $C_1$ e $C_2$). In tal caso, $y$ sarà il minimo in entrambe le colonne.
 
-    4. Poiché la permutazione $\pi$ è uniforme e casuale, possiamo dire che la probabilità che il minimo di $\pi(C_1 \cup C_2)$ appartenga sia a $C_1$ sia a $C_2$ è proprio la probabilità di intersezione rispetto all'unione degli shingle, cioè:
+    2. Poiché la permutazione $\pi$ è uniforme e casuale, possiamo dire che la probabilità che il minimo di $\pi(C_1 \cup C_2)$ appartenga sia a $C_1$ sia a $C_2$ è proprio la probabilità di intersezione rispetto all'unione degli shingle, cioè:
     \[
     \Pr_{\pi}[h_{\pi}(C_1) = h_{\pi}(C_2)] = \frac{|C_1 \cap C_2|}{|C_1 \cup C_2|} = J.sim(C_1, C_2)
     \]
@@ -167,7 +167,7 @@ Per due vettori di signature, $SIG(C_1)$ e $SIG(C_2)$, definiamo la similarità 
 
 Scegliamo un $t = 100$ fisso di permutazioni random delle righe. Questo numero di permutazioni viene utilizzato per generare una firma (o sketch) che rappresenta il documento o l'insieme in maniera compatta.
 
-Sia $SIG(i, C)$ l'indice della prima riga che contiene un valore 1 nella colonna $C$ secondo la permutazione casuale $i$. Ogni valore $SIG(i, C)$ occupa spazio proporzionale a $\theta(log(|C|)) = \theta(log(m))$ dove $m$ rappresenta il numero totale di possibilit $k-shingles$. L'insieme di tutti questi $SIG(i, C)$, cioè $SIG(*, C)$ rappresenta una firma del documento o dell'insieme $C$. Questa firma è compatta, circa 100 byte. In termini generali, la dimensione della firma è proporzionale a $theta(t\ log(m))$.
+Sia $SIG(i, C)$ l'indice della prima riga che contiene un valore 1 nella colonna $C$ secondo la permutazione casuale $i$. Ogni valore $SIG(i, C)$ occupa spazio proporzionale a $\theta(log(|C|)) = \theta(log(m))$ dove $m$ rappresenta il numero totale di possibili $k-shingles$. L'insieme di tutti questi $SIG(i, C)$, cioè $SIG(*, C)$ rappresenta una firma del documento o dell'insieme $C$. Questa firma è compatta, circa 100 byte. In termini generali, la dimensione della firma è proporzionale a $\theta(t\ log(m))$.
 
 In coclusione, grazie al minhash si è riusciti a "comprimere" i vettori di bit lunghi in firme più corte, cioè in **sketch**, in pratica si passa da un vettore di dimensione $m = |\Sigma|^k$ ad un vettore $t\ log(m)$.
 
@@ -175,7 +175,7 @@ In coclusione, grazie al minhash si è riusciti a "comprimere" i vettori di bit 
 
 La fase di Min-Hash, quindi di comprimere la matrice grande richiede di creare diverse permutazioni random delle righe della matrice originale per ciascun documento. Sapendo che $m = |\Sigma|^k$, e supponendo di usare l'alfabeto inglese e $k = 10$, allora anche generare una **SOLA** permutazione per $27^{10}$ righe sarebbe troppo dispendioso in termini di tempo e risorse.
 
-Invece di generare $t$ permutazioni, si sostituiscono le permutazione con le funzioni hash randomizzate (**Randomized Hash Functions**). Si scelgono $t$ funzioni hash $f_i$. Ogni funzione hash  $f_i: [m] \rightarrow [m]$, mappando le righe in modo casuale (ci potrebbe essere delle collisioni, ma vedremo che la probabilità delle collisioni è molto bassa).
+Invece di generare $t$ permutazioni, si sostituiscono le permutazione con le funzioni hash randomizzate (**Randomized Hash Functions**). Si scelgono $t$ funzioni hash $f_i$. Ogni funzione hash  $f_i: [m] \rightarrow [m]$, mappa le righe in modo casuale (ci potrebbe essere delle collisioni, ma vedremo che la probabilità delle collisioni è molto bassa).
 
 #### Algortimo per il calcolo del MinHash
 
@@ -199,7 +199,7 @@ for each row j = 1 to m do
 
 ```
 
-Osserviamo innanzitutto che questo algoritmo impiega tempo $\theta(mN)$. L'ottimizzazione di questo algoritma sta nel fatto che non generiamo pià $t$ permutazioni random delle $m$ righe, ma generiamo invece $t$ funzioni hash. Infatti per generare una permutazione delle $m$ righe impieghiamo tempo $O(n log(n))$ mentre per generare una singola funzione hash impieghiamo tempo $log(m)$. Infatti:
+Osserviamo innanzitutto che questo algoritmo impiega tempo $\theta(mN)$. L'ottimizzazione di questo algoritmo sta nel fatto che non generiamo più $t$ permutazioni random delle $m$ righe, ma generiamo invece $t$ funzioni hash. Infatti per generare una permutazione delle $m$ righe impieghiamo tempo $O(m log(m))$ mentre per generare una singola funzione hash impieghiamo tempo $log(m)$. Infatti:
 
 $$\mathcal{H} = \{h_{a,b} : [m] \rightarrow [m]\}$$
 dove lo spazio per memorizzare una singola hash function è $O(log(m))$ e il tempo per generarla è $O(log(m))$.
@@ -218,7 +218,7 @@ Anche se possiamo utilizzare il minhashing per comprimere documenti di grandi di
 
 Dunque l'obiettivo principale dell'approccio **LSH** è ridurre il numero di confronti necessari per identificare coppie simili in un insieme di elementi, evitando il confronto tra ogni coppia possibile.
 
-L'idea generale è di usare una funzione hash universale usata per "hashare" gli elementi in una hash table in modo tale che gli elementi simili abbiano maggiore possibilità di essere hashati nello stesso bucket rispetto agli elementi diverse.
+L'idea generale è di usare una funzione hash universale usata per "hashare" gli elementi in una hash table in modo tale che gli elementi simili abbiano maggiore possibilità di essere hashati nello stesso bucket rispetto agli elementi diversi.
 
 Alla fine di questo procedimento, per vedere quali sono le possibili coppie *candidate*, andiamo a considerare ciasun bucket, sapendo che in un bucket sono stati mappati tutte quelle possibili coppie candidate ad essere simili. L'obiettivo è che la maggior parte delle coppie diverse non venga mai hashata nello stesso bucket e quindi non venga mai controllata. Le coppie diverse che invece vengono hashate nello stesso bucket sono falsi positivi. Tali coppie possono essere poi facilmente controllate alla fine, andando a fare una ricerca nella matrice caratteristica, ovvero nella matrice degli shingling. Allo stesso modo, si spera che la maggior parte delle coppie effettivamente simili venga hashata nello stesso bucket. Quelle che non lo fanno sono falsi negativi, e l'obiettivo è di minimizzare il numero di tali coppie, poiché è molto difficile andare a controllare quali siano.
 
@@ -284,7 +284,7 @@ In input, oltre ai documenti prendiamo un parametro $s$, ovvero la soglia di sim
    - **Fatto 2: Probabilità che $C_1$ e $C_2$ non siano identiche in tutte le 20 bande**,
      - Se in una banda la probabilità che non corrispondono in una banda è $1 - 0.00243 = 0.99757$, allora la probabilità che non corrispondano in nessuna delle 20 bande è $(0.99757)^{20} \approx 0.9526$. Dunque, la probabilità che vengano hashate nello stesso bucket **alemno una volta (evento falso positivo)** è $1 - 0.9526 = 0.0474$
 
-   Quindi, in conclusione, circa il $4.74 \%$ delle coppie di documenti con $J.sim(C_1, C_2)=0.3$ vengono considerate coppie candidate. Questo è un **falso positivo**, poiché queste coppie vengono selezionate come candidate ma non soddisfano la soglia di similarità $s$. Tale percentuale non è un problema così grande, in quanto i falsi positivi possono essere poi controllati usando la matrice caratteristica degli shingles. Il il problema si verifica quando il numero di falsi negativi è troppo grande in quanto è molto più difficile identificare tali coppie.
+   Quindi, in conclusione, circa il $4.74 \%$ delle coppie di documenti con $J.sim(C_1, C_2)=0.3$ vengono considerate coppie candidate. Questo è un **falso positivo**, poiché queste coppie vengono selezionate come candidate ma non soddisfano la soglia di similarità $s$. Tale percentuale non è un problema così grande, in quanto i falsi positivi possono essere poi controllati usando la matrice caratteristica degli shingles. Il problema si verifica quando il numero di falsi negativi è troppo grande in quanto è molto più difficile identificare tali coppie.
 
 #### Analisi LSH
 
