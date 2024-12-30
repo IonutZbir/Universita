@@ -79,22 +79,22 @@ Una soluzione banale a questo problema, è di confrontare uno ad uno ciascun ele
 Bisogna dunque definire uno sketch per risolvere in modo efficiente il problema del pattern matching.
 
 !!! info
-    **Definizione:** Sia $x \in \Sigma^*$, allora un sketch di dati è una funzione random $f: x \in \Sigma* \Rightarrow \{0,1\}^k$ aventi le seguenti proprietà:
+    **Definizione:** Sia $x \in \Sigma^*$, allora un sketch di dati è una funzione random $f: x \in \Sigma^* \Rightarrow \{0,1\}^k$ aventi le seguenti proprietà:
     1. $k << \left|x\right|$, ovvero lo sketch deve essere molto più piccolo dell'input $x$.
     2. $f$ deve essere tale da poter essere **combinata** è **aggiornata** in tempo rapido, ovvero $f(xa) = F(f(x),f(a))$.
     3. $f$ deve mantenere le proprietà chiavi di $x$ con alta probabilità.
 
-La proprietà chiave da mantenere nel problema del patter matching è: date $x, y \in \Sigma^*$, vogliamo la nostra funzione $f$ tale che:
+La proprietà chiave da mantenere nel problema del pattern matching è: date $x, y \in \Sigma^*$, vogliamo la nostra funzione $f$ tale che:
 $$x = y \Leftrightarrow f(x) = f(y) \text{ con alta probabilità }\\
 x \neq y \Leftrightarrow f(x) \neq f(y) \text{ con alta probabilità }$$
 
 ### Funzione Hash di Rabin
 
-Studiamo adesso una funzione hash, che ci permette creare uno sketch dei dati, con le proprietà menzionate sopra.
+Studiamo adesso una funzione hash, che ci permette di creare uno sketch dei dati, con le proprietà menzionate sopra.
 
 Sia $\Sigma = [s]$, ovvero $\Sigma = \{1, 2, 3, \dots, s\}$ e $s \in \mathbb{N^+}$. Si fissa ora un numero primo $q > s$ tale che $q = \theta(s)$ e si sceglie un numero $z \in \mathbb{Z_q} = [q]$.
 
-Rappresentiamo il nostro flusso $x$ e il pattern da matchre $y$ in questo modo:
+Rappresentiamo il nostro flusso $x$ e il pattern da matchare $y$ in questo modo:
 $$x = \langle x[0], x[1], ..., x[n - 1] \rangle \in [s]^n\\
 y = \langle y[0], y[1], ..., y[n - 1] \rangle \in [s]^n$$
 
@@ -114,7 +114,7 @@ Osserviamo che $K_{q,z}$ è un polinomio, ma una volta scelto random $z$, $K_{q,
     Raccogliendo $z$, otteniamo
     $$K_{q,z}​(xc) = \left( K_{q,z}(x)z + c\right) \mod\ q$$
 
-Osserviamo però che $K_{q,z}(x)$ è lo sketch precedentemente computato, perciò queste 3 operzioni richiedono tempo $\theta(1)$, quindi l'aggornamento dello sketch è rapido (seconda proprietà).
+Osserviamo però che $K_{q,z}(x)$ è lo sketch precedentemente computato, perciò queste 3 operazioni richiedono tempo $\theta(1)$, quindi l'aggornamento dello sketch è rapido (seconda proprietà).
 
 Dati adesso due sketch, per $x$ e $y$, proviamo a calcolare $K_{z,q}(xy)$
 $$K_{q,z}​(xy) = \left( K_{q, z}(x)z^n + K_{q,z}​(y) \right) \mod\ q$$
@@ -169,7 +169,16 @@ Il passo cruciale è aggiornare l'hash quando un nuovo carattere $x[i+1]$​ arr
 - Aggiungendo il contributo del nuovo carattere $(x[i + 1]​)$.
 
 Questo si ottiene con la formula:
-$$K_{q,z}(\langle x[i − n + 2], x[i − n + 3], \dots, x[i + 1]\rangle) = (K_{q,z}(\langle x[i − n + 1], x[i − n + 2], \dots x[i]\rangle) − x[i − n + 1] \times z^{n−1}) \times z + x[i + 1]\mod q$$
+
+$$
+K_{q,z}(\langle x[i - n + 2], x[i - n + 3], \dots, x[i + 1]\rangle) =
+$$
+
+$$
+\Big(
+K_{q,z}(\langle x[i - n + 1], x[i - n + 2], \dots, x[i]\rangle) - x[i - n + 1] \cdot z^{n-1} \Big) \cdot z + x[i + 1] \bmod q
+$$
+
 Dove:
 - $z^{n−1} \mod q$ viene precomputato per risparmiare tempo.
 - La sottrazione rimuove il contributo del carattere più vecchio.
@@ -184,7 +193,7 @@ Poiché non possiamo mantenere in memoria l'intero flusso di dati, un approccio 
 1. Eseguire il campionamento di una **proporzione fissa** di elementi dallo stream, ad esempio, un decimo dei dati.
 2. Mantenere un campione casuale di **dimensione fissa**, anche su flussi potenzialmente infiniti.
 
-L'obiettivo che vogliamo perseguire sono i seguenti:
+Gli obiettivi che vogliamo perseguire sono i seguenti:
 1. Ad ogni istante di tempo $t$, vogliamo che il campione $s$ contenga solo elementi che abbiano la stessa probabilità di essere selezionati dallo stream, indipendentemente dal momento in cui sono stati osservati.
 2. Efficienza, aggiornameto veloce e poco spazio di memoria.
 
@@ -451,7 +460,7 @@ Le sliding window rappresentano un modello molto utile nel contesto dell'elabora
 
 Un’applicazione concreta di questo modello è rappresentata dall’analisi delle transazioni finanziarie di una grande azienda. Ogni elemento del flusso può essere visto come una transazione. Ad esempio, possiamo tenere traccia delle vendite di un determinato prodotto $x$, rappresentandole come un flusso binario (0/1): il valore 1 indica che il prodotto è stato venduto nella $j$-esima transazione, mentre il valore 0 indica che non lo è stato.
 
-Un tipico tipo di query in questo contesto potrebbe essere: "Quante volte è stato venduto il prodotto $x$ nelle ultime $k$ transazioni?", dove $k$ è un valore minore o uguale a $N$. Questo tipo di interrogazione permette di ottenere informazioni immediate e utili sulle performance recenti di un prodotto o sull’andamento delle vendite in una finestra temporale specifica.
+Una tipica query in questo contesto potrebbe essere: "Quante volte è stato venduto il prodotto $x$ nelle ultime $k$ transazioni?", dove $k$ è un valore minore o uguale a $N$. Questo tipo di interrogazione permette di ottenere informazioni immediate e utili sulle performance recenti di un prodotto o sull’andamento delle vendite in una finestra temporale specifica.
 
 ### Problema
 
@@ -460,7 +469,7 @@ Sia dato un flusso binario infinito $I = b_1, b_2, b_3, \dots$ dove ogni element
 **Input:**
 
 - Una finestra temporale di lunghezza $N$, che considera solo gli ultimi $N$ bit del flusso $I$.
-- Una variabile $k$, tale che $1 \leq j \leq N$, che definisce la sotto-finestra di lunghezza $k$ all’interno della finestra principale.
+- Una variabile $k$, tale che $1 \leq k \leq N$, che definisce la sotto-finestra di lunghezza $k$ all’interno della finestra principale.
 
 **Funzione da calcolare:**
 

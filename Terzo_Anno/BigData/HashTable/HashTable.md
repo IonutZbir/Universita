@@ -124,7 +124,7 @@ Pertanto, il costo complessivo per memorizzare e computare $h_a(x)$ è molto eff
 
 Il **perfect hashing** è un tipo di hash usato per la creazione di dizionari statici, ovvero dove il data set è fisso e non cambia dopo la sua costruzione. Questa tecnica garantisce che non ci sono collisioni, ogni chiave nel dizionario è mappata in un'unico slot della hash table.
 
-Quindi il probleda del dizionario staitico consiste in: dato un insieme $S$ di $n$ elementi (chiavi), l'obiettivo è costruire una struttura dati che supporti solo l'operazione di `search`. Con il perfect hashing si ottengono le seguenti prestazioni:
+Quindi il problema del dizionario statico consiste in: dato un insieme $S$ di $n$ elementi (chiavi), l'obiettivo è costruire una struttura dati che supporti solo l'operazione di `search`. Con il perfect hashing si ottengono le seguenti prestazioni:
 
 - $O(1)$ tempo di `search` nel caso peggiore.
 - $O(n)$ spazio.
@@ -157,12 +157,12 @@ Oltre a questi 2 step, vi sono degli step interdeti. I step 1.5 e 2.5 aggiungono
 
 #### Step 1.5
 
-Dopo aver scelto la funzione hash h1h1​ e aver mappato tutti gli elementi di SS nei vari slot della tabella principale, si aggiunge un controllo per verificare se il risultato è efficiente.
+Dopo aver scelto la funzione hash $h_1$​ e aver mappato tutti gli elementi di $S$ nei vari slot della tabella principale, si aggiunge un controllo per verificare se il risultato è efficiente.
 
 1. Per ciascuno slot $j$ della tabella principale, contiamo il numero di elementi $n_j$ che sono stati mappati in quello slot tramite $h_1$. La somma $\sum_{j = 0}^{m - 1} n^2_j$ rappresenta il totale dei quadrati dei numeri di elementi in ciascuno slot.
 2. Se questa somma supera una certa soglia, ossai se:
 $$\sum_{j = 0}^{m - 1} n^2_j > c \cdot n$$
-per un valore costante $c$ (che verrà scelto più avanti), allora si decide di **rifare il passo 1** (ovvero, di scegliere una nuova funzione hash $h_1$, e di rifare la mappatura degli elementi). Questo passaggio serve per limitare la concentrazione di elementi in alcuni slot, il che potrebbe rendere il secondo livello inefficiente se ci fossero troppi elementi in un singolo slot. Rifacendo il primo passaggio, si cerca una distribuzione migliore dei njnj​, riducendo la probabilità di avere slot troppo carichi.
+per un valore costante $c$ (che verrà scelto più avanti), allora si decide di **rifare il passo 1** (ovvero, di scegliere una nuova funzione hash $h_1$, e di rifare la mappatura degli elementi). Questo passaggio serve per limitare la concentrazione di elementi in alcuni slot, il che potrebbe rendere il secondo livello inefficiente se ci fossero troppi elementi in un singolo slot. Rifacendo il primo passaggio, si cerca una distribuzione migliore dei $n_j$​, riducendo la probabilità di avere slot troppo carichi.
 
 #### Step 2.5
 
@@ -197,7 +197,7 @@ Rimane ora da analizzare per quante volte andiamo a ripetere gli step $1.5$ e $2
 Dove:
 
 - $Pr_{h_{2,j}}[h_{2,j}(u) = h_{2,j}(v)] < \frac{1}{m_j} = \frac{1}{n_j^2}$ in quanto $m = \theta(n_j^2)$ e $h_{2,j}$ è una funzione hash universale.
-- $\{u, v \in S\ u \neq v\ h_1(u) = h_1(v)\}$ rappresenta l'insieme di tutte le possibili coppie di elementi mappati nello stesso slot da $h_1$ è sono: $\binom{n_j}{2} = \frac{n_j(n_j - 1)}{2}$.
+- $\{u, v \in S:\ u \neq v\ e\ h_1(u) = h_1(v)\}$ rappresenta l'insieme di tutte le possibili coppie di elementi mappati nello stesso slot da $h_1$ è sono: $\binom{n_j}{2} = \frac{n_j(n_j - 1)}{2}$.
 
 Quindi, ogni prova è come un lancio di moneta. Se l'esito è "testa", si passa allo step successivo. Si ha quindi che $E [\text{numero di prove}] \leq 2$ , ovvero, in media sono neccessari 2 iterazioni dello step per slot $(2.5)$.
 
@@ -230,7 +230,7 @@ Dove $h_1$ è la funzione hash scelta casualmente, e $X_{u,v} = 1$ indica che c'
     $$\sum_{j = 0}^{m - 1} n_j^2 = \sum_{u \in S}\sum_{v \in S}X_{u,v}$$
     - **Dim**
     $$\sum_{u \in S}\sum_{v \in S}X_{u,v} = n_1 \times n_1 + n_2 \times n_2 + \dots + n_m \times n_m$$
-    Dove $n_j \times n_j$ rappresenta gli elementi mappati nello slot $j$-esimo. Consideriamo ora tutti gli elementi $z_1, \dots z_j$ mappati nello slot $j$. Consideriamo tutte le coppie $z_e,\ z_m$, allora tutte le varibiali aleatorie $X_{e,m}$ sono uguali a 1 per $e = 1, 2, \dots, n_j$ e $m = 1, 2, \dots, n_j$. Quante sono? $n_j^2$.
+    Dove $n_j \times n_j$ rappresenta gli elementi mappati nello slot $j$-esimo. Consideriamo ora tutti gli elementi $z_1, \dots z_j$ mappati nello slot $j$. Consideriamo tutte le coppie $z_e,\ z_m$, allora tutte le variabili aleatorie $X_{e,m}$ sono uguali a 1 per $e = 1, 2, \dots, n_j$ e $m = 1, 2, \dots, n_j$. Quante sono? $n_j^2$.
 
 Si ha dunque:
 
@@ -249,7 +249,7 @@ $$Pr\left[ \sum_{j=0}^{m-1} n_j^2 > cn \right] \leq \frac{E\left[ \sum_{j=0}^{m-
 
 Per $c \geq 4$ si ha che una probabilità $\leq \frac{1}{2}$.
 
-Si ha quindi che $E[\text{numero di prove}] \leq 2$ e sempre per il ragionamento di prima, usando la **Chernoff inequality**, il numero di prove è $O(log(n))$ con alta probabilità. In coclusione il tempo per necessario per lo step ($1.5$) è $O(n log(n))$.
+Si ha quindi che $E[\text{numero di prove}] \leq 2$ e sempre per il ragionamento di prima, usando la **Chernoff inequality**, il numero di prove è $O(log(n))$ con alta probabilità. In conclusione il tempo per necessario per lo step ($1.5$) è $O(n log(n))$.
 
 #### Conclusione
 
