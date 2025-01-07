@@ -36,7 +36,7 @@ Prima di andare nel dettaglio, osserviamo ad alto livello l'algoritmo.
 1. **Input**: Un insieme grande di documenti;
 2. **Shingling**: Convertire i documenti in **insiemi** (molto grandi);
 3. **Min-Hashing**: Convertire gli insiemi molto grandi in piccole **firme (signatures)**, mantenendo la Jaccard similarity;
-4. **Locality-Sensitive Hashing (LSH)**: LSH si concentra su coppie di firme che probabilmente appartengono a documenti simili secondo la Jaccard similarity;
+4. **Locality-Sensitive Hashing (LSH)**: Processo al fine di restringere il numero di confronti da effettuare per le coppie di documenti. Permette di concentrarsi su coppie di firme provenienti con alta probabilità da documenti simili, evitando il costo quadratico.
 5. **Output**: Ritorna le coppie di documenti candidate ad essere simili.
 
 ### Step 1. Shingling: Convertire i documenti in insiemi
@@ -58,12 +58,12 @@ Scegliendo un $k$ maggiore, riduciamo la probabilità che uno shingle si present
 
 In caso di documenti piccoli, come email, $k = 5$ è ragionevole. Mentre per documenti più grandi, $k = 9$ è un ottima scelta.
 
-Sia $D \in \Sigma^*$ un documento rappresentato dal suo insieme di $k$-shingles. Se consideriamo $\Sigma^k$ l'insieme di tutti i possibili $k$-shingle ordinato, allora possiamo rappresentare $D$ come un vettore binario di dimensione $\bigm|\Sigma^k\bigm|$, dove ogni shingle è una componente di questo vettore e:
+Sia $D \in \Sigma^*$ un documento rappresentato dal suo insieme di $k$-shingles. Se consideriamo $\Sigma^k$ l'insieme di tutti i possibili $k$-shingle **ordinato**, allora possiamo rappresentare $D$ come un vettore binario di dimensione $\bigm|\Sigma^k\bigm|$, dove ogni shingle è una componente di questo vettore e:
 
 $$
 v[i] = \begin{cases}
-1 & \text{se l' i-esimo shingle dell'insieme ordinato } U \text{ sta nel documento} \\
-0 & \text{se l' i-esimo shingle dell'insieme ordinato } U \text{ non sta nel documento}
+1 & \text{se l' i-esimo shingle dell'insieme ordinato } \Sigma^k \text{ sta nel documento} \\
+0 & \text{se l' i-esimo shingle dell'insieme ordinato } \Sigma^k \text{ non sta nel documento}
 \end{cases}
 $$
 
@@ -209,7 +209,7 @@ dove lo spazio per memorizzare una singola permutazione è $O(m)$ e il tempo per
 
 Inoltre, ponendo la condizione (**), possiamo usare la proprietà che la matrice caratteristica è molto sparsa, andando a calcolare la funzione hash solo per quelle righe in cui c'è un 1.
 
-### Step 3. Locality-Sensitive Hashing: Si concentra su coppie di firme che probabilmente appartengono a documenti simili
+### Step 3. Locality-Sensitive Hashing
 
 Anche se possiamo utilizzare il minhashing per comprimere documenti di grandi dimensioni in firme ridotte che preservano la similarità attesa tra qualsiasi coppia di documenti, potrebbe comunque essere impossibile trovare in modo efficiente le coppie con la maggiore similarità. Il motivo è che il numero di coppie di documenti potrebbe essere troppo elevato, anche se i documenti non sono particolarmente numerosi.
 

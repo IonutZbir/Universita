@@ -8,12 +8,12 @@
 
     - **FORMALE** Il clustering consiste nel prendere un insieme $\mathbb{U}$ di $n$ oggetti $p_1, p_2, \dots, p_n$ (che possono rappresentare foto, punti, documenti etc...) e classificarli in gruppi (cluster) coerenti. L'idea è dunque quella di dividere tali in punti in gruppi $C_1, C_2, \dots, C_k$ detti **cluster**, dove ciascun cluster rappresenta un sottoinsieme di oggetti simili.
       - $\mathbb{C} = \{C_1, C_2, \dots, C_k\}$
-      - $C_i \subseteq U \forall i = 1, \dots, k$
+      - $C_i \subseteq U\ \forall i = 1, \dots, k$
       - $C_i \cap C_j = \emptyset\ \forall i,j = 1, \dots k$ tale che $i \neq j$
       - $\bigcup_{i = 1}^k C_i = U$
     
     #### DEF ($k$ - Clustering)
-    Si dice $k$-clustering una partizione dell'insieme $\mathbb{U}$ $k$ sottoinsiemi non vuoti.
+    Si dice $k$-clustering una partizione dell'insieme $\mathbb{U}$ in $k$ sottoinsiemi non vuoti.
 
 !!! note
     #### DEF (Distance Function)

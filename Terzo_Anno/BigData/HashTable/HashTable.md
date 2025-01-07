@@ -180,14 +180,14 @@ Ricordando che il calcolo di una delle funzioni hash universali viste in precede
 Rimane ora da analizzare per quante volte andiamo a ripetere gli step $1.5$ e $2.5$.
 
 !!! note
-    Se $\bigm| S \bigm| = n$ allora $\sum_{j = 0}^{n - 1} n_j = n$ **ma** siccome abbiamo posto $m_j = \theta(n_j^2)$ potremmo avere che $\sum_{j = 0}^{n - 1} m_j = \sum_{j = 0}^{n - 1} \theta(n_j^2) = \omega(n)$, ovvero occupiamo molto più spazio rispetto a spazio lineare. Dunque questo rappresenta il nostro evento "cattivo", che non deve mai succedere.
+    Se $\bigm| S \bigm| = n$ allora $\sum_{j = 0}^{n - 1} m_j = n$ **ma** siccome abbiamo posto $m_j = \theta(n_j^2)$ potremmo avere che $\sum_{j = 0}^{n - 1} m_j = \sum_{j = 0}^{n - 1} \theta(n_j^2) = \omega(n)$, ovvero occupiamo molto più spazio rispetto a spazio lineare. Dunque questo rappresenta il nostro evento "cattivo", che non deve mai succedere.
 
 - Dunque, per il passo $(2.5)$ si ha che
 \[
 \begin{aligned}
     Pr_{h_{2,j}}[h_{2,j}(u) = h_{2,j}(v), \; u \neq v]
     &\leq \sum_{\substack{u, v \in S \\ u \neq v \\ h_1(u) = h_1(v)}} Pr[h_{2,j}(u) = h_{2,j}(v)] \\
-    &\leq \frac{1}{2} n_j (n_j - 1) \\
+    &\leq \frac{1}{2n_j^2} n_j (n_j - 1) \\
     &= \frac{n_j (n_j - 1)}{2 n_j^2} \\
     &= \frac{n_j - 1}{2 n_j} \\
     &< \frac{1}{2}.

@@ -124,7 +124,7 @@ L'unico problema in questa formula che richiede tempo lineare è il calcolo di $
     Calcolare direttamente $a^b$ può diventare inefficiente per $b$ molto grande, poiché il risultato cresce esponenzialmente. Invece, si utilizza un approccio chiamato **esponenziazione rapida** (o "exponentiation by squaring"), che riduce la complessità a $O(log⁡(b))$.
     L'idea chiave è utilizzare la decomposizione binaria dell'esponente $b$:
     - Scriviamo $b$ in binario.
-    - Applichiamo una serie di moltiplicazioni e riduzioni modulo qq per calcolare solo i termini necessari.
+    - Applichiamo una serie di moltiplicazioni e riduzioni modulo $q$ per calcolare solo i termini necessari.
     - Passaggi dell'algoritmo
         1. Caso base:
             - Se $b = 0$, allora $a^b \mod q = 1$.
@@ -158,7 +158,7 @@ Dimostriamo ora che la funzione hash di Rabin può essere usata per creare un bu
 
 Supponiamo di aver elaborato una sequenza di caratteri fino a $x[1],x[2], \dots ,x[i]​$ (dove $i \geq n$) e di conoscere due valori di hash:
 
-- L'hash degli ultimi $n$ caratteri nella sequenza: $K_{q,z}(\langle x[i − n + 1], x[i − n + 2], x[i] \rangle)$.
+- L'hash degli ultimi $n$ caratteri nella sequenza: $K_{q,z}(\langle x[i − n + 1], x[i − n + 2], \dots, x[i] \rangle)$.
 - L'hash del pattern che stiamo cercando: $K_{q,z}(y)$.
 
 Confrontando questi hash, possiamo verificare se il pattern $y$ appare negli ultimi $n$ caratteri della sequenza. Se appare alloara aggiorniamo un contatore.
@@ -654,21 +654,20 @@ Supponiamo di voler calcolare quanti "1" sono presenti negli ultimi $k$ bit di u
 
 !!! info
     #### Idea chiave per ridurre l'errore
-    Invece di consentire 1 o 2 buckets per ciascuna dimensione, possiamo mantenere $b-1$ o $b$ buckets per ciascuna dimensione ($b > 2$). Per poter rappresentare qualsiasi numero possibile di "1", dobbiamo rilassare questa condizione per i buckets della dimensione 1 e per i buckets della dimensione più grande presente; in questi casi ci possono essere da 1 a $r$ buckets. La regola per combinare i buckets è essenzialmente la stessa, se ci troviamo con $r + 1$ bukcets della dimensione $2^j$, combiniamo i due buckets più a sinistra in un buckets della dimensione $2^{j+1}$. Questo, a sua volta, potrebbe causare la presenza di $r + 1$ secchi della dimensione $2^{j+1}$; in tal caso, continuiamo a combinare i secchi di dimensioni maggiori.
+    Invece di consentire 1 o 2 buckets per ciascuna dimensione, possiamo mantenere $b-1$ o $b$ buckets per ciascuna dimensione ($b > 2$). Per poter rappresentare qualsiasi numero possibile di "1", dobbiamo rilassare questa condizione per i buckets della dimensione 1 e per i buckets della dimensione più grande presente; in questi casi ci possono essere da 1 a $r$ buckets. La regola per combinare i buckets è essenzialmente la stessa, se ci troviamo con $r + 1$ bukcets della dimensione $2^j$, combiniamo i due buckets più a sinistra in un buckets della dimensione $2^{j+1}$. Questo, a sua volta, potrebbe causare la presenza di $r + 1$ buckets della dimensione $2^{j+1}$; in tal caso, continuiamo a combinare i buckets di dimensioni maggiori.
 
-    In questo modo, l'errore si riduce ad al più $O(\frac{1}{r})$. Scegliendo opportunamente $t$, possiamo bilanciare il compromesso tra la complessità spaziale e l'errore di approssimazione.
+    In questo modo, l'errore si riduce ad al più $O(\frac{1}{r})$. Scegliendo opportunamente $b$, possiamo bilanciare il compromesso tra la complessità spaziale e l'errore di approssimazione.
 
 #### Contare gli interi
 
-Si vuole vedere come estendere l'algoritmo per sommare gli ultimi $k$ elementi di uno stream, nel caso in cui tale flusso non fosse composto unicamente da cifre binarie ma da interi. L'idea è quella che, partendo dall'ipotesi di avere all'interno del flusso interi positivi nel range che va da 1 a $2^m$, per i quali sono quindi necessari $m$ bit per rappresentare ciascuno di questi valori univocamente, si considerino gli $m$ bits di ciascun intero come un flusso
-separato. Così facendo, si può usare l'algoritmo **DGIM** per stimare il numero di 1 che costituiscono un intero. Si supponga che il conto dell'i−esimo bit sia $c^i$. Si ha allora che la somma degli interi è:
+Si vuole vedere come estendere l'algoritmo per sommare gli ultimi $k$ elementi di uno stream, nel caso in cui tale flusso non fosse composto unicamente da cifre binarie ma da interi. L'idea è quella che, partendo dall'ipotesi di avere all'interno del flusso interi positivi nel range che va da 1 a $2^m$, per i quali sono quindi necessari $m$ bit per rappresentare ciascuno di questi valori univocamente, si considerino gli $m$ bits di ciascun intero come un flusso separato. Così facendo, si può usare l'algoritmo **DGIM** per stimare il numero di 1 che costituiscono un intero. Si supponga che il contatore dell'i−esimo bit sia $c_i$. Si ha allora che la somma degli interi è:
 $$\sum^{m - 1}_{i = 0} c_i 2^i$$
 
 ## 4. Filtering a data stream
 
 Un processo comune nei flussi di dati è la selezione o il filtraggio. Questo consiste nell'accettare solo le tuple del flusso che soddisfano un determinato criterio. Le tuple accettate vengono inviate come un nuovo flusso a un altro processo, mentre le altre vengono scartate.
 
-Se il criterio di selezione è calcolabile direttamente (ad esempio, "il primo componente è minore di 10"), la selezione è semplice.
+Se il criterio di selezione è calcolabile direttamente (ad esempio, "la prima componente è minore di 10"), la selezione è semplice.
 Il problema diventa più complesso se il criterio implica verificare l'appartenenza della tupla a un insieme. Questo è particolarmente difficile quando l'insieme è troppo grande per essere memorizzato nella memoria principale.
 
 Formalemente parlando abbiamo che:
@@ -683,33 +682,33 @@ Una soluzione banale consiste in memorizzare in una **Hash Table $T$** ogni elem
 
 **Fase 1: Pre-Prossessing**
 
-**Input:** Set $S$ of *good values* for $key_1$, size of bit array $n$
-**Output:** Bit array $B[1 \dots n]4 representing the filter
+**Input:** Insieme $S$ di *valori buoni* per $key_1$, $n$ la dimensione dell'array di bit
+**Output:** Array di bit $B[1 \dots n]$ che rappresenta il filtro
 
-1. Initialize $B[1 \dots n]$ to all $0s$
-2. Choose a hash function $h: U \Rightarrow [1, n]$
+1. Inizializza tutti gli elementi di $B[1 \dots n]$ a $0s$
+2. Scegli una funzione hash $h: U \Rightarrow [1, n]$
 3. For each element $s \in S$:
-       - Compute index $i = h(s)$
-       - Set $B[i] = 1$
+       - Calcola l'indice $i = h(s)$
+       - Poni $B[i] = 1$
 
 **Fase 2: Online**
 
-**Input:** Stream element $x = \langle x_1, ..., x_k \rangle$, bit array $B$, hash function $h$
-**Output:** Decision to accept or reject the stream element $x$
+**Input:** Elemento del flusso $x = \langle x_1, ..., x_k \rangle$, array di bit $B$, funzione hash $h$
+**Output:** Decide se accettare o meno l'elemento $x$
 
-1. Compute index $i = h(x_1)$
+1. Calcola l'indice $i = h(x_1)$
 2. If $B[i] = 1$:
-        - Accept stream element $x$
+        - Accetta $x$
    Else:
-        - Reject stream element $x$
+        - Rigetta $x$
 
 #### Proprietà dell'algoritmo
 
-- **False Positives (Falsi positivi):**
+- **Falsi positivi:**
     - Un elemento $x$ potrebbe essere accettato anche se non appartiene realmente a $S$. Ciò avviene perché più elementi possono essere mappati allo stesso indice (collisioni) e un bit impostato a 1 può non corrispondere all'elemento giusto.
     - Esempio: Un elemento "non buono" mappa su un indice già impostato a 1 da un elemento buono.
 
-- **No False Negatives (Nessun falso negativo):**
+- **Nessun falso negativo:**
     - Se un elemento appartiene effettivamente a $S$, viene sempre accettato, perché la fase di pre-elaborazione si assicura che i bit corrispondenti agli elementi di $S$ siano impostati a 1.
     - Questo garantisce che gli elementi validi non vengano mai scartati.
 
@@ -830,11 +829,11 @@ Questo restituisce una stima approssimativa $(m)$ del numero di elementi distint
 
 #### Anasili dell'algoritmo
 
-La funzione hash $h : [N] \rightarrow \{0, 1\}^2$ è una funzione perfetta che assegna un hash binario a ciascun elemento del dominio. La condizione $s \geq log(⁡N)$ garantisce che ci sia abbastanza spazio per rappresentare tutti i valori possibili.
+La funzione hash $h : [N] \rightarrow \{0, 1\}^s$ è una funzione perfetta che assegna un hash binario a ciascun elemento del dominio. La condizione $s \geq log(⁡N)$ garantisce che ci sia abbastanza spazio per rappresentare tutti i valori possibili.
 
-- **Fatto 1:** Per ogni $a$, vale che $Pr[r(a) \geq r] = \frac{2^{s - r}}{2^s} = \frac{1}{2^r}$. Defianiamo dunque una variabile aleatoria $X_r = 1$ se e solo se esiste un elemento $a$ dello stream tale che $r(a) \geq a$.
+- **Fatto 1:** Per ogni $a$, vale che $Pr[r(a) \geq r] = \frac{2^{s - r}}{2^s} = \frac{1}{2^r}$. Defianiamo dunque una variabile aleatoria $X_r = 1$ se e solo se esiste un elemento $a$ dello stream tale che $r(a) \geq r$.
 - **Fatto 2:** $Pr[X_r = 1] = 1 - (1 - 2^{-r})^d$ e $Pr[X_r = 0] = (1 - 2^{-r})^d$ dove:
-  - (1 - 2^{-r}) è la probabilità che dato un elemento $a$, $r(a) < r$.
+  - $(1 - 2^{-r})$ è la probabilità che dato un elemento $a$, $r(a) < r$.
   - $d$ è il numero reale di elementi distinti, ovvero il nostro numero target da stimare.
 
 Sia $m = 2^R$ la nostra approssimazione per $d$, possiamo calcolare la probabilità di errore per ogni costante $c > 0$ nel seguente modo:
@@ -919,7 +918,7 @@ Viene selezionato e aggiornato un campione di $k$ variabili casuali indipendenti
 - $X.el$: rappresenta un elemento specifico $i$ del flusso.
 - $X.val$: rappresenta il numero di occorrenze future dell’elemento $i$ nel sottostream successivo.
 
-l conteggio $X.val$ richiede memoria principale per monitorare le occorrenze dunque il numero di variabili $k$ deve essere limitato per mantenere l’efficienza.
+Il conteggio $X.val$ richiede memoria principale per monitorare le occorrenze, dunque il numero di variabili $k$ deve essere limitato per mantenere l’efficienza.
 
 Formalmente abbiamo che:
 
@@ -959,7 +958,7 @@ Per ogni elemento $a$ nel flusso, se l'elemento appare $m_a$ volte nel flusso, i
 
 Se l'elemento $a$ appare $m_a$ volte nel flusso, i suoi contributi sono calcolati considerando i punti in cui $a$ appare nel flusso:
 
-- Per la prima occorrenza, $c(j(1))$ = m_a$
+- Per la prima occorrenza, $c(j(1)) = m_a$
 - Per la seconda, $c(j(2)) = m_a − 1$,
 - Fino all'ultima, $c(j(m_a)) = 1$.
 
