@@ -92,7 +92,7 @@ x \neq y \Leftrightarrow f(x) \neq f(y) \text{ con alta probabilità }$$
 
 Studiamo adesso una funzione hash, che ci permette di creare uno sketch dei dati, con le proprietà menzionate sopra.
 
-Sia $\Sigma = [s]$, ovvero $\Sigma = \{1, 2, 3, \dots, s\}$ e $s \in \mathbb{N^+}$. Si fissa ora un numero primo $q > s$ tale che $q = \theta(s)$ e si sceglie un numero $z \in \mathbb{Z_q} = [q]$.
+Sia $\Sigma = [s]$, ovvero $\Sigma = \{1, 2, 3, \dots, s\}$ e $s \in \mathbb{N^+}$. Si fissa ora un numero primo $q > s$ ($q$ deve essere $> s$ affinchè possiamo rappresentare tutto $s$ in modo iniettivo, ovvero ciascun elemento di $s$ riusciamo a rappresentarlo univocamente con un elemento di $q$) tale che $q = \theta(s)$ e si sceglie un numero $z \in \mathbb{Z_q} = [q]$.
 
 Rappresentiamo il nostro flusso $x$ e il pattern da matchare $y$ in questo modo:
 $$x = \langle x[0], x[1], ..., x[n - 1] \rangle \in [s]^n\\
@@ -390,64 +390,28 @@ La soluzione a questo problema è il **Reservoir Sampling**, un algoritmo per ma
     ---
 
     ##### 2. Passo induttivo
-    Supponiamo che, dopo aver visto \( n \) elementi, ogni elemento visto finora abbia probabilità \( \frac{s}{n} \) di essere nel campione \( S \). Ora dimostriamo che, quando arriva l'elemento \( n + 1 \), la proprietà rimane valida.
+    Supponiamo di aver visto $n$ elementi. Per **HP. Induttiva** la probabilità che ciascuno di essi sia in $S$ è $\frac{s}{n}$.
+    All'arrivo dell' $n + 1$-esimo elemento questo viene incluso nel sample per costruzione dell'algortimo, probabilità $\frac{s}{n + 1}$.
 
-    Quando arriva l'elemento \( n + 1 \), l'algoritmo esegue i seguenti passi:
-    1. Decide di includere \( n + 1 \) in \( S \) con probabilità \( \frac{s}{n + 1} \).
-    2. Se l'elemento \( n + 1 \) viene incluso, sostituisce uno degli \( s \) elementi esistenti nel campione, scelto uniformemente a caso.
+    Si vuole mostrare che ogni altro elemento del flusso, all'istante di arrivo dell'elemento $n + 1$-esimo, si trova in $S$ con probabilità $\frac{s}{n + 1}$. Per fare ciò definiamo 3 eventi:
 
+    1. $E_1$: L'elemento $n + 1$ viene incluso.
+    2. $E_3$: L'elemento $n + 1$ non viene incluso.
+    3. $E_2$: L'elemento $x$ nel campione non viene eliminato.
+  
     ---
 
-    Analizziamo la probabilità che un elemento \( x \), già presente nel campione \( S \) dopo \( n \) passi, rimanga in \( S \) dopo il passo \( n + 1 \):
+    1. L'elemento $n + 1$ viene incluso con probabilità -  $Pr[E_1] = \frac{s}{n + 1}$
+    2. L'elemento $n + 1$ non viene incluso con probabilità - $Pr[E_2] = 1 - Pr[E_1] = 1 - \frac{s}{n + 1}$
+    3. Dal momento che se l'elemento $n + 1$-esimo è incluso, allora l'elemento $x \in S$ ha probabilità $\frac{1}{s}$ di essere eliminato. $Pr[E_3] = 1 - \frac{1}{s}$.
+  
+    Dato ora un elemento $x \in S$, la probabilità che l'algoritmo lo mantenga in $S$ è data da:
+    $$Pr[E_1] + Pr[E_2] + Pr[E_3] = \bigm(1 - \frac{s}{n + 1}\bigm) + \bigm(\frac{s}{n + 1}\bigm) \cdot \bigm(\frac{s - 1}{s}\bigm) = \frac{n}{n + 1}$$
 
-    1. **Caso 1: \( n + 1 \) non viene incluso nel campione.**  
-    In questo caso, il campione non cambia, quindi \( x \) rimane in \( S \). La probabilità che ciò accada è:
-    \[
-    Pr[n + 1 \text{ non viene incluso}] = 1 - \frac{s}{n + 1}
-    \]
+    Quindi all'istante $n + 1$-esimo l'elemento $x \in S$ rimane in esso com probrabilità $\frac{n}{n + 1}$. Per **HP. Induttiva**, la probabilità che un elemento del flusso si trovasse in $S$ fino all'istante $n$ è data da $\frac{s}{n}$.
 
-    2. **Caso 2: \( n + 1 \) viene incluso nel campione.**  
-    In questo caso, \( n + 1 \) sostituisce un elemento esistente nel campione, scelto uniformemente a caso.
-    - La probabilità che \( x \) **non venga rimosso** (e quindi rimanga in \( S \)) è:
-        \[
-        Pr[x \text{ non viene rimosso}] = 1 - \frac{1}{s}
-        \]
-    - La probabilità che \( n + 1 \) venga incluso è:
-        \[
-        Pr[n + 1 \text{ incluso}] = \frac{s}{n + 1}
-        \]
-    - Combinando, la probabilità che \( x \) **non venga rimosso** in questo scenario è:
-        \[
-        \frac{s}{n + 1} \cdot \left(1 - \frac{1}{s} \right)
-        \]
-
-    ---
-
-    ##### Probabilità totale che \( x \) rimanga in \( S \)
-    Combinando i due scenari:
-    \[
-    Pr[x \text{ rimane in } S] = Pr[n + 1 \text{ non incluso}] + Pr[n + 1 \text{ incluso e } x \text{ non rimosso}]
-    \]
-    Sostituendo le probabilità:
-    \[
-    Pr[x \text{ rimane in } S] = \left(1 - \frac{s}{n + 1}\right) + \frac{s}{n + 1} \cdot \left(1 - \frac{1}{s}\right)
-    \]
-
-    ---
-
-    ##### Semplificazione
-    Semplificando:
-    \[
-    Pr[x \text{ rimane in } S] = \left(1 - \frac{s}{n + 1}\right) + \frac{s}{n + 1} \cdot \frac{s - 1}{s}
-    \]
-    \[
-    Pr[x \text{ rimane in } S] = \frac{n}{n + 1}
-    \]
-
-    Pertanto, dopo il passo \( n + 1 \), la probabilità che \( x \) rimanga in \( S \) è:
-    \[
-    Pr[x \text{ in } S] = \frac{s}{n} \cdot \frac{n}{n + 1} = \frac{s}{n + 1}
-    \]
+    Dunque, la probabilità che un qualsiasi elemento $x$ del flusso si trovi in $S$ fino all'istante $n + 1$ è data da:
+    $$\frac{s}{n} \cdot \frac{n}{n + 1} = \frac{s}{n + 1}$$
 
     ---
 
@@ -582,22 +546,16 @@ Per rappresentare un bucket servono $O(log(N))$ bit perché:
 1. **Timestamp dell’estremo destro del bucket (modulo $N$):**
 Questo richiede $log_2(N)$ bit, poiché si tratta di un valore compreso tra 0 e $N − 1$.
 2. **Numero di 1 contenuti nel bucket:**
-Siccome il numero di 1 ($i$) è una potenza di 2 ($2^j$), possiamo rappresentare $i$ codificando $j$ in binario. Dato che $j \leq log_{⁡2}(N)$, servono $log_2(log_2(N))$ bit per rappresentare $j$.
+Sia $i$ il numero di 1. Poiché $i$ è una potenza di 2, allora $i = 2^j \Rightarrow j = log(i)$. Poiché $j$ è un intero lo possiamo rappresentare in memoria con $log(j)$ bits. Allora lo spazio necessario per rappresetare in memoria $i$ è $log(log(i))$, ma siccome $i \leq N$ allora sono necessari $log(log(N))$ bits.
 
 !!! note
     **Regole per la creazione dei bucket**
     1. L'estremo destro del bucket deve essere un 1.
-    Ogni bucket termina sempre in una posizione contenente un bit pari a 1.
     2. Ogni 1 appartiene a un bucket.
-    Tutti i bit pari a 1 nel flusso devono essere inclusi in almeno un bucket.
     3. Un bit non può appartenere a più di un bucket.
-    Ogni posizione con un 1 è assegnata esattamente a un unico bucket, senza sovrapposizioni.
     4. Massimo due bucket per ogni dimensione.
-    Per ciascuna dimensione $2^j$ (numero di 1), ci possono essere al massimo due bucket.
     5. Le dimensioni dei bucket devono essere potenze di 2:
-    Le dimensioni valide per i bucket sono $2^0, 2^1, 2^2, \dots$.
     6. Le dimensioni dei bucket non diminuiscono andando a sinistra.
-    Procedendo indietro nel tempo (verso sinistra), le dimensioni dei bucket devono rimanere costanti o aumentare.
 
 #### Come mantenere le condizioni del DGIM
 
@@ -670,11 +628,11 @@ Un processo comune nei flussi di dati è la selezione o il filtraggio. Questo co
 Se il criterio di selezione è calcolabile direttamente (ad esempio, "la prima componente è minore di 10"), la selezione è semplice.
 Il problema diventa più complesso se il criterio implica verificare l'appartenenza della tupla a un insieme. Questo è particolarmente difficile quando l'insieme è troppo grande per essere memorizzato nella memoria principale.
 
-Formalemente parlando abbiamo che:
+Formalmente parlando abbiamo che:
 
-- **Stream Model**: Ciascun elemento del flusso di dati $X$ è un tupla $x = \langle key_1, key_2, \dots, key_k \rangle$.
-- **Input**: Una lista *buona* di elementi (coppie $(key, value)$) e un sottoinsieme $S$ di **valori buoni** per $key_1$.
-- **Task**: Determinare e **filtrare** tutte quelle tuple $x \in X$ avente la chiave $key_1(x)$ in $S$.
+- Lo **stream** $X$ è costituito da tuple del tipo $x = \langle key_1, key_2, \dots, key_k \rangle$
+- **Input**: Una lista **buona** di elementi (coppie $(key, value)$) e un sottoinsieme $S$ di **valori buoni** per $key_1$
+- **Task**: Determinare e **filtrare** tutte quelle tuple $x \in X$ avente la chiave $key_1(x)$ in $S$
 
 Una soluzione banale consiste in memorizzare in una **Hash Table $T$** ogni elemento di $S$, e quando arriva un elemento $x$ del flusso, calcoliamo l'hash di $key_1(x)$ e verifichiamo se $x$ è presente in $T$. Questo approccio funziona bene per insiemi piccoli o moderati, ma si rompe quando $S$ è molto grande, come nel caso di Big Data.
 
@@ -686,7 +644,7 @@ Una soluzione banale consiste in memorizzare in una **Hash Table $T$** ogni elem
 **Output:** Array di bit $B[1 \dots n]$ che rappresenta il filtro
 
 1. Inizializza tutti gli elementi di $B[1 \dots n]$ a $0s$
-2. Scegli una funzione hash $h: U \Rightarrow [1, n]$
+2. Scegli una funzione hash $h: U \rightarrow [1, n]$
 3. For each element $s \in S$:
        - Calcola l'indice $i = h(s)$
        - Poni $B[i] = 1$
@@ -714,21 +672,27 @@ Una soluzione banale consiste in memorizzare in una **Hash Table $T$** ogni elem
 
 #### Analisi
 
-L'analisi del problema viene tradotta nel seguente esperimento:
+Andiamo ad analizzare la probabilità di avere falsi positivi: facciamo riferimento al **modello balls into bins**. Abbiamo $m$ sfere che devono essere lanciate in $n$ buckets, dove ogni sfera viene lanciata in un bin in modo uniformemente random ($\frac{1}{n}$ di probabilità di finire in un specifico bin $i$). Nel caso del nostro problema abbiamo che:
 
-- **Palline:** Ogni elemento di $S$ (cioè gli hash dei buoni valori di $S$).
-- **Contenitori:** I bucket $B[0], B[1], \dots, B[n−1]$, rappresentati da $n$ bit.
-- **Distribuzione casuale:** Una funzione hash assegna casualmente ogni pallina a uno dei $n$ contenitori.
-- **Obiettivo:** Stimare la probabilità che un contenitore riceva almeno una pallina.
+- Gli $n$ buckets sono le $n$ posizioni dell'array $B$.
+- Le $m$ sfere sono gli $m$ elementi in $S$.
+- I lanci uniformemente random sono rappresentati dall'utilizzo della funzione hash universale (per cui la probabilità che una posizione sia marcata a 1 è $\frac{1}{n}$)
 
-- Per ogni pallina (elemento hashato), la probabilità che finisca in un contenitore specifico è $\frac{1}{n}$, dato che la funzione hash distribuisce uniformemente gli elementi tra gli $n$ contenitori.
-- La probabilità che nessuna delle $m$ palline finisca in un contenitore specifico è $\left(1 − \frac{1}{n} \right)^m$, cioè tutte le $m$ palline mancano quel contenitore.
-- Di conseguenza, la probabilità che almeno una pallina finisca in quel contenitore è:
-$$Pr[\text{Un contenitore contiene almeno una pallina }] = 1 - \left(1 − \frac{1}{n} \right)^m$$
-Per $m$ grande e $n$ sufficientemente grande, possiamo approssimare $\left(1 − \frac{1}{n} \right)^m$ con $e^{-m/n}$ utilizzando l'espansione $(1−x)^m \approx e^{−mx}$.
-Quindi, la probabilità diventa:
-$$Pr[\text{ Errore }] \approx 1 − e^{−m/n}$$
-In conclusione, la probibilità che ci siano dei falsi positivi è: $1 − e^{−m/n}$.
+La probabilità di avere un falso positivo è la probabilità che un elemento con chiave $v \in U-S$ venga mappato in $h(v)$ dove $B[h(v)] = 1$, ossia che una sfera venga lanciata in un bin già pieno.
+
+La probabilità di errore, ovvero di avere falsi positivi è dominata dalla probabilità che un bin riceva almeno una sfera, dunque definendo i seguenti eventi abbiamo che:
+
+- $E$ = Un bin riceve almene una sfera;
+- $Error$ = Un bin riceve almene due sfere (ovvere c'è collisione, quindi abbiamo un falso positivo);
+
+Allora $Pr[E] \geq Pr[Error]$, quindi dobbiamo calcolare $Pr[E]$ per dare un **upperbound** alla probabilità che ci siano dei falsi positivi.
+
+$$Pr[\text{Nessuna delle } m \text{ sfere finisca in un specifico bin}] = \left(1 - \frac{1}{n}\right)^m$$
+$$Pr[E] = 1 - \left(1 - \frac{1}{n}\right)^m$$
+
+Per $m$ e $n$ sufficientemente grandi, possiamo approssimare $1 - \left(1 - \frac{1}{n}\right)^m \approx e^{-\frac{m}{n}}$, quindi
+$$Pr[Error] \leq 1 - \left(1 - \frac{1}{n}\right)^m \approx e^{-\frac{m}{n}} \text{ per $m << n$. }$$
+
 
 ### Bloom Filter
 
@@ -745,13 +709,11 @@ In conclusione, la probibilità che ci siano dei falsi positivi è: $1 − e^{�
 **Output:** Decidi se accettare o scartare $x$
 
 1. Per ogni funzione hash $h_i (i = 1, \dots, k)$:
-       - Calcola indice: $index = h_i(x)$
-       - if $B[index] \neq 1$:
-            - Scarta $x$ (non può essere in $S$)
-            - Esci
-
-2. if tutti $B[index] = 1$ per tutte le funzioni hash $h_1, \dots, h_k$:
-       - Accetta $x$ (potrebbe essere in $S$) altrimenti scarta $x$
+    - Calcola indice: $index = h_i(x)$
+    - if $B[index] \neq 1$:
+      - Scarta $x$ (non può essere in $S$)
+      - Esci
+2. Accetta $x$
 
 #### Analisi
 
@@ -860,12 +822,12 @@ Sia $m = 2^R$ la nostra approssimazione per $d$, possiamo calcolare la probabili
 
 \[
 \begin{aligned}
-\Pr[m < 2^c \cdot d] &= \Pr[2^R < 2^c \cdot d] \\
+\Pr[m < 2^{-c} \cdot d] &= \Pr[2^R < 2^{-c} \cdot d] \\
 &= \Pr[R < \log_2(d) - c] \\
 &= \Pr[X_{\log_2(d) - c} = 0] \\
 &= (1 - 2^{-(\log_2(d) - c)})^d \\
 &\leq \exp(-2^{-(\log_2(d) - c)} \cdot d) \\
-&= \exp(-2^{c - 1}),
+&= \exp(-2^c)
 \end{aligned}
 \]
 
@@ -875,7 +837,7 @@ dove
 -2^{-(\log_2(d) - c)} \cdot d = -2^{-\log_2(d)} \cdot 2^c \cdot d = -\frac{2^c \cdot d}{2^{\log_2(d)}} = -2^c.
 \]
 
-È stata usata la seguente disuguaglianza: $(1 - x)^d \leq e^{-xd}$ con $x = 2^{-(\log_2(d) + c)}$
+È stata usata la seguente disuguaglianza: $(1 - x)^d \leq e^{-xd}$ con $x = 2^{-(\log_2(d) - c)}$
 
 Dovendo mantenere un unico contatore, lo spazio richiesto è: $O(log(log(N)))$.
 
