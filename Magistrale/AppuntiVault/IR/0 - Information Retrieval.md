@@ -1,0 +1,96 @@
+---
+tags:
+  - IR
+  - ComputerScience
+  - IA
+  - Network
+  - ArtificialIntelligence
+  - InformationRetrieval
+---
+# Information Retrieval 
+--------------------------
+## Info corso
+- **Docente**: Danilo Croce
+- **A.A.**: 2025/2026
+- **Semestre**: 2°
+- **CFU**: 6
+- **Università**: Tor Vergata
+- **Settore**: INF/01
+- **Sito**: http://sag.art.uniroma2.it/didattica/croce/IR_24_25/
+
+---------------------
+## Lecture notes
+- [[IR/Lecture 1|Lecture 1]]
+- [[IR/Lecture 2|Lecture 3]]
+- [[IR/Lecture 3|Lecture 3]]
+- [[IR/Lecture 4|Lecture 4]]
+- [[IR/Lecture 5|Lecture 5]]
+- [[IR/Lecture 6|Lecture 6]]
+- [[IR/Lecture 7|Lecture 7]]
+- [[IR/Lecture 9|Lecture 9]]
+- [[IR/Lecture 10|Lecture 10]]
+- [[IR/Lecture 11|Lecture 11]]
+- [[IR/Lecture 12|Lecture 12]]
+- [[Lecture 13]]
+- [[Lecture 14]]
+- [[Lecture 15|Lecture 15]]
+
+---------
+## Table of contents
+- [[Boolean Retrieval]] 
+	- [[Binary Term-Document Incidence Matrix]]
+	- [[Inverted Index]]
+- [[Positional postings and phrase queries]]
+	- [[Biword Indexes]]
+	- [[Positional indexes]]
+- [[Index construction]]
+	- [[Blocked sort-based indexing]]
+	- [[Single-pass in-memory indexing]]
+	- [[Distributed indexing]]
+	- [[Dynamic indexing]]
+- [[Index Compression]]
+	- [[Index Compression#Dictionary compression|Dictionary compression]]
+		- [[Dictionary storage]] (naïve approach)
+		- [[Dictionary as a String]]
+		- [[Blocked storage]]
+		- [[Front Coding]]
+	- [[Index Compression#Postings file compression|Postings file compression]]
+		- [[Gap encoding]]
+		- [[Unary code]]
+		- [[Gamma code]]
+		- [[Variable byte codes]]
+- [[Wilds Cards]]
+	- [[Permuterm Index]]
+	- [[k-grams]]
+- [[Spelling Correction]]
+- [[Scoring, term weighting & the vector space model]]
+	- [[Jaccard coefficient]]
+	- [[Bag of words model - Term Frequency tf]]
+	- [[TF-IDF weight]]
+	- [[Vector Space Model]]
+	- [[Variants of weighting]]
+- [[Evaluation of IR systems]]
+	- [[Set Based Measures]] (Precision, Recall, Accuracy, Error, F-Measure)
+	- [[Rank-Based Measures]]
+	- [[Beyond Binary Relevance]]
+- [[Probabilistic Approach]]
+	- [[Appendice Probabilità]]
+	- [[Probabilistic Ranking Principle]] (PRP)
+	- [[Binary Independent Model]] (BIM)
+	- [[Introducing term frequency in BIM]]
+		- [[Term occurrences as Poisson]]
+		- [[Term occurrences as 2-Poisson]]
+	- [[Okapi BM25]] (BestMatch 25)
+- [[IR/Language Models]]
+- [[Efficient Scoring]]
+	- [[Speeding Ranking Computation by Pruning]]
+	- [[Query-Independent Document Scores]]
+	- [[Cluster Pruning]]
+	- [[Tiered Indexes]]
+	- [[Impact-Ordered Postings]]
+	- [[Safe Scoring - WAND]]
+- [[Relevance feedback & Query expansion]]
+	- [[Relevance Feedback]]
+	- [[Query Expansion]]
+- [[Latent Semantic Index - LSI]]
+- [[Link Analysis]]

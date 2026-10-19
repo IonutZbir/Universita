@@ -1,0 +1,3 @@
+- [[Binary Term-Document Incidence Matrix]]
+- [[Inverted Index]]
+- [[Positional postings and phrase queries]]
